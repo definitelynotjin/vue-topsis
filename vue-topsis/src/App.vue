@@ -12,6 +12,9 @@
 
     <div v-else class="full-height-comp">
       <main>
+        <VueSidebar />
+        <NavBar />
+
         <router-view />
       </main>
     </div>

@@ -13,6 +13,8 @@ declare module 'vue' {
     NavBar: typeof import('./components/NavBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SparkLine: typeof import('./components/SparkLine.vue')['default']
+    SparkLines: typeof import('./components/SparkLines.vue')['default']
     VueSidebar: typeof import('./components/VueSidebar.vue')['default']
   }
 }

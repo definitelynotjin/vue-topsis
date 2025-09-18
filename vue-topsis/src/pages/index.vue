@@ -2,7 +2,7 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   // import { useToast } from '@/components/ui/toast/use-toast'
-  import Logo from '../assets/logo.png'
+  // import Logo from '../assets/logo.png'
 
   // const { toast } = useToast()
   const router = useRouter()
@@ -36,11 +36,11 @@
 </script>
 
 <template>
-  <v-app class="!bg-gradient-to-r from-blue-800 to-gray-800 hide-scrollbar">
+  <v-app class="!bg-gradient-to-r from-cyan-800 to-violet-800 hide-scrollbar">
     <v-row class="ma-10 pa-10">
       <v-col class="bg-gray-900 rounded-tl-2xl rounded-bl-2xl d-flex">
         <v-row align="center">
-          <v-img :height="150" :src="Logo" :width="150" />
+          <v-img :height="150" :width="150" />
         </v-row>
       </v-col>
       <v-col class="bg-slate-100 rounded-tr-2xl rounded-br-2xl flex items-center justify-center">
