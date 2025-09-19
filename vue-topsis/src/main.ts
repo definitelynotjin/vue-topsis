@@ -16,6 +16,7 @@ import App from './App.vue'
 // Styles
 import 'unfonts.css'
 import './styles/main.css'
+import '@fontsource-variable/open-sans'
 
 const app = createApp(App)
 

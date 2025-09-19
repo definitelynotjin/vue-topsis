@@ -14,7 +14,7 @@
       <main>
         <VueSidebar />
         <NavBar />
-
+        <!-- <BreadCrumbs class="overflow-auto" /> -->
         <router-view />
       </main>
     </div>

@@ -4,7 +4,7 @@
   <v-app class="calculator-wallpaper">
     <v-row>
       <v-container fluid>
-        <v-card> thef uk </v-card>
+        <v-card> so this is the calculator </v-card>
       </v-container>
     </v-row>
   </v-app>

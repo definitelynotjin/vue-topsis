@@ -19,14 +19,14 @@
 </script>
 
 <template>
-  <v-app-bar app height="80" class="!bg-cyan-800">
+  <v-app-bar app height="80" class="!bg-cyan-700">
     <v-app-title-bar class="pl-10 text-h4 !font-semibold !title-bar"
       >{{ dynamicTitle }}
     </v-app-title-bar>
-    <div class="d-flex align-items-center pa-4" />
+    <!-- <div class="d-flex align-items-center pa-4" /> -->
     <v-spacer />
     <v-btn
-      class="button-logout !bg-red-500 mr-20"
+      class="button-logout !bg-red-500"
       variant="flat"
       :width="100"
       :append-icon="LogOutIcon"
@@ -40,8 +40,6 @@
     background-color: green;
   }
   .button-logout {
-    margin-right: 10rem;
-
-    justify-items: end;
+    justify-content: center;
   }
 </style>

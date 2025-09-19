@@ -37,7 +37,7 @@
 
 <template>
   <v-navigation-drawer
-    class="!bg-cyan-800 sidebar"
+    class="!bg-cyan-700 sidebar"
     :elevation="5"
     expand-on-hover
     permanent
@@ -53,8 +53,7 @@
         <v-list-item
           v-for="item in menuItems"
           :key="item.value"
-          active-class="primary--text"
-          class="pl-7 sidebar-icons d-flex"
+          class="pl-7 sidebar-icon"
           :prepend-icon="item.icon"
           :title="item.title"
           @click="selectMenu(item.value)"
@@ -64,14 +63,16 @@
   </v-navigation-drawer>
 </template>
 
-<style lang="css">
+<style lang="css" scoped>
   .v-divider.sidebar-divider {
     background-color: red;
     color: green;
   }
+  .v-list-item.sidebar-icon--active {
+    color: red;
+  }
 
   .v-navigation-drawer.sidebar {
-    /* background-color: red; */
-    color: ghostwhite;
+    color: white;
   }
 </style>
