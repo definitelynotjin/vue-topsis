@@ -7,6 +7,7 @@ from routes.alternative import alt_bp
 from routes.score import score_bp
 from routes.topsis import topsis_bp
 from routes.export import export_bp
+from routes.imports import import_bp
 
 def create_app():
     app = Flask(__name__)
@@ -29,6 +30,7 @@ def create_app():
     app.register_blueprint(score_bp, url_prefix="/score")
     app.register_blueprint(topsis_bp, url_prefix="/topsis")
     app.register_blueprint(export_bp, url_prefix="/export")
+    app.register_blueprint(import_bp, url_prefix="/import")
 
     @app.route("/")
     def home():

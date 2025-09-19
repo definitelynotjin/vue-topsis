@@ -24,7 +24,7 @@ class Alternative(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
-    nip = db.Column(db.String(50), nullable=True)  # Menambahkan kolom nip
+    id_alt = db.Column(db.String(50), nullable=True)  # Menambahkan kolom nip
 
     project = db.relationship('Project', backref=db.backref('alternatives', lazy=True))
 

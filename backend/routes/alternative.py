@@ -13,7 +13,7 @@ def get_alternatives(project_id):
         result.append({
             "id": alt.id,
             "name": alt.name,
-            "nip": getattr(alt, "nip", None),
+            "id_alt": getattr(alt, "id_alt", None),
             "project_id": alt.project_id
         })
     return jsonify(result)
@@ -25,13 +25,13 @@ def add_alternative():
     data = request.json
     project_id = data.get("project_id")
     name = data.get("name")
-    nip = data.get("nip", "")
+    id_alt = data.get("id_alt", "")
 
     if not project_id or not name:
         return jsonify({"error": "Project and Alternative name cannot be empty"}), 400
 
     # buat instance Alternative
-    new_alt = Alternative(project_id=project_id, name=name, nip=nip)
+    new_alt = Alternative(project_id=project_id, name=name, id_alt=id_alt)
     db.session.add(new_alt)
     db.session.commit()
 

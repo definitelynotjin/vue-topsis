@@ -21,13 +21,13 @@ def export_alternatives(project_id):
     ws.title = "Alternatives"
 
     # Header
-    headers = ["Nama Pegawai"] + ["NIP"] + criteria_names + ["Nama Project"]
+    headers = ["Nama"] + ["ID"] + criteria_names + ["Nama Project"]
     ws.append(headers)
 
     # Isi data
     for alt in alternatives:
         row = [alt.name]
-        row.append(getattr(alt, "nip", ""))  # Menambahkan NIP
+        row.append(getattr(alt, "id_alt", ""))  # Menambahkan NIP
 
         # urutkan skor sesuai criteria_names
         scores_by_criteria = {s.criteria.name: s.value for s in alt.scores}
