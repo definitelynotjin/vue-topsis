@@ -14,6 +14,7 @@ def get_alternatives(project_id):
             "id": alt.id,
             "name": alt.name,
             "id_alt": getattr(alt, "id_alt", None),
+            # "rank": getattr(alt, "rank", None),
             "project_id": alt.project_id
         })
     return jsonify(result)

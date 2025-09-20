@@ -1,25 +1,18 @@
 from flask import Blueprint, jsonify, request
 from db import db
-from models import Alternative, Score, Criteria
+from models import Alternative, Score, Criteria, TopsisResult
 from services.topsis import calculate_topsis
 
 topsis_bp = Blueprint("topsis", __name__)
 
-@topsis_bp.route("/<int:project_id>", methods=["GET", "POST"])
-def topsis_ranking(project_id):
-    save_to_db = request.args.get("save", "0") == "1"
-
-    # Ambil semua alternatif dan skor untuk project
+def get_topsis_data(project_id):
+    """Helper untuk ambil alternatif + kriteria lalu hitung TOPSIS"""
     alternatives = Alternative.query.filter_by(project_id=project_id).all()
     criteria = Criteria.query.filter_by(project_id=project_id).all()
 
-    # Susun urutan kriteria sesuai DB
+    # urutan kriteria sesuai DB
     criteria_order = [
-        {
-            "criteria": c.name,
-            "weight": c.weight,
-            "type": c.type
-        }
+        {"criteria": c.name, "weight": c.weight, "type": c.type}
         for c in criteria
     ]
 
@@ -28,33 +21,81 @@ def topsis_ranking(project_id):
         scores_data = []
         for score in alt.scores:
             scores_data.append({
-                "criteria": score.criteria.name,   # penting: dipakai di services/topsis.py
+                "criteria": score.criteria.name,
                 "value": score.value
             })
         alt_list.append({
             "id": alt.id,
             "name": alt.name,
-            "nip": getattr(alt, "nip", None),
+            "id_alt": getattr(alt, "id_alt", None),
             "scores": scores_data
         })
 
-    # Hitung ranking TOPSIS
-    ranking_result = calculate_topsis(alt_list, criteria_order)
+    ranking_result, skipped = calculate_topsis(alt_list, criteria_order)
+    ranking_result = sorted(ranking_result, key=lambda x: x["score"], reverse=True)
+    
+    return ranking_result, skipped
 
-    return jsonify(ranking_result)
 
-    # # Simpan ke DB jika parameter save=1 (opsional)
-    # if save_to_db and ranking_result:
-    #     # Hapus ranking lama project (asumsi ada model Ranking)
-    #     Ranking.query.filter_by(project_id=project_id).delete()
-    #     for idx, alt in enumerate(ranking_result, start=1):
-    #         new_rank = Ranking(
-    #             project_id=project_id,
-    #             alternative_id=alt["id"],
-    #             score=alt["score"],
-    #             rank=idx
-    #         )
-    #         db.session.add(new_rank)
-    #     db.session.commit()
+@topsis_bp.route("/<int:project_id>", methods=["GET"])
+def topsis_ranking(project_id):
+    """Hitung TOPSIS tanpa simpan ke DB"""
+    ranking_result, skipped = get_topsis_data(project_id)
 
-    return jsonify(ranking_result)
+    return jsonify({
+        "status": "success",
+        "message": f"TOPSIS calculation completed",
+        "total": len(ranking_result),
+        "skipped": skipped,
+        "data": ranking_result
+    })
+
+
+@topsis_bp.route("/<int:project_id>/save", methods=["POST"])
+def save_topsis_ranking(project_id):
+    """Hitung TOPSIS lalu simpan ke DB"""
+    ranking_result, skipped = get_topsis_data(project_id)
+
+    # hapus hasil lama
+    TopsisResult.query.filter_by(project_id=project_id).delete()
+
+    # simpan hasil baru
+    for idx, r in enumerate(ranking_result, start=1):
+        new_result = TopsisResult(
+            project_id=project_id,
+            alternative_id=r["id"],
+            score=r["score"],
+            rank=idx
+        )
+        db.session.add(new_result)
+
+    db.session.commit()
+
+    return jsonify({
+        "status": "success",
+        "message": "Ranking saved successfully",
+        "total": len(ranking_result),
+        "skipped": len(skipped),
+    })
+
+@topsis_bp.route("/<int:project_id>/results", methods=["GET"])
+def get_saved_ranking(project_id):
+    """Ambil hasil ranking yang sudah disimpan"""
+    results = TopsisResult.query.filter_by(project_id=project_id).order_by(TopsisResult.rank).all()
+    output = []
+    for r in results:
+        alt = Alternative.query.get(r.alternative_id)
+        output.append({
+            "id": r.id,
+            "alternative_id": r.alternative_id,
+            "alternative_name": alt.name if alt else "",
+            "id_alt": getattr(alt, "id_alt", None) if alt else None,
+            "score": r.score,
+            "rank": r.rank
+        })
+
+    return jsonify({
+        "status": "success",
+        "message": f"Retrieved {len(output)} ranking results",
+        "data": output
+    })

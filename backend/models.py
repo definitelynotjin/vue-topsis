@@ -25,6 +25,7 @@ class Alternative(db.Model):
     name = db.Column(db.String(100), nullable=False)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
     id_alt = db.Column(db.String(50), nullable=True)  # Menambahkan kolom nip
+    # rank = db.Column(db.Integer, nullable=True)  # Menambahkan kolom rank
 
     project = db.relationship('Project', backref=db.backref('alternatives', lazy=True))
 
@@ -38,3 +39,12 @@ class Score(db.Model):
 
     alternative = db.relationship('Alternative', backref=db.backref('scores', lazy=True))
     criteria = db.relationship('Criteria', backref=db.backref('scores', lazy=True))
+
+# Get Ranking Result
+class TopsisResult(db.Model):
+    __tablename__ = "topsis_results"
+    id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.Integer, nullable=False)
+    alternative_id = db.Column(db.Integer, nullable=False)
+    score = db.Column(db.Float, nullable=False)
+    rank = db.Column(db.Integer, nullable=False)
