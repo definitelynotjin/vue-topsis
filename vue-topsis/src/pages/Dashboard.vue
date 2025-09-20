@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Eye, Trash, SquarePen } from 'lucide-vue-next'
-  const cardItems = ref([
+  const cardItems = reactive([
     {
       text: 'Project 1',
       description: '',
@@ -55,12 +55,16 @@
           <v-card hover class="project-card flex-1" v-for="item in cardItems" :key="item">
             {{ item.text }}
             <v-row justify="end">
-              <v-card-actions>
+              <v-card-actions class="action-buttons">
                 <v-btn color="gray" :icon="Eye" />
                 <v-btn color="gray" :icon="SquarePen" />
                 <v-btn color="red" :icon="Trash" />
               </v-card-actions>
             </v-row>
+
+            <v-card-text v-for="item in cardItems" :key="item">
+              {{ item.value }}
+            </v-card-text>
           </v-card>
         </v-row>
       </v-container>
@@ -87,5 +91,8 @@
     padding: 15px;
     margin: 10px;
     background-color: darkslategrey;
+  }
+  .action-buttons {
+    top: 20px;
   }
 </style>
