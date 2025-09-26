@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from db import db, migrate
 # import blueprint
 from routes.project import project_bp
@@ -11,9 +12,13 @@ from routes.imports import import_bp
 
 def create_app():
     app = Flask(__name__)
+    _= CORS(app, resources={r"/*": {
+    "origins": ["http://localhost:3000", "http://127.0.0.1:3000"]
+}})
+
 
     # konfigurasi database MySQL
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/topsis_db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flaskuser:flask123@localhost/topsis_db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # inisialisasi db & migrate
@@ -21,7 +26,6 @@ def create_app():
     migrate.init_app(app, db)
 
     # import models supaya Flask-Migrate bisa membaca
-    from models import Alternative, Criteria, Score
 
     # daftarkan blueprint
     app.register_blueprint(project_bp, url_prefix="/project")

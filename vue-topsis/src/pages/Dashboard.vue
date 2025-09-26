@@ -1,72 +1,40 @@
 <script setup lang="ts">
-  import { Eye, Trash, SquarePen } from 'lucide-vue-next'
-  const cardItems = reactive([
-    {
-      text: 'Project 1',
-      description: '',
-      value: [
-        {
-          Best: 'Kurniawan',
-          Worst: 'Ferdi',
-        },
-      ],
-    },
+  import { onMounted, ref } from 'vue'
+  import { ChevronDown } from 'lucide-vue-next'
+  import { fetchProjectData } from '../services/api.ts'
+  import type { Project } from '../types/type.ts'
 
-    {
-      text: 'Project 2',
-      description: '',
-      value: [
-        {
-          Best: 'Budiawan',
-          Worst: 'Setya',
-        },
-      ],
-    },
+  const isDropdownVisible = ref(false)
+  const myProject = ref<Project[]>([])
+  const dropdowns = ref<Record<number, boolean>>({})
 
-    {
-      text: 'Project 3',
-      description: '',
-      value: [
-        {
-          Best: 'Gatot',
-          Worst: 'Sera',
-        },
-      ],
-    },
-
-    {
-      text: 'Project 4',
-      description: '',
-      value: [
-        {
-          Best: 'Asep',
-          Worst: 'Eko',
-        },
-      ],
-    },
-  ])
+  const toggleDropdownSelect = () => {
+    isDropdownVisible.value = !isDropdownVisible.value
+  }
+  onMounted(async () => {
+    myProject.value = await fetchProjectData()
+    myProject.value.forEach((project) => {
+      dropdowns.value[project.id] = false
+    })
+  })
 </script>
 
 <template>
-  <v-app class="wallpaper">
+  <v-app class="!bg-cyan-900">
     <main>
-      <v-container fluid class="card-container">
-        <v-row justify="space-around">
-          <v-card hover class="project-card flex-1" v-for="item in cardItems" :key="item">
-            {{ item.text }}
-            <v-row justify="end">
-              <v-card-actions class="action-buttons">
-                <v-btn color="gray" :icon="Eye" />
-                <v-btn color="gray" :icon="SquarePen" />
-                <v-btn color="red" :icon="Trash" />
-              </v-card-actions>
-            </v-row>
-
-            <v-card-text v-for="item in cardItems" :key="item">
-              {{ item.value }}
+      <v-container fluid class="card-container bg-cyan-700 justify-around">
+        <v-card hover class="project-card flex-1" v-for="project in myProject" :key="project.id">
+          {{ project.name }}
+          <v-row>
+            <v-card-text class="project-card-text">
+              {{ project.description }}
             </v-card-text>
-          </v-card>
-        </v-row>
+            <v-card-actions class="action-buttons">
+              <v-btn color="white" :icon="ChevronDown" @click="toggleDropdownSelect" />
+            </v-card-actions>
+          </v-row>
+        </v-card>
+        <DashboardDropdown />
       </v-container>
     </main>
   </v-app>
@@ -74,25 +42,33 @@
 
 <style scoped lang="css">
   .wallpaper {
-    background-color: darkslategrey;
+    background-color: antiquewhite;
   }
-
   .card-container {
     padding: 25px;
     margin-top: 70px;
-    background-color: burlywood;
     width: 165vh;
     border-radius: 10px;
+    overflow-y: auto;
   }
   .project-card {
-    height: 30vh;
+    border-radius: 10px;
+    height: 10vh;
     font-size: 1.2rem;
     font-weight: bold;
     padding: 15px;
     margin: 10px;
-    background-color: darkslategrey;
+    background-color: steelblue;
   }
+
+  .project-card-text {
+    margin: 10px;
+    color: floralwhite;
+    font-size: 17px;
+  }
+
   .action-buttons {
+    justify-items: auto;
     top: 20px;
   }
 </style>

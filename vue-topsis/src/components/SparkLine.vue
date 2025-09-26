@@ -11,10 +11,9 @@
     class="sparkline-chart"
     line-width="1"
     stroke-linecap="round"
-    :labels="item"
     smooth
   >
-    <template v-slot:label="item" class="chart-label"> {{ item.value }} </template>
+    <template v-slot:label="item" class="chart-label font-extralight"> {{ item.value }} </template>
   </v-sparkline>
 </template>
 

@@ -8,15 +8,27 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ActionButtons: typeof import('./components/ActionButtons.vue')['default']
+    AddAlternativeDialog: typeof import('./components/AddAlternativeDialog.vue')['default']
+    AddCriteria: typeof import('./components/AddCriteria.vue')['default']
+    AddCriteriaDialog: typeof import('./components/AddCriteriaDialog.vue')['default']
+    'AddCriteriaDialog.vue': typeof import('./components/AddCriteriaDialog.vue.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     BreadCrumbs: typeof import('./components/BreadCrumbs.vue')['default']
+    CardTitle: typeof import('./components/CardTitle.vue')['default']
+    CardTitleDropdown: typeof import('./components/CardTitleDropdown.vue')['default']
+    CardTitleScoreDropdown: typeof import('./components/CardTitleScoreDropdown.vue')['default']
+    DashboardDropdown: typeof import('./components/DashboardDropdown.vue')['default']
+    DataTable: typeof import('./components/DataTable.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     NavBar: typeof import('./components/NavBar.vue')['default']
     PieChart: typeof import('./components/PieChart.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SearchBar: typeof import('./components/SearchBar.vue')['default']
     SparkLine: typeof import('./components/SparkLine.vue')['default']
     SparkLines: typeof import('./components/SparkLines.vue')['default']
     VueSidebar: typeof import('./components/VueSidebar.vue')['default']
+    Wallpaper: typeof import('./components/Wallpaper.vue')['default']
   }
 }

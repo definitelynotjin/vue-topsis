@@ -1,31 +1,44 @@
 <script setup lang="ts">
-  import { UserPen, SquarePlus, LayoutDashboard, Activity } from 'lucide-vue-next'
+  import {
+    Blend,
+    NotepadText,
+    UserPen,
+    Calculator,
+    LayoutDashboard,
+    Activity,
+  } from 'lucide-vue-next'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  // import Logo from '../assets/logo.png'
+
+  const dashboard = {
+    title: 'Dashboard',
+    value: '/dashboard',
+    icon: LayoutDashboard,
+  }
 
   const menuItems = [
     {
-      title: 'Dashboard',
-      value: '/dashboard',
-      icon: LayoutDashboard,
+      title: 'Criteria Data',
+      value: '/criteria',
+      icon: Calculator,
     },
     {
-      title: 'Calculator',
-      value: '/calculator',
-      icon: SquarePlus,
-    },
-    {
-      title: 'Team Management',
-      value: '/teammanagement',
+      title: 'Alternative Data',
+      value: '/alternative',
       icon: UserPen,
     },
     {
-      title: 'Playground',
-      value: '/playground',
+      title: 'Scoring Data',
+      value: '/scoringdata',
       icon: Activity,
     },
+    {
+      title: 'Final Score',
+      value: '/finalscore',
+      icon: NotepadText,
+    },
   ]
+
   const activeMenu = ref('home')
   const router = useRouter()
 
@@ -45,12 +58,21 @@
     rail-width="80"
   >
     <v-list>
-      <v-list-item class="d-flex justify-space-around">
-        <v-img :height="50" :width="50" />
+      <v-list-item>
+        <Blend class="top-icon-sidebar" :size="50" />
+      </v-list-item>
+      <v-divider class="sidebar-divider bg-red-200" :thickness="2" />
+      <v-list-item
+        class="pl-7 py-5"
+        @click="selectMenu(dashboard.value)"
+        :prepend-icon="LayoutDashboard"
+      >
+        {{ dashboard.title }}
       </v-list-item>
       <v-list>
-        <v-divider class="sidebar-divider" :length="100" :thickness="5" />
+        <v-divider class="sidebar-divider" :thickness="2" />
         <v-list-item
+          color="primary"
           v-for="item in menuItems"
           :key="item.value"
           class="pl-7 sidebar-icon"
@@ -66,7 +88,7 @@
 <style lang="css" scoped>
   .v-divider.sidebar-divider {
     background-color: red;
-    color: green;
+    color: white;
   }
   .v-list-item.sidebar-icon--active {
     color: red;
@@ -74,5 +96,24 @@
 
   .v-navigation-drawer.sidebar {
     color: white;
+  }
+  .criteria {
+    text-overflow: unset;
+    overflow: visible;
+  }
+  .top-icon-sidebar {
+    height: 63px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    align-items: center;
+    color: ghostwhite;
+  }
+
+  .v-navigation-drawer--expanded .sidebar-divider {
+    width: 80%;
+  }
+  .sidebar-divider {
+    margin: 0 auto;
   }
 </style>

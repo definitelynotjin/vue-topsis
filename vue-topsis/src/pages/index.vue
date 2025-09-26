@@ -53,7 +53,8 @@
           <h2 class="top-auto text-gray-500">Enter your user valid username and password.</h2>
           <v-text-field
             v-model="username"
-            bg-color="blue-grey-darken-3"
+            class="form-color"
+            bg-color="cyan-darken-4"
             :counter="10"
             label="Username"
             required
@@ -63,9 +64,9 @@
 
           <v-text-field
             v-model="password"
+            class="form-color"
             :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-            bg-color="blue-grey-darken-3"
-            class="!text-blue-900"
+            bg-color="cyan-darken-4"
             :counter="6"
             :elevation="24"
             label="Password"
@@ -78,7 +79,7 @@
 
           <v-btn
             bg="red-darken-2"
-            class="text-none"
+            class="!bg-cyan-700 submit-button"
             density="comfortable"
             :height="50"
             rounded="lg"
@@ -92,7 +93,14 @@
     </v-row>
   </v-app>
 </template>
-<style lang="css">
+<style scoped lang="css">
+  .form-color {
+    color: green;
+  }
+  .submit-button {
+    color: white;
+    text-transform: initial;
+  }
   .v-row.hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;

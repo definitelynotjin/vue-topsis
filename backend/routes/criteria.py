@@ -19,6 +19,21 @@ def get_criteria(project_id):
         })
     return jsonify(result)
 
+#GET all criteria
+# @criteria_bp.route("/", methods=["GET"])
+# def get_all_criteria():
+#     criteria_list = Criteria.query.all()
+#     result = [
+#         {
+#             "id": c.id,
+#             "name": c.name,
+#             "weight": c.weight,
+#             "type": c.type,
+#             "project_id": c.project_id
+#         }
+#         for c in criteria_list
+#     ]
+#     return jsonify(result)
 
 # POST add new criteria
 @criteria_bp.route("/", methods=["POST"])
@@ -41,4 +56,11 @@ def add_criteria():
     db.session.add(new_criteria)
     db.session.commit()
 
-    return jsonify({"message": "Criteria added successfully"}, 201)
+    return jsonify({ 
+        "id": new_criteria.id,
+        "name": new_criteria.name,
+        "weight": new_criteria.weight,
+        "type": new_criteria.type,
+        "project_id": new_criteria.project_id
+    }), 201
+
