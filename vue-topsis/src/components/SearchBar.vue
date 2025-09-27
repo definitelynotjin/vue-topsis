@@ -9,13 +9,12 @@
 
 <template>
   <v-text-field
-    class="searchbar"
+    class="searchbar min-h-auto"
     placeholder="Search"
     prepend-inner-icon="mdi-magnify"
     variant="outlined"
-    width="100"
+    width="90"
     @input="search"
-    height="200"
     clearable
     persistent-clear
     flat
@@ -27,7 +26,7 @@
 
 <style scoped lang="css">
   .searchbar {
-    margin-top: 14px;
-    height: 0.5rem;
+    margin: 14px;
+    height: 30px;
   }
 </style>

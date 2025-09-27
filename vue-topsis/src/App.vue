@@ -1,5 +1,7 @@
 <script lang="ts" setup>
   import { useRoute } from 'vue-router'
+  import { Toaster } from 'vue-sonner'
+  import 'vue-sonner/style.css'
 
   const route = useRoute()
 </script>
@@ -11,6 +13,7 @@
     </div>
 
     <div v-else class="full-height-comp">
+      <Toaster theme="light" rich-colors />
       <main>
         <VueSidebar />
         <NavBar />

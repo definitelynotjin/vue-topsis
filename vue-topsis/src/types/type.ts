@@ -1,6 +1,6 @@
 export interface Project {
-  name?: string
-  id: number
+  name: string
+  id?: number
   description: string
 }
 
@@ -13,8 +13,16 @@ export interface Criteria {
 }
 
 export interface Alternative {
+  alt_id?: number
   name: string
   project_id: number
   type: string
   weight: number
+}
+export interface Score {
+  alt_id: number
+  project_id: number
+  criteria: string
+  id?: number
+  value: number
 }

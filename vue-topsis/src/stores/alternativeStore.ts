@@ -17,7 +17,7 @@ export const useAlternativeStore = defineStore('alternative', () => {
       } catch (error) {
         console.error('big error alternaive', error)
         alert('woah, alternive fucked')
-      } {}
+      }
     } else {
       alert('alternative cannot be empty')
     }

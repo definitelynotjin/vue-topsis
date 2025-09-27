@@ -5,10 +5,19 @@ import { addCriteriaData, fetchCriteriaData } from '@/services/api.ts'
 
 export const useCriteriaStore = defineStore('criteria', () => {
   const criteria = ref<Criteria []>([])
+  const selectedCriteriaId = ref<number | null>(null)
   async function loadByProject (projectId: number) {
     criteria.value = await fetchCriteriaData (projectId)
   }
-  async function addCriteria (newCriteria) {
+  // function selectedCriteriaId (id: number) {
+  //   selectedCriteriaId.value = id
+  // }
+  async function addCriteria (newCriteria: {
+    project_id: number
+    name: string
+    type: string
+    weight: number
+  }) {
     if (newCriteria.project_id && newCriteria.name && newCriteria.type && newCriteria.weight) {
       try {
         const res = await addCriteriaData(newCriteria)
@@ -21,5 +30,8 @@ export const useCriteriaStore = defineStore('criteria', () => {
       alert('dis cannot be empty tho')
     }
   }
-  return { loadByProject, criteria, addCriteria }
+  function setSelectedCriteriaId (id: number) {
+    selectedCriteriaId.value = id
+  }
+  return { loadByProject, criteria, addCriteria, selectedCriteriaId, setSelectedCriteriaId }
 })

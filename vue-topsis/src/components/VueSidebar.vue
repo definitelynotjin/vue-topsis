@@ -33,8 +33,8 @@
       icon: Activity,
     },
     {
-      title: 'Final Score',
-      value: '/finalscore',
+      title: 'TOPSIS ',
+      value: '/topsisscore',
       icon: NotepadText,
     },
   ]

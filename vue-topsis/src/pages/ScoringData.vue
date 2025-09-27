@@ -1,44 +1,65 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
-  import { fetchScoreData } from '../services/api.ts'
+  import { ref } from 'vue'
+  import { useCriteriaStore } from '@/stores/criteriaStore'
+  import { useProjectStore } from '@/stores/projectStore'
+  import { useScoreStore } from '@/stores/scoreStore'
 
-  const scoreData = ref([])
+  const criteriaStore = useCriteriaStore()
+  const projectStore = useProjectStore()
+  const scoreStore = useScoreStore()
+
   const searchFilter = ref('')
+  const showDialog = ref(false)
 
   const handleSearch = (search) => {
     searchFilter.value = search
   }
-  const showDialog = ref(false)
   const scoreHeaders = [
     {
-      title: 'ID',
-      key: 'project_id',
+      title: 'Alternative ID',
+      key: 'alt_id',
     },
 
     {
-      title: 'Nama alternatif',
-      key: 'alternative.name',
+      title: 'Alternative Name',
+      key: 'name',
     },
 
     {
-      title: 'Type',
-      key: 'type',
+      title: 'Value',
+      key: 'value',
     },
 
     {
-      title: 'Weight',
-      key: 'weight',
-    },
-
-    {
-      title: 'ID',
-      key: 'project_id',
+      title: 'Actions',
+      key: 'actions',
     },
   ]
 
-  onMounted(async () => {
-    scoreData.value = await fetchScoreData(1)
+  const filteredScore = computed(() => {
+    const term = (searchFilter.value ?? '').toLowerCase()
+    return scoreStore.score.filter((item) => {
+      return (
+        item.id?.toString().includes(term) ||
+        item.alt_id?.toString().includes(term) ||
+        item.value?.toString().includes(term)
+      )
+    })
   })
+
+  watch(
+    () => projectStore.selectedProjectId,
+    async (newProjectId) => {
+      if (newProjectId) {
+        await criteriaStore.loadByProject(newProjectId)
+        criteriaStore.selectedCriteriaId = null
+      } else {
+        criteriaStore.criteria = []
+        criteriaStore.selectedCriteriaId = null
+      }
+    },
+    { immediate: true },
+  )
 </script>
 
 <template>
@@ -46,20 +67,21 @@
     <main>
       <v-container fluid class="bg-cyan-700 score-container">
         <div class="d-flex bg-cyan-700 score-top-table-text">
-          <CardTitleDropdown />
+          <CardTitleScoreDropdown />
           <SearchBar @search="handleSearch" />
           <v-btn
             @click="showDialog = true"
             v-bind="props"
             hover
+            variant="flat"
             type="submit"
-            class="score-add-button !bg-cyan-600"
+            class="card-edit-button !bg-cyan-600"
           >
-            Tambahkan Kriteria
+            Edit Value
           </v-btn>
         </div>
-        <AddCriteriaDialog v-model="showDialog" />
-        <DataTable :items="scoreData" :headers="scoreHeaders" />
+        <EditScoreValueDialog v-model="showDialog" />
+        <DataTable :items="filteredScore" :headers="scoreHeaders" />
         <ActionButtons />
       </v-container>
     </main>
@@ -84,9 +106,17 @@
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 10px;
+    height: 100px;
     justify-content: space-between;
   }
   .score-add-button {
+    margin: 15px;
+    height: 50px;
+    padding: 10px;
+    text-transform: initial;
+  }
+
+  .card-edit-button {
     margin: 15px;
     height: 50px;
     padding: 10px;

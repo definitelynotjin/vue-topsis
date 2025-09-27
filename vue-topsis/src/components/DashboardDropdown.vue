@@ -1,11 +1,30 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { defineProps, ref, defineEmits } from 'vue'
+  import { useProjectStore } from '@/stores/projectStore'
+
+  const projectStore = useProjectStore()
+  const emit = defineEmits()
+  const props = defineProps<{}>()
+</script>
 
 <template>
-  <v-card class="base-card">test </v-card>
+  <v-container class="dropdown-container">
+    <v-card class="base-card">Go to criteria </v-card>
+    <v-card class="base-card">Go to alternative </v-card>
+    <v-card class="base-card">Go to score </v-card>
+  </v-container>
 </template>
 
 <style scoped lang="css">
+  .dropdown-container {
+    background-color: darkblue;
+    margin-top: initial;
+  }
   .base-card {
-    background-color: red;
+    text-align: left;
+    padding: 13px;
+    height: 50px;
+    background-color: darkcyan;
+    margin-bottom: 10px;
   }
 </style>

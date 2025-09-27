@@ -17,9 +17,11 @@ import App from './App.vue'
 import 'unfonts.css'
 import './styles/main.css'
 import '@fontsource-variable/open-sans'
+import './styles/overrides.css'
 
 const app = createApp(App)
 
 registerPlugins(app)
 
 app.mount('#app')
+// app.use(Toast)

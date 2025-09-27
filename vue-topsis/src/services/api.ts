@@ -8,6 +8,15 @@ export async function fetchProjectData () {
     return []
   }
 }
+export async function addProjectData (newProject: { name: string, description: string }) {
+  try {
+    const response = await axios.post('api/project/', newProject)
+    return response.data
+  } catch (error) {
+    console.error('error adding project', error)
+    throw error
+  }
+}
 
 export async function fetchCriteriaData (id: number) {
   try {
@@ -71,5 +80,24 @@ export async function fetchScoreData (alternative_id: number) {
   } catch (error) {
     console.error('error score', error)
     return []
+  }
+}
+export async function fetchScoresByCriteria (projectId: number, criteriaId: number) {
+  try {
+    const response = await axios.get(`api/score/project/${projectId}/criteria/${criteriaId}`)
+    return response.data
+  } catch (error) {
+    console.error('error fetchScoresByCriteria', error)
+    throw error
+  }
+}
+
+export async function addScoreData (newScore: { value: number }, alternative_id: number) {
+  try {
+    const response = await axios.post(`api/score/${alternative_id}`, newScore)
+    return response.data
+  } catch (error) {
+    console.error('oi, add score data from api error tangina', error)
+    throw error
   }
 }

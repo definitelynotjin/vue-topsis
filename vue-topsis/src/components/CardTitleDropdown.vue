@@ -6,7 +6,7 @@
 
   onMounted(async () => {
     projectStore.loadAllProjects()
-    console.log('thisis the projectsore, ', projectStore.projects)
+    // console.log('thisis the projectsore, ', projectStore.projects)
   })
 </script>
 

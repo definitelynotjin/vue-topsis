@@ -2,7 +2,6 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   // import { useToast } from '@/components/ui/toast/use-toast'
-  // import Logo from '../assets/logo.png'
 
   // const { toast } = useToast()
   const router = useRouter()
@@ -36,7 +35,7 @@
 </script>
 
 <template>
-  <v-app class="!bg-gradient-to-r from-cyan-800 to-violet-800 hide-scrollbar">
+  <v-app class="!bg-gradient-to-r from-cyan-400 to-violet-600 hide-scrollbar">
     <v-row class="ma-10 pa-10">
       <v-col class="bg-gray-900 rounded-tl-2xl rounded-bl-2xl d-flex">
         <v-row align="center">
@@ -54,7 +53,7 @@
           <v-text-field
             v-model="username"
             class="form-color"
-            bg-color="cyan-darken-4"
+            bg-color="cyan-darken-1"
             :counter="10"
             label="Username"
             required
@@ -66,7 +65,7 @@
             v-model="password"
             class="form-color"
             :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-            bg-color="cyan-darken-4"
+            bg-color="cyan-darken-1"
             :counter="6"
             :elevation="24"
             label="Password"

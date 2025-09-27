@@ -2,6 +2,7 @@
   import { defineProps, defineEmits } from 'vue'
   import { Save } from 'lucide-vue-next'
   import { useAlternativeStore } from '@/stores/alternativeStore'
+  import { toast } from 'vue-sonner'
 
   const alternativeStore = useAlternativeStore()
 
@@ -19,7 +20,7 @@
 
   async function save() {
     if (!alternativeId.value || !alternativeName.value) {
-      alert('All rquired eh')
+      toast.error('Alternative cannot be empty')
       return
     }
     try {

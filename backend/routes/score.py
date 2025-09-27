@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from db import db
-from models import Score, Criteria
+from models import Score, Alternative
 
 score_bp = Blueprint("score", __name__)
 
@@ -17,6 +17,25 @@ def get_scores(alt_id):
         })
     return jsonify(result)
 
+# GET scores by project_id + criteria_id
+@score_bp.route("/project/<int:project_id>/criteria/<int:criteria_id>", methods=["GET"])
+def get_scores_by_criteria(project_id, criteria_id):
+    scores = (
+        db.session.query(Alternative, Score.value)
+        .outerjoin(Score, (Score.alternative_id == Alternative.id) & (Score.criteria_id == criteria_id))  
+        .filter(Alternative.project_id == project_id)
+        .all()
+    )
+
+    result = []
+    for alt, value in scores:
+        result.append({
+            "alt_id": alt.id,
+            "name": alt.name,
+            "value": value if value is not None else None  # show None if not yet scored
+        })
+
+    return jsonify(result)
 
 # POST add new score
 @score_bp.route("/", methods=["POST"])
@@ -38,3 +57,21 @@ def add_score():
     db.session.commit()
 
     return jsonify({"message": "Score added sucessfully"}, 201)
+
+# UPDATE a score
+@score_bp.route("/<int:score_id>", methods=["PUT", "PATCH"])
+def edit_score(score_id):
+    data = request.json
+    value = data.get("value")
+
+    if value is None:
+        return jsonify({"error": "Value is required"}), 400
+
+    score = Score.query.get(score_id)
+    if not score:
+        return jsonify({"error": "Score not found"}), 404
+
+    score.value = value
+    db.session.commit()
+
+    return jsonify({"message": "Score updated successfully"})

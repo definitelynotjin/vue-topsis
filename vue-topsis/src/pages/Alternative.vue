@@ -9,6 +9,7 @@
   const showDialog = ref(false)
 
   const searchfilter = ref('')
+
   const filteredAlternative = computed(() => {
     const term = (searchfilter.value ?? '').toLowerCase()
     return alternativeStore.alternative.filter((item) => {
@@ -24,7 +25,6 @@
     searchfilter.value = search
   }
   const altHeaders = [
-    { title: ' ID', key: 'id' },
     { title: 'Alternative ID', key: 'id_alt' },
     { title: 'Alternative Name', key: 'name' },
     { title: 'Actions', key: 'actions', sortable: false },
@@ -43,7 +43,6 @@
 </script>
 
 <template>
-  <!-- <v-app class="wallpaper"> -->
   <v-app class="!bg-cyan-900">
     <main>
       <v-container fluid class="alternative-container">
@@ -59,7 +58,7 @@
             class="!bg-cyan-600 card-add-button"
             variant="flat"
           >
-            Tambahkan Alternatif
+            Add Alternative
           </v-btn>
         </div>
         <AddAlternativeDialog v-model="showDialog" :project_id="projectStore.selectedProjectId" />

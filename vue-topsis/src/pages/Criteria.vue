@@ -11,6 +11,7 @@
   const showDialog = ref(false)
 
   const critHeaders = [
+    { title: 'No', key: 'num', sortable: false },
     { title: 'Criteria Name', key: 'name' },
     { title: 'Type', key: 'type' },
     { title: 'Weight', key: 'weight' },
@@ -58,9 +59,10 @@
             v-bind="props"
             hover
             type="submit"
+            variant="flat"
             class="card-add-button !bg-cyan-600"
           >
-            Tambahkan Kriteria
+            Add Criteria
           </v-btn>
         </div>
         <AddCriteriaDialog
@@ -72,7 +74,10 @@
           :list-props="{ bgColor: 'cyan-darken-1' }"
           :items="filteredCriteria"
           :headers="critHeaders"
-        />
+        >
+          <template v-slot:item.num="{ index }"> </template>
+          <template> </template>
+        </DataTable>
         <ActionButtons />
       </v-container>
     </main>

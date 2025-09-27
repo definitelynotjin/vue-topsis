@@ -1,0 +1,7 @@
+.v-tooltip .v-overlay__content {
+  background-color: steelblue !important;
+  color: white !important;
+  font-size: 15px;
+  border-radius: 10px;
+  padding: 10px;
+}
