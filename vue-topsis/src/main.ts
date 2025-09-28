@@ -4,12 +4,12 @@
  * Bootstraps Vuetify and other plugins then mounts the App`
  */
 
+import * as VInlineFields from '@wdns/vuetify-inline-fields'
+
 // Composables
 import { createApp } from 'vue'
-
 // Plugins
 import { registerPlugins } from '@/plugins'
-
 // Components
 import App from './App.vue'
 
@@ -20,8 +20,10 @@ import '@fontsource-variable/open-sans'
 import './styles/overrides.css'
 
 const app = createApp(App)
+for (const prop in VInlineFields) {
+  app.component(prop, VInlineFields[prop])
+}
 
 registerPlugins(app)
 
 app.mount('#app')
-// app.use(Toast)

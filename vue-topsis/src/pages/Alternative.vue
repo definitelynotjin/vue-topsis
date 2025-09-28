@@ -62,7 +62,7 @@
           </v-btn>
         </div>
         <AddAlternativeDialog v-model="showDialog" :project_id="projectStore.selectedProjectId" />
-        <DataTable :items="filteredAlternative" :headers="altHeaders" />
+        <AlternativeDataTable :items="filteredAlternative" :headers="altHeaders" />
       </v-container>
     </main>
   </v-app>

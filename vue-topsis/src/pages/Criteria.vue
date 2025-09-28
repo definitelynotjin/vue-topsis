@@ -15,7 +15,6 @@
     { title: 'Criteria Name', key: 'name' },
     { title: 'Type', key: 'type' },
     { title: 'Weight', key: 'weight' },
-    { title: 'Actions', key: 'actions', sortable: false },
   ]
 
   const handleSearch = (search) => {
@@ -70,15 +69,11 @@
           @saved="console.log('saved')"
           :project-id="projectStore.selectedProjectId"
         />
-        <DataTable
+        <CriteriaDataTable
           :list-props="{ bgColor: 'cyan-darken-1' }"
           :items="filteredCriteria"
           :headers="critHeaders"
-        >
-          <template v-slot:item.num="{ index }"> </template>
-          <template> </template>
-        </DataTable>
-        <ActionButtons />
+        />
       </v-container>
     </main>
   </v-app>

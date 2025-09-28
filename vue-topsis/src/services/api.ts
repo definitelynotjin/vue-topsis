@@ -82,6 +82,7 @@ export async function fetchScoreData (alternative_id: number) {
     return []
   }
 }
+
 export async function fetchScoresByCriteria (projectId: number, criteriaId: number) {
   try {
     const response = await axios.get(`api/score/project/${projectId}/criteria/${criteriaId}`)

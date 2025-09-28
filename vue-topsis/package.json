@@ -16,6 +16,7 @@
     "@fontsource/roboto": "5.2.6",
     "@mdi/font": "7.4.47",
     "@tailwindcss/vite": "^4.1.13",
+    "@wdns/vuetify-inline-fields": "^1.0.9",
     "axios": "^1.12.2",
     "lucide-vue-next": "^0.544.0",
     "pinia": "^3.0.3",

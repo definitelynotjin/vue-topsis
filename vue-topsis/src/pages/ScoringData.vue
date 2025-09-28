@@ -29,11 +29,6 @@
       title: 'Value',
       key: 'value',
     },
-
-    {
-      title: 'Actions',
-      key: 'actions',
-    },
   ]
 
   const filteredScore = computed(() => {
@@ -46,16 +41,25 @@
       )
     })
   })
-
   watch(
     () => projectStore.selectedProjectId,
     async (newProjectId) => {
       if (newProjectId) {
         await criteriaStore.loadByProject(newProjectId)
-        criteriaStore.selectedCriteriaId = null
       } else {
         criteriaStore.criteria = []
-        criteriaStore.selectedCriteriaId = null
+      }
+    },
+    { immediate: true },
+  )
+
+  watch(
+    [() => projectStore.selectedProjectId, () => criteriaStore.selectedCriteriaId],
+    async ([newProjectId, newCriteriaId]) => {
+      if (newProjectId && newCriteriaId) {
+        await scoreStore.loadByCriteria(newProjectId, newCriteriaId)
+      } else {
+        scoreStore.score = []
       }
     },
     { immediate: true },
@@ -81,8 +85,7 @@
           </v-btn>
         </div>
         <EditScoreValueDialog v-model="showDialog" />
-        <DataTable :items="filteredScore" :headers="scoreHeaders" />
-        <ActionButtons />
+        <ScoreDataTable :items="filteredScore" :headers="scoreHeaders" />
       </v-container>
     </main>
   </v-app>
