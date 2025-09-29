@@ -21,20 +21,20 @@ def export_alternatives(project_id):
     ws.title = "Alternatives"
 
     # Header
-    headers = ["Nama"] + ["ID"] + criteria_names + ["Nama Project"]
+    headers = ["Nama"] + ["ID"] + ["Nama Project"] + criteria_names
     ws.append(headers)
 
     # Isi data
     for alt in alternatives:
         row = [alt.name]
-        row.append(getattr(alt, "id_alt", ""))  # Menambahkan NIP
+        row.append(getattr(alt, "id_alt", ""))  # Menambahkan ID
+        row.append(alt.project.name)
 
         # urutkan skor sesuai criteria_names
         scores_by_criteria = {s.criteria.name: s.value for s in alt.scores}
         for cname in criteria_names:
             row.append(scores_by_criteria.get(cname, ""))
 
-        row.append(alt.project.name)
         ws.append(row)
 
     # Simpan ke buffer
