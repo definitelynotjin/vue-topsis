@@ -92,10 +92,21 @@ export async function fetchScoresByCriteria (projectId: number, criteriaId: numb
     throw error
   }
 }
-
-export async function addScoreData (newScore: { value: number }, alternative_id: number) {
+export async function editScoreData (scoreId: number, newValue: number) {
   try {
-    const response = await axios.post(`api/score/${alternative_id}`, newScore)
+    const response = await axios.patch(`api/score/${scoreId}`, {
+      value: newValue,
+    })
+    return response
+  } catch (error) {
+    console.error('error editScoreValue', error)
+    throw error
+  }
+}
+
+export async function addScoreData (newScore: { value: number, alternative_id: number, criteria_id: number }) {
+  try {
+    const response = await axios.post(`api/score/`, newScore)
     return response.data
   } catch (error) {
     console.error('oi, add score data from api error tangina', error)

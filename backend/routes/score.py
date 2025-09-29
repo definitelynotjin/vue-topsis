@@ -17,20 +17,22 @@ def get_scores(alt_id):
         })
     return jsonify(result)
 
-# GET scores by project_id + criteria_id
+# GET scores by project_id + criteria_id + score_id
 @score_bp.route("/project/<int:project_id>/criteria/<int:criteria_id>", methods=["GET"])
 def get_scores_by_criteria(project_id, criteria_id):
     scores = (
-        db.session.query(Alternative, Score.value)
+        db.session.query(Alternative, Score.id  ,Score.value)
         .outerjoin(Score, (Score.alternative_id == Alternative.id) & (Score.criteria_id == criteria_id))  
         .filter(Alternative.project_id == project_id)
         .all()
     )
 
     result = []
-    for alt, value in scores:
+    for alt, score_id, value in scores:
         result.append({
             "alt_id": alt.id,
+            "score_id": score_id,
+            "criteria_id": criteria_id,
             "name": alt.name,
             "value": value if value is not None else None  # show None if not yet scored
         })
