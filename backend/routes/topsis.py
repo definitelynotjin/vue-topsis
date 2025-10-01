@@ -131,7 +131,7 @@ def get_saved_ranking(project_id):
         "data": output
     })
 
-# DATA Matriks
+# DATA Matriks Weighted
 @topsis_bp.route("/<int:project_id>/matrix", methods=["GET"])
 def get_decision_matrix(project_id):
     """Hitung matriks keputusan berbobot tanpa simpan ke DB"""
@@ -144,3 +144,68 @@ def get_decision_matrix(project_id):
         "skipped": len(skipped),
         "data": matrix_result
     })
+
+# DATA Matriks Before Weight
+@topsis_bp.route("/<int:project_id>/matrix-before-weight", methods=["GET"])
+def get_decision_matrix_before_weight(project_id):
+    """Hitung matriks keputusan sebelum berbobot tanpa simpan ke DB"""
+    alternatives = Alternative.query.filter_by(project_id=project_id).all()
+    criteria = Criteria.query.filter_by(project_id=project_id).all()
+
+    # urutan kriteria sesuai DB
+    criteria_order = [
+        {"criteria": c.name, "weight": c.weight, "type": c.type}
+        for c in criteria
+    ]
+
+    alt_list = []
+    for alt in alternatives:
+        scores_data = []
+        for score in alt.scores:
+            scores_data.append({
+                "criteria": score.criteria.name,
+                "value": score.value
+            })
+        alt_list.append({
+            "id": alt.id,
+            "name": alt.name,
+            "id_alt": getattr(alt, "id_alt", None),
+            "scores": scores_data
+        })
+
+    matrix_result = []
+    skipped = []
+    if not criteria_order:
+        return jsonify({
+            "status": "error",
+            "message": "No criteria found for this project",
+            "total": 0,
+            "skipped": 0,
+            "data": []
+        }), 400
+
+    # Buat matriks keputusan sebelum berbobot
+    decision_matrix = []
+    for alt in alt_list:
+        row = {"id": alt["id"], "name": alt["name"], "id_alt": alt["id_alt"]}
+        scores_dict = {s["criteria"]: s["value"] for s in alt["scores"]}
+        missing_criteria = False
+        for c in criteria_order:
+            if c["criteria"] in scores_dict:
+                row[c["criteria"]] = scores_dict[c["criteria"]]
+            else:
+                row[c["criteria"]] = None
+                missing_criteria = True
+        if missing_criteria:
+            skipped.append(alt)
+        else:
+            decision_matrix.append(row)
+
+    return jsonify({
+        "status": "success",
+        "message": f"Decision matrix before weighting calculation completed",
+        "total": len(decision_matrix),
+        "skipped": len(skipped),
+        "data": decision_matrix
+    })
+
