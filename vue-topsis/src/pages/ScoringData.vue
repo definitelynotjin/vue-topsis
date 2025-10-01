@@ -15,6 +15,7 @@
     searchFilter.value = search
   }
   const scoreHeaders = [
+    { title: 'No', key: 'no', sortable: false },
     {
       title: 'Alternative ID',
       key: 'alt_id',

@@ -25,6 +25,9 @@
 
 <template>
   <v-data-table hover class="data-table">
+    <template v-slot:item.no="{ index }">
+      {{ index + 1 }}
+    </template>
     <template v-slot:item.value="{ item }">
       <VInlineTextField
         v-model="item.value"

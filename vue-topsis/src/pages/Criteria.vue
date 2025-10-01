@@ -11,7 +11,7 @@
   const showDialog = ref(false)
 
   const critHeaders = [
-    { title: 'No', key: 'num', sortable: false },
+    { title: 'No', key: 'no', sortable: false },
     { title: 'Criteria Name', key: 'name' },
     { title: 'Type', key: 'type' },
     { title: 'Weight', key: 'weight' },

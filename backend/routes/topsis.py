@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from db import db
 from models import Alternative, Score, Criteria, TopsisResult
-from services.topsis import calculate_topsis
+from services.topsis import calculate_topsis, calculate_weighted_matrix
 
 topsis_bp = Blueprint("topsis", __name__)
 
@@ -33,8 +33,39 @@ def get_topsis_data(project_id):
 
     ranking_result, skipped = calculate_topsis(alt_list, criteria_order)
     ranking_result = sorted(ranking_result, key=lambda x: x["score"], reverse=True)
+    # skipped = sorted(skipped, key=lambda x: x["name"], reverse=True)
     
     return ranking_result, skipped
+
+def get_matriks_weighted(project_id):
+    """Helper untuk ambil alternatif + kriteria lalu hitung matriks berbobot"""
+    alternatives = Alternative.query.filter_by(project_id=project_id).all()
+    criteria = Criteria.query.filter_by(project_id=project_id).all()
+
+    # urutan kriteria sesuai DB
+    criteria_order = [
+        {"criteria": c.name, "weight": c.weight, "type": c.type}
+        for c in criteria
+    ]
+
+    alt_list = []
+    for alt in alternatives:
+        scores_data = []
+        for score in alt.scores:
+            scores_data.append({
+                "criteria": score.criteria.name,
+                "value": score.value
+            })
+        alt_list.append({
+            "id": alt.id,
+            "name": alt.name,
+            "id_alt": getattr(alt, "id_alt", None),
+            "scores": scores_data
+        })
+
+    matrix_result, skipped = calculate_weighted_matrix(alt_list, criteria_order)
+    
+    return matrix_result, skipped
 
 
 @topsis_bp.route("/<int:project_id>", methods=["GET"])
@@ -46,7 +77,7 @@ def topsis_ranking(project_id):
         "status": "success",
         "message": f"TOPSIS calculation completed",
         "total": len(ranking_result),
-        "skipped": skipped,
+        "skipped": len(skipped),
         "data": ranking_result
     })
 
@@ -98,4 +129,18 @@ def get_saved_ranking(project_id):
         "status": "success",
         "message": f"Retrieved {len(output)} ranking results",
         "data": output
+    })
+
+# DATA Matriks
+@topsis_bp.route("/<int:project_id>/matrix", methods=["GET"])
+def get_decision_matrix(project_id):
+    """Hitung matriks keputusan berbobot tanpa simpan ke DB"""
+    matrix_result, skipped = get_matriks_weighted(project_id)
+
+    return jsonify({
+        "status": "success",
+        "message": f"Weighted decision matrix calculation completed",
+        "total": len(matrix_result),
+        "skipped": len(skipped),
+        "data": matrix_result
     })
