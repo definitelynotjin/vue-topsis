@@ -20,6 +20,7 @@ declare module 'vue' {
     CardTitle: typeof import('./components/CardTitle.vue')['default']
     CardTitleDropdown: typeof import('./components/CardTitleDropdown.vue')['default']
     CardTitleScoreDropdown: typeof import('./components/CardTitleScoreDropdown.vue')['default']
+    copy: typeof import('./components/ScoreDataTable copy.vue')['default']
     CriteriaDataTable: typeof import('./components/CriteriaDataTable.vue')['default']
     DashboardDropdown: typeof import('./components/DashboardDropdown.vue')['default']
     DataTable: typeof import('./components/DataTable.vue')['default']
@@ -34,6 +35,7 @@ declare module 'vue' {
     SearchBar: typeof import('./components/SearchBar.vue')['default']
     SparkLine: typeof import('./components/SparkLine.vue')['default']
     SparkLines: typeof import('./components/SparkLines.vue')['default']
+    TopsisDataTable: typeof import('./components/TopsisDataTable.vue')['default']
     VueSidebar: typeof import('./components/VueSidebar.vue')['default']
     Wallpaper: typeof import('./components/Wallpaper.vue')['default']
   }

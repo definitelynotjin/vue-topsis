@@ -25,6 +25,7 @@
     searchfilter.value = search
   }
   const altHeaders = [
+    { title: 'No', key: 'no', sortable: false },
     { title: 'Alternative ID', key: 'id_alt' },
     { title: 'Alternative Name', key: 'name' },
     { title: 'Actions', key: 'actions', sortable: false },
@@ -45,6 +46,18 @@
 <template>
   <v-app class="!bg-cyan-900">
     <main>
+      <v-container>
+        <div class="d-flex justify-end">
+          <v-btn
+            type="submit"
+            hover
+            variant="flat"
+            class="card-add-button !bg-cyan-600"
+          >
+              Import Data
+          </v-btn>
+        </div> 
+      </v-container>  
       <v-container fluid class="alternative-container">
         <div class="d-flex !bg-cyan-700 alternative-top-table-text">
           <CardTitleDropdown />

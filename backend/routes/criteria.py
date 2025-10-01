@@ -19,6 +19,22 @@ def get_criteria(project_id):
         })
     return jsonify(result)
 
+# GET criteria by id
+@criteria_bp.route("/detail/<int:criteria_id>", methods=["GET"])
+def get_criteria_by_id(criteria_id):
+    c = Criteria.query.get(criteria_id)
+    if not c:
+        return jsonify({"error": "Criteria not found"}), 404
+
+    result = {
+        "id": c.id,
+        "name": c.name,
+        "weight": c.weight,
+        "type": c.type,
+        "project_id": c.project_id
+    }
+    return jsonify(result)
+
 #GET all criteria
 # @criteria_bp.route("/", methods=["GET"])
 # def get_all_criteria():
@@ -63,4 +79,38 @@ def add_criteria():
         "type": new_criteria.type,
         "project_id": new_criteria.project_id
     }), 201
+
+# UPDATE criteria
+@criteria_bp.route("/<int:criteria_id>", methods=["PUT"])
+def update_criteria(criteria_id):
+    data = request.json
+    name = data.get("name")
+    weight = data.get("weight")
+    type_ = data.get("type")  # benefit / cost
+
+    criteria = Criteria.query.get(criteria_id)
+    if not criteria:
+        return jsonify({"error": "Criteria not found"}), 404
+
+    if name is not None and name != "":
+        criteria.name = name
+    if weight is not None and weight != "":
+        criteria.weight = weight
+    if type_ is not None and type_ in ["benefit", "cost"]:
+        criteria.type = type_
+    db.session.commit()
+
+    return jsonify({"message": "Criteria updated successfully"})
+
+# DELETE criteria
+@criteria_bp.route("/<int:criteria_id>", methods=["DELETE"])
+def delete_criteria(criteria_id):
+    criteria = Criteria.query.get(criteria_id)
+    if not criteria:
+        return jsonify({"error": "Criteria not found"}), 404
+
+    db.session.delete(criteria)
+    db.session.commit()
+
+    return jsonify({"message": "Criteria deleted successfully"})
 

@@ -113,3 +113,13 @@ export async function addScoreData (newScore: { value: number, alternative_id: n
     throw error
   }
 }
+
+export async function fetchTopsisScores (projectId: number) {
+  try {
+    const response = await axios.get(`api/topsis/${projectId}`)
+    return response.data
+  } catch (error) {
+    console.error('error fetchTopsisScores', error)
+    throw error
+  }
+}

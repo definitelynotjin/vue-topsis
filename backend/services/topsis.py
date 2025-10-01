@@ -69,9 +69,80 @@ def calculate_topsis(alternatives, criteria_order):
             "id": alt["id"],
             "name": alt["name"],
             "id_alt": alt["id_alt"],
-            "score": float(scores[i])
-        })
+            "score": float(scores[i]),
+    })
     
+    # Urutkan berdasarkan skor (descending)
+    sorted_results = sorted(results, key=lambda x: x["score"], reverse=True)
+
+    # Tambahkan ranking
+    for rank, item in enumerate(sorted_results, start=1):
+        item["rank"] = rank
+
+    return results, skipped
+
+
+def calculate_weighted_matrix(alternatives, criteria_order):
+    """
+    Menghasilkan matriks berbobot untuk alternatif yang lengkap saja.
+    """
+    clean_alternatives = []
+    skipped = []
+
+    for alt in alternatives:
+        criteria_map = {s["criteria"]: s["value"] for s in alt["scores"]}
+        row = []
+        missing = False
+        for c in criteria_order:
+            if c["criteria"] in criteria_map:
+                row.append(criteria_map[c["criteria"]])
+            else:
+                missing = True
+                break
+        if missing:
+            skipped.append({
+                "id": alt["id"],
+                "name": alt["name"],
+                "id_alt": alt.get("id_alt"),
+                "reason": "Missing criteria scores"
+            })
+            continue
+        clean_alternatives.append({
+            "id": alt["id"],
+            "name": alt["name"],
+            "id_alt": alt.get("id_alt"),
+            "row": row
+        })
+
+    if not clean_alternatives:
+        return [], skipped
+
+    # Buat matrix
+    matrix = np.array([alt["row"] for alt in clean_alternatives], dtype=float)
+    weights = np.array([c["weight"] for c in criteria_order], dtype=float)
+
+    # Normalisasi
+    norm_matrix = matrix / np.sqrt((matrix**2).sum(axis=0))
+
+    # Matriks berbobot
+    weighted_matrix = norm_matrix * weights
+
+    # Kembalikan dengan identitas alternatif
+    results = []
+    for i, alt in enumerate(clean_alternatives):
+        # buat dictionary criteria → nilai
+        weighted_scores = {
+            c["criteria"]: float(weighted_matrix[i][j])
+            for j, c in enumerate(criteria_order)
+        }
+
+        results.append({
+            "id": alt["id"],
+            "name": alt["name"],
+            "id_alt": alt["id_alt"],
+            "weighted_scores": weighted_scores
+        })
+
 
     return results, skipped
 

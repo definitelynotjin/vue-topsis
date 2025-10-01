@@ -37,3 +37,35 @@ def add_alternative():
     db.session.commit()
 
     return jsonify({"message": "Alternative added succesfully"}, 201)
+
+# UPDATE alternative
+@alt_bp.route("/<int:alt_id>", methods=["PUT"])
+def update_alternative(alt_id):
+    data = request.json or {}
+    name = data.get("name")
+    id_alt = data.get("id_alt")
+
+    alt = Alternative.query.get(alt_id)
+    if not alt:
+        return jsonify({"error": "Alternative not found"}), 404
+
+    # Update hanya kalau field dikirim dan tidak kosong
+    if name is not None and name != "":
+        alt.name = name
+    if id_alt is not None and id_alt != "":
+        alt.id_alt = id_alt
+    db.session.commit()
+
+    return jsonify({"message": "Alternative updated successfully"})
+
+# DELETE alternative
+@alt_bp.route("/<int:alt_id>", methods=["DELETE"])
+def delete_alternative(alt_id):
+    alt = Alternative.query.get(alt_id)
+    if not alt:
+        return jsonify({"error": "Alternative not found"}), 404
+
+    db.session.delete(alt)
+    db.session.commit()
+
+    return jsonify({"message": "Alternative deleted successfully"})

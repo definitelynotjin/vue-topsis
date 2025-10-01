@@ -18,22 +18,32 @@
 
   const menuItems = [
     {
-      title: 'Criteria Data',
+      title: 'Data Kriteria',
       value: '/criteria',
       icon: Calculator,
     },
     {
-      title: 'Alternative Data',
+      title: 'Data Alternatif',
       value: '/alternative',
       icon: UserPen,
     },
     {
-      title: 'Scoring Data',
+      title: 'Data Penilaian',
       value: '/scoringdata',
       icon: Activity,
     },
     {
       title: 'TOPSIS ',
+      value: '/topsisscore',
+      icon: NotepadText,
+    },
+    {
+      title: 'Data Ranking ',
+      value: '/topsisscore',
+      icon: NotepadText,
+    },
+    {
+      title: 'Data User',
       value: '/topsisscore',
       icon: NotepadText,
     },
