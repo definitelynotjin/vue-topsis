@@ -6,7 +6,11 @@
   const projectStore = useProjectStore()
   const alternativeStore = useAlternativeStore()
 
-  const showDialog = ref(false)
+  const showAddDialog = ref(false)
+  const pendingDeleteId = ref<number | null>(null)
+  const pendingDeleteName = ref<string | null>(null)
+  const showImportDialog = ref(false)
+  const showDeleteDialog = ref(false)
 
   const searchfilter = ref('')
 
@@ -21,14 +25,28 @@
     })
   })
 
+  function requestDelete(item: { id: number; name: string }) {
+    pendingDeleteId.value = item.id
+    pendingDeleteName.value = item.name
+    showDeleteDialog.value = true
+  }
+
+  async function confirmDelete() {
+    if (pendingDeleteId.value !== null) {
+      await alternativeStore.deleteAlternative(pendingDeleteId.value)
+      await alternativeStore.loadByProject(projectStore.selectedProjectId!)
+    }
+    showDeleteDialog.value = false
+    pendingDeleteId.value = null
+  }
   const handleSearch = (search: string) => {
     searchfilter.value = search
   }
   const altHeaders = [
-    { title: 'No', key: 'no', sortable: false },
-    { title: 'Alternative ID', key: 'id_alt' },
-    { title: 'Alternative Name', key: 'name' },
-    { title: 'Actions', key: 'actions', sortable: false },
+    { title: 'No', key: 'no', sortable: false, width: '10%' },
+    { title: 'ID Alternatif', key: 'id_alt', width: '30%' },
+    { title: 'Nama Alternatif', key: 'name' },
+    { title: '', key: 'actions', sortable: false, align: 'end', width: '1%' },
   ]
   watch(
     () => projectStore.selectedProjectId,
@@ -46,36 +64,46 @@
 <template>
   <v-app class="!bg-cyan-900">
     <main>
-      <v-container>
-        <div class="d-flex justify-end">
-          <v-btn
-            type="submit"
-            hover
-            variant="flat"
-            class="card-add-button !bg-cyan-600"
-          >
-              Import Data
-          </v-btn>
-        </div> 
-      </v-container>  
       <v-container fluid class="alternative-container">
         <div class="d-flex !bg-cyan-700 alternative-top-table-text">
           <CardTitleDropdown />
           <SearchBar @search="handleSearch" />
           <v-btn
             :disabled="!projectStore.selectedProjectId"
-            @click="showDialog = true"
+            @click="showAddDialog = true"
             v-bind="props"
             hover
             type="submit"
-            class="!bg-cyan-600 card-add-button"
+            class="!bg-green-600 card-add-button"
             variant="flat"
           >
-            Add Alternative
+            Tambah Alternatif
+          </v-btn>
+          <v-btn
+            type="submit"
+            hover
+            variant="flat"
+            @click="showImportDialog = true"
+            class="card-add-button !bg-cyan-600"
+          >
+            Import Data
           </v-btn>
         </div>
-        <AddAlternativeDialog v-model="showDialog" :project_id="projectStore.selectedProjectId" />
-        <AlternativeDataTable :items="filteredAlternative" :headers="altHeaders" />
+        <AddAlternativeDialog
+          v-model="showAddDialog"
+          :project_id="projectStore.selectedProjectId!"
+        />
+        <DeleteAlternativeDialog
+          v-model="showDeleteDialog"
+          :alternative-name="pendingDeleteName"
+          @confirm-delete="confirmDelete"
+        />
+        <AddImportDataAlternativeDialog v-model="showImportDialog" />
+        <AlternativeDataTable
+          :items="filteredAlternative"
+          :headers="altHeaders"
+          @delete-request="requestDelete"
+        />
       </v-container>
     </main>
   </v-app>
@@ -102,7 +130,6 @@
     margin: 15px;
     height: 50px;
     padding: 10px;
-    background-color: burlywood;
     text-transform: initial;
   }
 </style>

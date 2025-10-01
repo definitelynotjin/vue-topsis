@@ -13,6 +13,7 @@ declare module 'vue' {
     AddCriteria: typeof import('./components/AddCriteria.vue')['default']
     AddCriteriaDialog: typeof import('./components/AddCriteriaDialog.vue')['default']
     'AddCriteriaDialog.vue': typeof import('./components/AddCriteriaDialog.vue.vue')['default']
+    AddImportDataAlternative: typeof import('./components/AddImportDataAlternative.vue')['default']
     AddImportDataAlternativeDialog: typeof import('./components/AddImportDataAlternativeDialog.vue')['default']
     AddProjectDialog: typeof import('./components/AddProjectDialog.vue')['default']
     AlternativeDataTable: typeof import('./components/AlternativeDataTable.vue')['default']

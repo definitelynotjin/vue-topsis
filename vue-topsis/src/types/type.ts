@@ -13,7 +13,7 @@ export interface Criteria {
 }
 
 export interface Alternative {
-  alt_id?: number
+  id_alt?: number
   name: string
   project_id: number
   type: string

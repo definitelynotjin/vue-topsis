@@ -1,14 +1,12 @@
 <script setup lang="ts">
   import { defineProps, ref, defineEmits } from 'vue'
   import { useProjectStore } from '@/stores/projectStore'
-  import { useScoreStore } from '@/stores/scoreStore'
-  import { useAlternativeStore } from '@/stores/alternativeStore'
   import { useCriteriaStore } from '@/stores/criteriaStore'
+  import { useAlternativeStore } from '@/stores/alternativeStore'
 
   const projectStore = useProjectStore()
-  const criteriaStore = useCriteriaStore()
   const alternativeStore = useAlternativeStore()
-  const scoreStore = useScoreStore()
+  const criteriaStore = useCriteriaStore()
 
   const emit = defineEmits()
   const props = defineProps<{}>()

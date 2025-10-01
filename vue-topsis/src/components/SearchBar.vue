@@ -10,7 +10,7 @@
 <template>
   <v-text-field
     class="searchbar min-h-auto"
-    placeholder="Search"
+    placeholder="Cari"
     prepend-inner-icon="mdi-magnify"
     variant="outlined"
     width="90"

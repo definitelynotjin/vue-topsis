@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { onMounted, ref, computed } from 'vue'
   import { useProjectStore } from '@/stores/projectStore'
   import { ChevronDown, Plus } from 'lucide-vue-next'
   import { fetchProjectData } from '../services/api.ts'
@@ -9,6 +9,15 @@
 
   const dropdowns = ref<Record<number, boolean>>({})
   const showDialog = ref(false)
+  const activeProject = ref(null)
+
+  function openDropdown(project) {
+    activeProject.value = project
+  }
+  function closeDropdown() {
+    activeProject.value = null
+  }
+
   const activeProject = ref(null)
 
   function openDropdown(project) {
@@ -90,6 +99,33 @@
             />
           </v-card>
         </div>
+        <v-card
+          hover
+          class="project-card flex-1"
+          v-for="project in filteredProject"
+          :key="project.id"
+        >
+          {{ project.name }}
+          <v-row>
+            <v-card-text class="project-card-text">
+              {{ project.description }}
+            </v-card-text>
+            <v-card-actions class="action-buttons">
+              <v-btn
+                color="white"
+                :icon="ChevronDown"
+                @click="activeProject?.id === project.id ? closeDropdown() : openDropdown(project)"
+                @close="closeDropdown"
+              />
+            </v-card-actions>
+          </v-row>
+
+          <DashboardDropdown
+            v-if="activeProject?.id === project.id"
+            :project="activeProject"
+            @close="closeDropdown"
+          />
+        </v-card>
         <AddProjectDialog v-model="showDialog" @saved="console.log('project saved')" />
       </v-container>
     </main>

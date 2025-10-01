@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+// Projects
+
 export async function fetchProjectData () {
   try {
     const response = await axios.get('api/project/')
@@ -17,6 +19,8 @@ export async function addProjectData (newProject: { name: string, description: s
     throw error
   }
 }
+
+// Criterias
 
 export async function fetchCriteriaData (id: number) {
   try {
@@ -43,9 +47,17 @@ export async function addCriteriaData (newCriteria: {
     throw error
   }
 }
-export async function deleteCriteriaData (id: number) {
-  try {} catch {}
+export async function deleteCriteriaData (criteriaId: number) {
+  try {
+    const response = await axios.delete(`api/criteria/${criteriaId}`)
+    return response.data
+  } catch (error) {
+    console.error('canot delet criteria', error)
+    throw error
+  }
 }
+
+// Alternatives
 
 export async function fetchAlternativeData (id: number) {
   try {
@@ -71,6 +83,17 @@ export async function addAlternativeData (newAlternative: {
     throw error
   }
 }
+export async function deleteAlternativeData (alternative_id: number) {
+  try {
+    const response = await axios.delete(`api/alternative/${alternative_id}`)
+    return response.data
+  } catch (error) {
+    console.error('cannot delete atelratnive eh', error)
+    throw error
+  }
+}
+
+// Scores
 
 export async function fetchScoreData (alternative_id: number) {
   try {
@@ -92,9 +115,18 @@ export async function fetchScoresByCriteria (projectId: number, criteriaId: numb
     throw error
   }
 }
+export async function deleteScoreData (scoreId: number) {
+  try {
+    const response = await axios.delete(`api/score/${scoreId}`)
+    return response.data
+  } catch (error) {
+    console.error('sorry man cannot deltee score', error)
+    throw error
+  }
+}
 export async function editScoreData (scoreId: number, newValue: number) {
   try {
-    const response = await axios.patch(`api/score/${scoreId}`, {
+    const response = await axios.put(`api/score/${scoreId}`, {
       value: newValue,
     })
     return response
@@ -113,6 +145,7 @@ export async function addScoreData (newScore: { value: number, alternative_id: n
     throw error
   }
 }
+// Topsis Scores
 
 export async function fetchTopsisScores (projectId: number) {
   try {

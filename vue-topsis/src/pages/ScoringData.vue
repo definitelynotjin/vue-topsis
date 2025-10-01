@@ -9,7 +9,10 @@
   const scoreStore = useScoreStore()
 
   const searchFilter = ref('')
-  const showDialog = ref(false)
+  const pendingDeleteId = ref<number | null>(null)
+  const pendingDeleteName = ref<string | null>(null)
+  const showAddDialog = ref(false)
+  const showDeleteDialog = ref(false)
 
   const handleSearch = (search) => {
     searchFilter.value = search
@@ -17,19 +20,21 @@
   const scoreHeaders = [
     { title: 'No', key: 'no', sortable: false },
     {
-      title: 'Alternative ID',
+      title: 'ID Alternatif',
       key: 'alt_id',
     },
 
     {
-      title: 'Alternative Name',
+      title: 'Nama Alternatif',
       key: 'name',
     },
 
     {
-      title: 'Value',
+      title: 'Nilai',
       key: 'value',
     },
+
+    { title: '', key: 'actions', sortable: false, align: 'end', width: '1%' },
   ]
 
   const filteredScore = computed(() => {
@@ -42,6 +47,22 @@
       )
     })
   })
+
+  function requestDelete(item: { id: number; name: string }) {
+    pendingDeleteId.value = item.id
+    pendingDeleteName.value = item.name
+    showDeleteDialog.value = true
+  }
+
+  async function confirmDelete() {
+    if (pendingDeleteId.value !== null) {
+      await scoreStore.deleteScoreValue(pendingDeleteId.value)
+      await scoreStore.loadByCriteria(projectStore.selectedProjectId!, pendingDeleteId.value)
+    }
+    showDeleteDialog.value = false
+    pendingDeleteId.value = null
+  }
+
   watch(
     () => projectStore.selectedProjectId,
     async (newProjectId) => {
@@ -75,7 +96,7 @@
           <CardTitleScoreDropdown />
           <SearchBar @search="handleSearch" />
           <v-btn
-            @click="showDialog = true"
+            @click="showAddDialog = true"
             v-bind="props"
             hover
             variant="flat"
@@ -85,8 +106,12 @@
             Edit Value
           </v-btn>
         </div>
-        <EditScoreValueDialog v-model="showDialog" />
-        <ScoreDataTable :items="filteredScore" :headers="scoreHeaders" />
+        <EditScoreValueDialog v-model="showDeleteDialog" @confirm-delete="confirmDelete" />
+        <ScoreDataTable
+          :items="filteredScore"
+          :headers="scoreHeaders"
+          @delete-request="requestDelete"
+        />
       </v-container>
     </main>
   </v-app>

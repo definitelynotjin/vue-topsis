@@ -6,6 +6,8 @@
     Calculator,
     LayoutDashboard,
     Activity,
+    Trophy,
+    CircleUserRound,
   } from 'lucide-vue-next'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
@@ -40,12 +42,12 @@
     {
       title: 'Data Ranking ',
       value: '/topsisscore',
-      icon: NotepadText,
+      icon: Trophy,
     },
     {
       title: 'Data User',
       value: '/topsisscore',
-      icon: NotepadText,
+      icon: CircleUserRound,
     },
   ]
 
