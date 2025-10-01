@@ -9,12 +9,18 @@
 
   const dropdowns = ref<Record<number, boolean>>({})
   const showDialog = ref(false)
+  const activeProject = ref(null)
+
+  function openDropdown(project) {
+    activeProject.value = project
+  }
+  function closeDropdown() {
+    activeProject.value = null
+  }
 
   const handleSearch = (search) => {
     searchFilter.value = search
   }
-
-  const toggleDropdown = ref(false)
 
   const filteredProject = computed(() => {
     const term = (searchFilter.value ?? '').toLowerCase()
@@ -54,24 +60,37 @@
             </template>
           </v-tooltip>
         </div>
-        <v-card
-          hover
-          class="project-card flex-1"
-          v-for="project in filteredProject"
-          :key="project.id"
-        >
-          {{ project.name }}
-          <v-row>
-            <v-card-text class="project-card-text">
-              {{ project.description }}
-            </v-card-text>
-            <v-card-actions class="action-buttons">
-              <v-btn color="white" :icon="ChevronDown" @click="toggleDropdown" />
-            </v-card-actions>
-          </v-row>
-        </v-card>
+        <div>
+          <v-card
+            hover
+            class="project-card flex-1"
+            v-for="project in filteredProject"
+            :key="project.id"
+          >
+            {{ project.name }}
+            <v-row>
+              <v-card-text class="project-card-text">
+                {{ project.description }}
+              </v-card-text>
+              <v-card-actions class="action-buttons">
+                <v-btn
+                  color="white"
+                  :icon="ChevronDown"
+                  @click="
+                    activeProject?.id === project.id ? closeDropdown() : openDropdown(project)
+                  "
+                  @close="closeDropdown"
+                />
+              </v-card-actions>
+            </v-row>
+            <DashboardDropdown
+              v-if="activeProject?.id === project.id"
+              :project="activeProject"
+              @close="closeDropdown"
+            />
+          </v-card>
+        </div>
         <AddProjectDialog v-model="showDialog" @saved="console.log('project saved')" />
-        <DashboardDropdown />
       </v-container>
     </main>
   </v-app>
