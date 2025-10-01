@@ -18,15 +18,6 @@
     activeProject.value = null
   }
 
-  const activeProject = ref(null)
-
-  function openDropdown(project) {
-    activeProject.value = project
-  }
-  function closeDropdown() {
-    activeProject.value = null
-  }
-
   const handleSearch = (search) => {
     searchFilter.value = search
   }
