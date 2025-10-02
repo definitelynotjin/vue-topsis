@@ -14,7 +14,7 @@
   const showAddDialog = ref(false)
   const showDeleteDialog = ref(false)
 
-  const handleSearch = (search) => {
+  const handleSearch = (search: any) => {
     searchFilter.value = search
   }
   const scoreHeaders = [
@@ -48,16 +48,33 @@
     })
   })
 
-  function requestDelete(item: { id: number; name: string }) {
-    pendingDeleteId.value = item.id
-    pendingDeleteName.value = item.name
+  async function handleEditScoreValue(
+    scoreId: number,
+    updated: {
+      value?: number
+      alternative_id: number
+      criteria_id: number
+    },
+  ) {
+    await scoreStore.editScoreValue(scoreId, updated)
+    await scoreStore.loadByCriteria(
+      projectStore.selectedProjectId!,
+      criteriaStore.selectedCriteriaId!,
+    )
+  }
+
+  function requestDelete(item: { score_id: number; name: string }) {
+    pendingDeleteId.value = item.score_id
     showDeleteDialog.value = true
   }
 
   async function confirmDelete() {
     if (pendingDeleteId.value !== null) {
       await scoreStore.deleteScoreValue(pendingDeleteId.value)
-      await scoreStore.loadByCriteria(projectStore.selectedProjectId!, pendingDeleteId.value)
+      await scoreStore.loadByCriteria(
+        projectStore.selectedProjectId!,
+        criteriaStore.selectedCriteriaId!,
+      )
     }
     showDeleteDialog.value = false
     pendingDeleteId.value = null
@@ -106,9 +123,15 @@
             Edit Value
           </v-btn>
         </div>
-        <EditScoreValueDialog v-model="showDeleteDialog" @confirm-delete="confirmDelete" />
+        <DeleteScoreDialog
+          :score-id="pendingDeleteId"
+          :score-name="pendingDeleteName"
+          v-model="showDeleteDialog"
+          @confirm-delete="confirmDelete"
+        />
         <ScoreDataTable
           :items="filteredScore"
+          @edit-value="handleEditScoreValue"
           :headers="scoreHeaders"
           @delete-request="requestDelete"
         />

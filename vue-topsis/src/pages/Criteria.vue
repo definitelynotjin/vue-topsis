@@ -38,6 +38,17 @@
     showDeleteDialog.value = false
     pendingDeleteId.value = null
   }
+  async function handleEditCriteria(
+    criteriaId: number,
+    updated: {
+      name?: string
+      weight?: number
+      type?: string
+    },
+  ) {
+    await criteriaStore.editCriteria(criteriaId, updated)
+    await criteriaStore.loadByProject(projectStore.selectedProjectId!)
+  }
 
   const filteredCriteria = computed(() => {
     const term = (searchfilter.value ?? '').toLowerCase()
@@ -95,6 +106,7 @@
         <CriteriaDataTable
           :list-props="{ bgColor: 'cyan-darken-1' }"
           :items="filteredCriteria"
+          @edit-criteria="handleEditCriteria!"
           :headers="critHeaders"
           @delete-request="requestDelete"
         />

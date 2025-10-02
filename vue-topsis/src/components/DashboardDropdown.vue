@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { defineProps, ref, defineEmits } from 'vue'
+  import { defineProps, defineEmits } from 'vue'
   import { useProjectStore } from '@/stores/projectStore'
   import { useScoreStore } from '@/stores/scoreStore'
   import { useAlternativeStore } from '@/stores/alternativeStore'

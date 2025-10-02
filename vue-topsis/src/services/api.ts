@@ -20,6 +20,8 @@ export async function addProjectData (newProject: { name: string, description: s
   }
 }
 
+// -------------------------------------------------------------------//
+
 // Criterias
 
 export async function fetchCriteriaData (id: number) {
@@ -47,6 +49,21 @@ export async function addCriteriaData (newCriteria: {
     throw error
   }
 }
+
+export async function editCriteriaData (criteriaId: number, updatedCriteria: {
+  name?: string
+  weight?: number
+  type?: string
+}) {
+  try {
+    const response = await axios.put(`api/criteria/${criteriaId}`, updatedCriteria)
+    return response.data
+  } catch (error) {
+    console.error('canpt edit crit eh', error)
+    throw error
+  }
+}
+
 export async function deleteCriteriaData (criteriaId: number) {
   try {
     const response = await axios.delete(`api/criteria/${criteriaId}`)
@@ -56,6 +73,8 @@ export async function deleteCriteriaData (criteriaId: number) {
     throw error
   }
 }
+
+// -------------------------------------------------------------------//
 
 // Alternatives
 
@@ -83,6 +102,19 @@ export async function addAlternativeData (newAlternative: {
     throw error
   }
 }
+
+export async function editAlternativeData (alternative_id: number, updatedAlternative: {
+  name?: string
+  id_alt?: string
+}) {
+  try {
+    const response = await axios.put(`api/alternative/${alternative_id}`, updatedAlternative)
+    return response.data
+  } catch (error) {
+    console.error('sorry man canot edit alt eh', error)
+    throw error
+  }
+}
 export async function deleteAlternativeData (alternative_id: number) {
   try {
     const response = await axios.delete(`api/alternative/${alternative_id}`)
@@ -92,6 +124,8 @@ export async function deleteAlternativeData (alternative_id: number) {
     throw error
   }
 }
+
+// -------------------------------------------------------------------//
 
 // Scores
 
@@ -124,12 +158,10 @@ export async function deleteScoreData (scoreId: number) {
     throw error
   }
 }
-export async function editScoreData (scoreId: number, newValue: number) {
+export async function editScoreData (scoreId: number, updatedValue: number) {
   try {
-    const response = await axios.put(`api/score/${scoreId}`, {
-      value: newValue,
-    })
-    return response
+    const response = await axios.put(`api/score/${scoreId}`, updatedValue)
+    return response.data
   } catch (error) {
     console.error('error editScoreValue', error)
     throw error
@@ -145,6 +177,9 @@ export async function addScoreData (newScore: { value: number, alternative_id: n
     throw error
   }
 }
+
+// -------------------------------------------------------------------//
+
 // Topsis Scores
 
 export async function fetchTopsisScores (projectId: number) {

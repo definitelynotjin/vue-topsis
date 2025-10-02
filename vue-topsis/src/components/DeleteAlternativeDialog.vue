@@ -21,8 +21,12 @@
   <v-dialog v-model="props.modelValue" class="max-w-200 dialog-wallpaper justify-center">
     <v-card-text class="dialog-card !bg-cyan-700 flex">
       <v-row class="justify-around">
-        <h1 class="text-xl justify-center font-bold ma-5 pa-5">
-          Hapus Alternatif {{ props.alternativeName }} dari Projek ?
+        <h1 class="text-xl justify-center ma-5 pa-5">
+          Hapus Alternatif
+          <strong>
+            {{ props.alternativeName }}
+          </strong>
+          dari Projek ?
         </h1>
       </v-row>
     </v-card-text>

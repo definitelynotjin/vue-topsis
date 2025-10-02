@@ -4,7 +4,10 @@
 
   const props = defineProps<{
     modelValue: boolean
+    scoreId: number | null
     scoreName: string | null
+    scoreValue: number | null
+    value: number
   }>()
   const emit = defineEmits(['update:modelValue', 'confirm-delete'])
 
@@ -21,7 +24,9 @@
   <v-dialog v-model="props.modelValue" class="max-w-200 dialog-wallpaper justify-center">
     <v-card-text class="dialog-card !bg-cyan-700 flex justify-center">
       <v-col class="" cols="6" md="6" sm="8">
-        <h1 class="text-xl font-bold mb-5">Hapus Score dari Projek ?</h1>
+        <h1 class="text-xl ma-5">
+          Hapus Score {{ props.scoreValue }} {{ props.scoreName }} dari Projek ?
+        </h1>
       </v-col>
     </v-card-text>
     <v-card-actions>

@@ -2,8 +2,25 @@
   import { X } from 'lucide-vue-next'
   import { defineEmits } from 'vue'
 
+  const typeItems = [
+    {
+      title: 'Benefit',
+      value: 'benefit',
+    },
+
+    {
+      title: 'Cost',
+      value: 'cost',
+    },
+  ]
+
   const emit = defineEmits<{
     (e: 'delete-request', item: any): void
+    (
+      e: 'edit-criteria',
+      criteriaId: number,
+      updated: { name?: string; type?: string; weight?: string },
+    ): void
   }>()
 </script>
 
@@ -13,17 +30,36 @@
       {{ index + 1 }}
     </template>
     <template v-slot:item.name="{ item }">
-      <VInlineTextField v-model="item.name" name="name" :cell="true" :table-field="true">
+      <VInlineTextField
+        v-model="item.name"
+        @update="(value) => emit('edit-criteria', Number(item.id), { name: value })"
+        name="name"
+        :cell="true"
+        :table-field="true"
+      >
       </VInlineTextField>
     </template>
 
     <template v-slot:item.type="{ item }">
-      <VInlineSelect v-model="item.type" name="type" :cell="true" :table-field="true">
+      <VInlineSelect
+        v-model="item.type"
+        :items="typeItems"
+        @update="(value) => emit('edit-criteria', Number(item.id), { type: value })"
+        name="type"
+        :cell="true"
+        :table-field="true"
+      >
       </VInlineSelect>
     </template>
 
     <template v-slot:item.weight="{ item }">
-      <VInlineTextField v-model="item.weight" name="weight" :cell="true" :table-field="true">
+      <VInlineTextField
+        v-model="item.weight"
+        @update="(value) => emit('edit-criteria', Number(item.id), { weight: value })"
+        name="weight"
+        :cell="true"
+        :table-field="true"
+      >
       </VInlineTextField>
     </template>
 

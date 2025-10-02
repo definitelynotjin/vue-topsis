@@ -44,6 +44,8 @@
       value: '/topsisscore',
       icon: Trophy,
     },
+  ]
+  const userMenuItems = [
     {
       title: 'Data User',
       value: '/topsisscore',
@@ -73,7 +75,7 @@
       <v-list-item>
         <Blend class="top-icon-sidebar" :size="50" />
       </v-list-item>
-      <v-divider class="sidebar-divider bg-red-200" :thickness="2" />
+      <v-divider class="sidebar-divider ma-1" :thickness="2" />
       <v-list-item
         class="pl-7 py-5"
         @click="selectMenu(dashboard.value)"
@@ -82,10 +84,20 @@
         {{ dashboard.title }}
       </v-list-item>
       <v-list>
-        <v-divider class="sidebar-divider" :thickness="2" />
+        <v-divider class="sidebar-divider ma-1" :thickness="2" />
         <v-list-item
           color="primary"
           v-for="item in menuItems"
+          :key="item.value"
+          class="pl-7 sidebar-icon"
+          :prepend-icon="item.icon"
+          :title="item.title"
+          @click="selectMenu(item.value)"
+        />
+        <v-divider class="sidebar-divider ma-1" :thickness="2" />
+        <v-list-item
+          color="primary"
+          v-for="item in userMenuItems"
           :key="item.value"
           class="pl-7 sidebar-icon"
           :prepend-icon="item.icon"

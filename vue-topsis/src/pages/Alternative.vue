@@ -30,6 +30,16 @@
     pendingDeleteName.value = item.name
     showDeleteDialog.value = true
   }
+  async function handleAlternativeEdit(
+    alternative_id: number,
+    updated: {
+      name?: string
+      id_alt?: string
+    },
+  ) {
+    await alternativeStore.editAlternative(alternative_id, updated)
+    await alternativeStore.loadByProject(projectStore.selectedProjectId!)
+  }
 
   async function confirmDelete() {
     if (pendingDeleteId.value !== null) {
@@ -102,6 +112,7 @@
         <AlternativeDataTable
           :items="filteredAlternative"
           :headers="altHeaders"
+          @edit-alternative="handleAlternativeEdit"
           @delete-request="requestDelete"
         />
       </v-container>

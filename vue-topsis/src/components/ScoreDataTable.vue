@@ -1,32 +1,15 @@
 <script setup lang="ts">
-  import { addScoreData, editScoreData } from '../services/api.ts'
   import { X } from 'lucide-vue-next'
   import { defineEmits } from 'vue'
 
   const emit = defineEmits<{
     (e: 'delete-request', item: any): void
+    (
+      e: 'edit-value',
+      scoreId: number,
+      updated: { value?: number; alternative_id: number; criteria_id: number },
+    ): void
   }>()
-
-  async function handleScoreUpdate(item: any) {
-    try {
-      if (!item.value || item.value === '') {
-        return
-      }
-
-      if (item.score_id) {
-        await editScoreData(item.score_id, Number(item.value))
-      } else {
-        const newScore = await addScoreData({
-          value: Number(item.value),
-          alternative_id: Number(item.alt_id),
-          criteria_id: Number(item.criteria_id),
-        })
-        item.score_id = newScore.id
-      }
-    } catch (err) {
-      console.error('Failed to save score:', err)
-    }
-  }
 </script>
 
 <template>
@@ -39,7 +22,14 @@
         v-model="item.value"
         name="value"
         :cell="true"
-        @update="handleScoreUpdate(item)"
+        @update="
+          (value) =>
+            emit('edit-value', Number(item.score_id), {
+              value: value,
+              alternative_id: item.alt_id,
+              criteria_id: item.criteria_id,
+            })
+        "
         :table-field="true"
       >
       </VInlineTextField>

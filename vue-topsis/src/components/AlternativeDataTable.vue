@@ -4,6 +4,11 @@
 
   const emit = defineEmits<{
     (e: 'delete-request', item: any): void
+    (
+      e: 'edit-alternative',
+      alternative_id: number,
+      updated: { name?: string; id_alt?: string },
+    ): void
   }>()
 </script>
 
@@ -13,12 +18,24 @@
       {{ index + 1 }}
     </template>
     <template v-slot:item.name="{ item }">
-      <VInlineTextField v-model="item.name" name="name" :cell="true" :table-field="true">
+      <VInlineTextField
+        v-model="item.name"
+        name="name"
+        @update="(value) => emit('edit-alternative', Number(item.id), { name: value })"
+        :cell="true"
+        :table-field="true"
+      >
       </VInlineTextField>
     </template>
 
     <template v-slot:item.id_alt="{ item }">
-      <VInlineTextField v-model="item.id_alt" name="id_alt" :cell="true" :table-field="true">
+      <VInlineTextField
+        v-model="item.id_alt"
+        @update="(value) => emit('edit-alternative', Number(item.id), { id_alt: value })"
+        name="id_alt"
+        :cell="true"
+        :table-field="true"
+      >
       </VInlineTextField>
     </template>
 
