@@ -41,14 +41,19 @@
     },
     {
       title: 'Data Ranking ',
-      value: '/topsisscore',
+      value: '/ranking',
       icon: Trophy,
     },
   ]
   const userMenuItems = [
     {
       title: 'Data User',
-      value: '/topsisscore',
+      value: '/userdata',
+      icon: CircleUserRound,
+    },
+    {
+      title: 'Profil Admin',
+      value: '/profile',
       icon: CircleUserRound,
     },
   ]

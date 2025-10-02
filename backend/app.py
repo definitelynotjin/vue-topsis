@@ -18,7 +18,8 @@ def create_app():
 
 
     # konfigurasi database MySQL
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/topsis_db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flaskuser:flask123@localhost/topsis_db'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/topsis_db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # inisialisasi db & migrate

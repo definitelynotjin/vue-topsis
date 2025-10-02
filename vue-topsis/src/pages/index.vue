@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import { toast } from 'vue-sonner'
   // import { useToast } from '@/components/ui/toast/use-toast'
 
   // const { toast } = useToast()
@@ -25,11 +26,7 @@
       localStorage.setItem('isLoggedIn', 'true')
       router.push('/dashboard')
     } else {
-      // toast({
-      //   title: 'Invalid Credentials!',
-      //   description: 'Make sure you inserted the username or password correctly',
-      //   variant: 'destructive',
-      // })
+      toast.error('bro, what goin on')
     }
   }
 </script>

@@ -1,6 +1,7 @@
 import type { Criteria } from '../types/type.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { toast } from 'vue-sonner'
 import { addCriteriaData, deleteCriteriaData, editCriteriaData, fetchCriteriaData } from '@/services/api.ts'
 
 export const useCriteriaStore = defineStore('criteria', () => {
@@ -28,10 +29,10 @@ export const useCriteriaStore = defineStore('criteria', () => {
         await loadByProject(newCriteria.project_id)
         return res
       } catch {
-        alert('failed man, sorry')
+        toast.error('failed man, sorry')
       }
     } else {
-      alert('dis cannot be empty tho')
+      toast.error('dis cannot be empty tho')
     }
   }
 
@@ -45,7 +46,7 @@ export const useCriteriaStore = defineStore('criteria', () => {
       await loadByProject(selectedProjectId!)
       return res
     } catch {
-      alert('welp, cant edit')
+      toast.error('welp, cant edit')
     }
   }
 
@@ -53,11 +54,11 @@ export const useCriteriaStore = defineStore('criteria', () => {
     try {
       const res = await deleteCriteriaData(id)
       if (selectedCriteriaId.value) {
-        await loadByProject(selectedCriteriaId.value)
+        await loadByProject(selectedProjectId.value)
       }
       return res
     } catch (error) {
-      console.error('cant delete crit man', error)
+      toast.error('cant delete crit man', error)
       throw error
     }
   }

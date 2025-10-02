@@ -25,6 +25,11 @@
     })
   })
 
+  function getProjectName(projectId: number | null) {
+    if (!projectId) return 'idk'
+    return projectStore.projects.find((p) => p.id === projectId)?.name || 'idk tho'
+  }
+
   function requestDelete(item: { id: number; name: string }) {
     pendingDeleteId.value = item.id
     pendingDeleteName.value = item.name
@@ -105,6 +110,7 @@
         />
         <DeleteAlternativeDialog
           v-model="showDeleteDialog"
+          :project-name="getProjectName(projectStore.selectedProjectId)"
           :alternative-name="pendingDeleteName"
           @confirm-delete="confirmDelete"
         />

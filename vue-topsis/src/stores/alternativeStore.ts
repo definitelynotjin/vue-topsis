@@ -1,14 +1,17 @@
 import type { Alternative } from '../types/type.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { toast } from 'vue-sonner'
 import { addAlternativeData, deleteAlternativeData, editAlternativeData, fetchAlternativeData } from '@/services/api.ts'
 
 export const useAlternativeStore = defineStore('alternative', () => {
   const alternative = ref<Alternative []>([])
   const selectedProjectId = ref<number | null>(null)
+
   async function loadByProject (projectId: number) {
     alternative.value = await fetchAlternativeData (projectId)
   }
+
   async function addAlternative (newAlternative: {
     project_id: number
     name: string
@@ -19,9 +22,8 @@ export const useAlternativeStore = defineStore('alternative', () => {
         const res = await addAlternativeData(newAlternative)
         await loadByProject(newAlternative.project_id)
         return res
-      } catch (error) {
-        console.error('big error alternaive', error)
-        alert('woah, alternive fucked')
+      } catch {
+        toast.error('Cannot add alternative!')
       }
     } else {
       alert('alternative cannot be empty')
@@ -35,8 +37,8 @@ export const useAlternativeStore = defineStore('alternative', () => {
       const res = await editAlternativeData(alternative_id, updatedAlternative)
       await loadByProject(selectedProjectId)
       return res
-    } catch (error) {
-      console.error('edit store cant edit eh', error)
+    } catch {
+      toast.error('Cannot edit alternative!')
     }
   }
 
@@ -45,7 +47,7 @@ export const useAlternativeStore = defineStore('alternative', () => {
       const res = await deleteAlternativeData(id)
       return res
     } catch (error) {
-      console.error('sorry man failed delete alt ehehe', error)
+      toast.error('Cannot delete alternative!')
       throw error
     }
   }

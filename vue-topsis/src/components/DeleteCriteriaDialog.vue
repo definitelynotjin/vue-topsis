@@ -5,6 +5,7 @@
   const props = defineProps<{
     modelValue: boolean
     criteriaName: string | null
+    projectName: string | null
   }>()
   const emit = defineEmits(['update:modelValue', 'confirm-delete'])
 
@@ -26,7 +27,11 @@
           <strong>
             {{ props.criteriaName }}
           </strong>
-          dari Projek ?
+          dari Projek
+          <strong>
+            {{ props.projectName }}
+          </strong>
+          ?
         </h1>
       </v-row>
     </v-card-text>

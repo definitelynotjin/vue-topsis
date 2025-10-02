@@ -25,11 +25,17 @@
     searchfilter.value = search
   }
 
+  function getProjectName(projectId: number | null) {
+    if (!projectId) return 'idk'
+    return projectStore.projects.find((p) => p.id === projectId)?.name || 'idk tho'
+  }
+
   function requestDelete(item: { id: number; name: string }) {
     pendingDeleteId.value = item.id
     pendingDeleteName.value = item.name
     showDeleteDialog.value = true
   }
+
   async function confirmDelete() {
     if (pendingDeleteId.value !== null) {
       await criteriaStore.deleteCriteria(pendingDeleteId.value)
@@ -38,6 +44,7 @@
     showDeleteDialog.value = false
     pendingDeleteId.value = null
   }
+
   async function handleEditCriteria(
     criteriaId: number,
     updated: {
@@ -61,6 +68,7 @@
       )
     })
   })
+
   watch(
     () => projectStore.selectedProjectId,
     async (newId) => {
@@ -101,6 +109,7 @@
         <DeleteCriteriaDialog
           v-model="showDeleteDialog"
           :criteria-name="pendingDeleteName"
+          :project-name="getProjectName(projectStore.selectedProjectId)"
           @confirm-delete="confirmDelete"
         />
         <CriteriaDataTable

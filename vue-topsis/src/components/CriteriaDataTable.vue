@@ -43,6 +43,7 @@
     <template v-slot:item.type="{ item }">
       <VInlineSelect
         v-model="item.type"
+        :list-props="{ bgColor: 'cyan-darken-1' }"
         :items="typeItems"
         @update="(value) => emit('edit-criteria', Number(item.id), { type: value })"
         name="type"

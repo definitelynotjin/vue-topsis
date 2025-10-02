@@ -1,6 +1,7 @@
 import type { Score } from '../types/type.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { toast } from 'vue-sonner'
 import { addScoreData, deleteScoreData, editScoreData, fetchScoreData, fetchScoresByCriteria } from '@/services/api'
 import { useCriteriaStore } from './criteriaStore.ts'
 import { useProjectStore } from './projectStore.ts'
@@ -9,7 +10,6 @@ export const useScoreStore = defineStore('score', () => {
   const score = ref<Score[]>([])
   const projectStore = useProjectStore()
   const criteriaStore = useCriteriaStore()
-  const selectedProjectId = ref<number | null>(null)
 
   async function loadByAlternative (alternative_id: number) {
     score.value = await fetchScoreData(alternative_id)
@@ -26,7 +26,7 @@ export const useScoreStore = defineStore('score', () => {
         await loadByAlternative(newScore.alternative_id)
         return res
       } catch {
-        alert('oi, add score error tangina')
+        toast.error('Cannot add score!')
       }
     } else {
       alert('Score value cannot be empty')
@@ -43,9 +43,10 @@ export const useScoreStore = defineStore('score', () => {
       await loadByCriteria(projectStore.selectedProjectId!, criteriaStore.selectedCriteriaId!)
       return res
     } catch {
-      alert(' oh well, cant edit value')
+      toast.error('Cannot edit score!')
     }
   }
+
   async function deleteScoreValue (scoreId: number) {
     try {
       const res = await deleteScoreData(scoreId)
@@ -54,7 +55,7 @@ export const useScoreStore = defineStore('score', () => {
       }
       return res
     } catch (error) {
-      console.error('canot deltee score', error)
+      toast.error('Cannot delete score')
       throw error
     }
   }
