@@ -7,7 +7,7 @@
     (
       e: 'edit-value',
       scoreId: number,
-      updated: { value?: number; alternative_id: number; criteria_id: number },
+      updated: { value?: number; alternative_id?: number; criteria_id?: number },
     ): void
   }>()
 </script>
@@ -20,6 +20,7 @@
     <template v-slot:item.value="{ item }">
       <VInlineTextField
         v-model="item.value"
+        save-icon-color="cyan"
         name="value"
         :cell="true"
         @update="

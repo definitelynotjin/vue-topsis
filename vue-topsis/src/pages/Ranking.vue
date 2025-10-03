@@ -21,10 +21,12 @@
     {
       title: 'No',
       key: 'no',
+      sortable: false,
+      width: '10%',
     },
 
     {
-      title: 'Nama',
+      title: 'Nama Alternatif',
       key: 'name',
     },
 
@@ -87,7 +89,6 @@
         <div class="d-flex bg-cyan-700 score-top-table-text">
           <CardTitleDropdown />
           <SearchBar @search="handleSearch" />
-
           <v-btn
             type="submit"
             hover
@@ -96,7 +97,7 @@
             :disabled="!projectStore.selectedProjectId || loading"
             @click="hitungTopsis"
           >
-            {{ loading ? 'Menghitung...' : 'Hitung Topsis Score' }}
+            <!-- {{ loading ? 'Menghitung...' : 'Hitung Topsis Score' }} -->
           </v-btn>
         </div>
         <TopsisDataTable

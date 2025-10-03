@@ -31,6 +31,7 @@
     </template>
     <template v-slot:item.name="{ item }">
       <VInlineTextField
+        save-icon-color="cyan"
         v-model="item.name"
         @update="(value) => emit('edit-criteria', Number(item.id), { name: value })"
         name="name"
@@ -43,6 +44,7 @@
     <template v-slot:item.type="{ item }">
       <VInlineSelect
         v-model="item.type"
+        save-icon-color="cyan"
         :list-props="{ bgColor: 'cyan-darken-1' }"
         :items="typeItems"
         @update="(value) => emit('edit-criteria', Number(item.id), { type: value })"
@@ -59,6 +61,7 @@
         @update="(value) => emit('edit-criteria', Number(item.id), { weight: value })"
         name="weight"
         :cell="true"
+        save-icon-color="cyan"
         :table-field="true"
       >
       </VInlineTextField>

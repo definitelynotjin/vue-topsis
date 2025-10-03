@@ -2,9 +2,7 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { toast } from 'vue-sonner'
-  // import { useToast } from '@/components/ui/toast/use-toast'
 
-  // const { toast } = useToast()
   const router = useRouter()
   const username = ref('')
   const password = ref('')
@@ -26,7 +24,7 @@
       localStorage.setItem('isLoggedIn', 'true')
       router.push('/dashboard')
     } else {
-      toast.error('bro, what goin on')
+      toast.error('Make sure you have entered the right username or password')
     }
   }
 </script>

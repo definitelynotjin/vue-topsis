@@ -2,7 +2,6 @@
   import { ref, onMounted } from 'vue'
   import axios from 'axios'
   import { useProjectStore } from '@/stores/projectStore'
-  import TopsisDataTable from '@/components/TopsisDataTable.vue'
 
   const projectStore = useProjectStore()
   const scores = ref<{ alternative: string; score: number }[]>([])
@@ -21,10 +20,12 @@
     {
       title: 'No',
       key: 'no',
+      sortable: false,
+      width: '10%',
     },
 
     {
-      title: 'Nama',
+      title: 'Nama Alternatif',
       key: 'name',
     },
 
