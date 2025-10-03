@@ -8,17 +8,53 @@
   const criteriaStore = useCriteriaStore()
 
   const searchfilter = ref('')
-  const showDialog = ref(false)
+  const pendingDeleteId = ref<number | null>(null)
+  const pendingDeleteName = ref<string | null>(null)
+  const showAddDialog = ref(false)
+  const showDeleteDialog = ref(false)
 
   const critHeaders = [
-    { title: 'No', key: 'no', sortable: false },
-    { title: 'Criteria Name', key: 'name' },
-    { title: 'Type', key: 'type' },
-    { title: 'Weight', key: 'weight' },
+    { title: 'No', key: 'no', sortable: false, width: '10%' },
+    { title: 'Nama Kriteria', key: 'name', width: '30%' },
+    { title: 'Tipe', key: 'type' },
+    { title: 'Bobot', key: 'weight' },
+    { title: '', key: 'actions', sortable: false, align: 'end', width: '1%' },
   ]
 
-  const handleSearch = (search) => {
+  const handleSearch = (search: any) => {
     searchfilter.value = search
+  }
+
+  function getProjectName(projectId: number | null) {
+    if (!projectId) return 'idk'
+    return projectStore.projects.find((p) => p.id === projectId)?.name || 'idk tho'
+  }
+
+  function requestDelete(item: { id: number; name: string }) {
+    pendingDeleteId.value = item.id
+    pendingDeleteName.value = item.name
+    showDeleteDialog.value = true
+  }
+
+  async function confirmDelete() {
+    if (pendingDeleteId.value !== null) {
+      await criteriaStore.deleteCriteria(pendingDeleteId.value)
+      await criteriaStore.loadByProject(projectStore.selectedProjectId!)
+    }
+    showDeleteDialog.value = false
+    pendingDeleteId.value = null
+  }
+
+  async function handleEditCriteria(
+    criteriaId: number,
+    updated: {
+      name?: string
+      weight?: number
+      type?: string
+    },
+  ) {
+    await criteriaStore.editCriteria(criteriaId, updated)
+    await criteriaStore.loadByProject(projectStore.selectedProjectId!)
   }
 
   const filteredCriteria = computed(() => {
@@ -32,6 +68,7 @@
       )
     })
   })
+
   watch(
     () => projectStore.selectedProjectId,
     async (newId) => {
@@ -53,7 +90,7 @@
           <CardTitleDropdown title="Daftar Data Kriteria" :icon="LibraryBig" />
           <SearchBar @search="handleSearch" />
           <v-btn
-            @click="showDialog = true"
+            @click="showAddDialog = true"
             :disabled="!projectStore.selectedProjectId"
             v-bind="props"
             hover
@@ -61,18 +98,26 @@
             variant="flat"
             class="card-add-button !bg-cyan-600"
           >
-            Add Criteria
+            Tambah Kriteria
           </v-btn>
         </div>
         <AddCriteriaDialog
-          v-model="showDialog"
+          v-model="showAddDialog"
           @saved="console.log('saved')"
           :project-id="projectStore.selectedProjectId"
+        />
+        <DeleteCriteriaDialog
+          v-model="showDeleteDialog"
+          :criteria-name="pendingDeleteName"
+          :project-name="getProjectName(projectStore.selectedProjectId)"
+          @confirm-delete="confirmDelete"
         />
         <CriteriaDataTable
           :list-props="{ bgColor: 'cyan-darken-1' }"
           :items="filteredCriteria"
+          @edit-criteria="handleEditCriteria!"
           :headers="critHeaders"
+          @delete-request="requestDelete"
         />
       </v-container>
     </main>

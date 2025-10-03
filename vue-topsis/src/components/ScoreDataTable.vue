@@ -1,30 +1,19 @@
 <script setup lang="ts">
-  import { addScoreData, editScoreData } from '../services/api.ts'
+  import { X } from 'lucide-vue-next'
+  import { defineEmits } from 'vue'
 
-  async function handleScoreUpdate(item: any) {
-    try {
-      if (!item.value || item.value === '') {
-        return
-      }
-
-      if (item.score_id) {
-        await editScoreData(item.score_id, Number(item.value))
-      } else {
-        const newScore = await addScoreData({
-          value: Number(item.value),
-          alternative_id: Number(item.alt_id),
-          criteria_id: Number(item.criteria_id),
-        })
-        item.score_id = newScore.id
-      }
-    } catch (err) {
-      console.error('Failed to save score:', err)
-    }
-  }
+  const emit = defineEmits<{
+    (e: 'delete-request', item: any): void
+    (
+      e: 'edit-value',
+      scoreId: number,
+      updated: { value?: number; alternative_id: number; criteria_id: number },
+    ): void
+  }>()
 </script>
 
 <template>
-  <v-data-table hover class="data-table">
+  <v-data-table hover class="score-data-table">
     <template v-slot:item.no="{ index }">
       {{ index + 1 }}
     </template>
@@ -33,17 +22,40 @@
         v-model="item.value"
         name="value"
         :cell="true"
-        @update="handleScoreUpdate(item)"
+        @update="
+          (value) =>
+            emit('edit-value', Number(item.score_id), {
+              value: value,
+              alternative_id: item.alt_id,
+              criteria_id: item.criteria_id,
+            })
+        "
         :table-field="true"
       >
       </VInlineTextField>
+    </template>
+
+    <template v-slot:item.actions="{ item }">
+      <div class="hover-delete">
+        <v-btn variant="plain" icon @click="emit('delete-request', item)">
+          <X :size="20" />
+        </v-btn>
+      </div>
     </template>
   </v-data-table>
 </template>
 
 <style lang="css" scoped>
-  .data-table {
+  .score-data-table {
     background-color: steelblue;
     font-size: 16px;
+  }
+
+  .score-data-table:deep(.v-data-table__tr) .hover-delete {
+    visibility: hidden;
+  }
+  .score-data-table:deep(.v-data-table__tr:hover) .hover-delete {
+    visibility: visible;
+    color: red;
   }
 </style>

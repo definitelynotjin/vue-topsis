@@ -18,7 +18,7 @@
     variant="outlined"
     item-title="name"
     item-value="id"
-    label="Select Project"
+    label="Pilih Projek"
     :list-props="{ bgColor: 'cyan-darken-1' }"
     item-color="white"
   >

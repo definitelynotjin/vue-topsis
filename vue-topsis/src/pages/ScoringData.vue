@@ -9,27 +9,32 @@
   const scoreStore = useScoreStore()
 
   const searchFilter = ref('')
-  const showDialog = ref(false)
+  const pendingDeleteId = ref<number | null>(null)
+  const pendingDeleteName = ref<string | null>(null)
+  const showAddDialog = ref(false)
+  const showDeleteDialog = ref(false)
 
-  const handleSearch = (search) => {
+  const handleSearch = (search: any) => {
     searchFilter.value = search
   }
   const scoreHeaders = [
     { title: 'No', key: 'no', sortable: false },
     {
-      title: 'Alternative ID',
+      title: 'ID Alternatif',
       key: 'alt_id',
     },
 
     {
-      title: 'Alternative Name',
+      title: 'Nama Alternatif',
       key: 'name',
     },
 
     {
-      title: 'Value',
+      title: 'Nilai',
       key: 'value',
     },
+
+    { title: '', key: 'actions', sortable: false, align: 'end', width: '1%' },
   ]
 
   const filteredScore = computed(() => {
@@ -42,6 +47,39 @@
       )
     })
   })
+
+  async function handleEditScoreValue(
+    scoreId: number,
+    updated: {
+      value?: number
+      alternative_id: number
+      criteria_id: number
+    },
+  ) {
+    await scoreStore.editScoreValue(scoreId, updated)
+    await scoreStore.loadByCriteria(
+      projectStore.selectedProjectId!,
+      criteriaStore.selectedCriteriaId!,
+    )
+  }
+
+  function requestDelete(item: { score_id: number; name: string }) {
+    pendingDeleteId.value = item.score_id
+    showDeleteDialog.value = true
+  }
+
+  async function confirmDelete() {
+    if (pendingDeleteId.value !== null) {
+      await scoreStore.deleteScoreValue(pendingDeleteId.value)
+      await scoreStore.loadByCriteria(
+        projectStore.selectedProjectId!,
+        criteriaStore.selectedCriteriaId!,
+      )
+    }
+    showDeleteDialog.value = false
+    pendingDeleteId.value = null
+  }
+
   watch(
     () => projectStore.selectedProjectId,
     async (newProjectId) => {
@@ -75,7 +113,7 @@
           <CardTitleScoreDropdown />
           <SearchBar @search="handleSearch" />
           <v-btn
-            @click="showDialog = true"
+            @click="showAddDialog = true"
             v-bind="props"
             hover
             variant="flat"
@@ -85,8 +123,18 @@
             Edit Value
           </v-btn>
         </div>
-        <EditScoreValueDialog v-model="showDialog" />
-        <ScoreDataTable :items="filteredScore" :headers="scoreHeaders" />
+        <DeleteScoreDialog
+          :score-id="pendingDeleteId"
+          :score-name="pendingDeleteName"
+          v-model="showDeleteDialog"
+          @confirm-delete="confirmDelete"
+        />
+        <ScoreDataTable
+          :items="filteredScore"
+          @edit-value="handleEditScoreValue"
+          :headers="scoreHeaders"
+          @delete-request="requestDelete"
+        />
       </v-container>
     </main>
   </v-app>

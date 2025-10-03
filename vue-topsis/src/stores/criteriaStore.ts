@@ -1,17 +1,22 @@
 import type { Criteria } from '../types/type.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { addCriteriaData, fetchCriteriaData } from '@/services/api.ts'
+import { toast } from 'vue-sonner'
+import { addCriteriaData, deleteCriteriaData, editCriteriaData, fetchCriteriaData } from '@/services/api.ts'
 
 export const useCriteriaStore = defineStore('criteria', () => {
   const criteria = ref<Criteria []>([])
   const selectedCriteriaId = ref<number | null>(null)
+  const selectedProjectId = ref<number | null>(null)
+
   async function loadByProject (projectId: number) {
     criteria.value = await fetchCriteriaData (projectId)
   }
-  // function selectedCriteriaId (id: number) {
-  //   selectedCriteriaId.value = id
-  // }
+
+  function setSelectedCriteriaId (id: number) {
+    selectedCriteriaId.value = id
+  }
+
   async function addCriteria (newCriteria: {
     project_id: number
     name: string
@@ -24,14 +29,39 @@ export const useCriteriaStore = defineStore('criteria', () => {
         await loadByProject(newCriteria.project_id)
         return res
       } catch {
-        alert('failed man, sorry')
+        toast.error('failed man, sorry')
       }
     } else {
-      alert('dis cannot be empty tho')
+      toast.error('dis cannot be empty tho')
     }
   }
-  function setSelectedCriteriaId (id: number) {
-    selectedCriteriaId.value = id
+
+  async function editCriteria (criteriaId: number, updatedCriteria: {
+    name?: string
+    weight?: number
+    type?: string
+  }) {
+    try {
+      const res = await editCriteriaData(criteriaId, updatedCriteria)
+      await loadByProject(selectedProjectId!)
+      return res
+    } catch {
+      toast.error('welp, cant edit')
+    }
   }
-  return { loadByProject, criteria, addCriteria, selectedCriteriaId, setSelectedCriteriaId }
+
+  async function deleteCriteria (id: number) {
+    try {
+      const res = await deleteCriteriaData(id)
+      if (selectedCriteriaId.value) {
+        await loadByProject(selectedProjectId.value)
+      }
+      return res
+    } catch (error) {
+      toast.error('cant delete crit man', error)
+      throw error
+    }
+  }
+
+  return { deleteCriteria, editCriteria, loadByProject, criteria, addCriteria, selectedCriteriaId, setSelectedCriteriaId }
 })

@@ -8,6 +8,7 @@
 
 <template>
   <v-app>
+    <Toaster theme="light" rich-colors />
     <div v-if="route.path === '/'" class="h-full">
       <router-view />
     </div>

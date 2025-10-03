@@ -22,9 +22,12 @@ declare module 'vue-router/auto-routes' {
     '/Alternative': RouteRecordInfo<'/Alternative', '/Alternative', Record<never, never>, Record<never, never>>,
     '/Criteria': RouteRecordInfo<'/Criteria', '/Criteria', Record<never, never>, Record<never, never>>,
     '/Dashboard': RouteRecordInfo<'/Dashboard', '/Dashboard', Record<never, never>, Record<never, never>>,
+    '/Profile': RouteRecordInfo<'/Profile', '/Profile', Record<never, never>, Record<never, never>>,
+    '/Ranking': RouteRecordInfo<'/Ranking', '/Ranking', Record<never, never>, Record<never, never>>,
     '/ScoringData': RouteRecordInfo<'/ScoringData', '/ScoringData', Record<never, never>, Record<never, never>>,
     '/SubCriteria': RouteRecordInfo<'/SubCriteria', '/SubCriteria', Record<never, never>, Record<never, never>>,
     '/TeamManagement': RouteRecordInfo<'/TeamManagement', '/TeamManagement', Record<never, never>, Record<never, never>>,
     '/TopsisScore': RouteRecordInfo<'/TopsisScore', '/TopsisScore', Record<never, never>, Record<never, never>>,
+    '/UserData': RouteRecordInfo<'/UserData', '/UserData', Record<never, never>, Record<never, never>>,
   }
 }

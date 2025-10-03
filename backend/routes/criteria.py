@@ -100,7 +100,13 @@ def update_criteria(criteria_id):
         criteria.type = type_
     db.session.commit()
 
-    return jsonify({"message": "Criteria updated successfully"})
+    return jsonify({
+        "id":criteria.id,
+        "name": criteria.name,
+        "weight":criteria.weight,
+        "type": criteria.type,
+        "project_id": criteria.project_id
+    })
 
 # DELETE criteria
 @criteria_bp.route("/<int:criteria_id>", methods=["DELETE"])

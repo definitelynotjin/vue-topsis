@@ -14,7 +14,7 @@
     variant="outlined"
     item-title="name"
     item-value="id"
-    label="Select Project"
+    label="Pilih Projek"
     :list-props="{ bgColor: 'cyan-darken-2' }"
     item-color="white"
   >
@@ -29,7 +29,7 @@
     item-title="name"
     :list-props="{ bgColor: 'cyan-darken-2' }"
     item-value="id"
-    label="Select Criteria"
+    label="Pilih Kriteria"
   >
   </v-select>
 </template>

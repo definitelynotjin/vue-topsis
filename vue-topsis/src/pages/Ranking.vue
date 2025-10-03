@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue'
   import axios from 'axios'
   import { useProjectStore } from '@/stores/projectStore'
-  import TopsisDataTable from '@/components/TopsisDataTable.vue'
+  // import TopsisDataTable from '@/components/TopsisDataTable.vue'
 
   const projectStore = useProjectStore()
   const scores = ref<{ alternative: string; score: number }[]>([])
@@ -85,7 +85,6 @@
     <main>
       <v-container fluid class="bg-cyan-700 score-container">
         <div class="d-flex bg-cyan-700 score-top-table-text">
-          <!-- Dropdown project -->
           <CardTitleDropdown />
           <SearchBar @search="handleSearch" />
 
