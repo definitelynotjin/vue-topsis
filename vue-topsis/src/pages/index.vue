@@ -44,13 +44,14 @@ async function handleLogin() {
     localStorage.setItem('user', JSON.stringify(user))
 
     toast.success('Login successful!')
+    router.push('/dashboard')
 
     // Redirect sesuai role
-    if (user.role === 'admin') {
-      router.push('/admin')
-    } else {
-      toast.error('Make sure you have entered the right username or password')
-    }
+    // if (user.role === 'admin') {
+    //   router.push('/admin')
+    // } else {
+    //   toast.error('Make sure you have entered the right username or password')
+    // }
 
   } catch (error: any) {
     console.error(error)
