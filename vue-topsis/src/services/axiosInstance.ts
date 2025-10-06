@@ -23,8 +23,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem("token")
-      window.location.href = "/login" // redirect kalau token invalid
+        window.location.href = "/" // redirect kalau token invalid
+        localStorage.removeItem("token")
     }
     return Promise.reject(error)
   }

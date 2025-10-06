@@ -7,6 +7,8 @@
 
   function handleLogout() {
     localStorage.removeItem('isLoggedIn')
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
     router.push('/')
   }
 

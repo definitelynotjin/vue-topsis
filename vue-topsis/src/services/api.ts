@@ -47,6 +47,20 @@ export async function login (credentials: { username: string, password: string }
 }
 
 
+// Logout
+export async function logout () {
+  try {
+    // const response = await api.post('api/logout') 
+    localStorage.removeItem("token")
+    window.location.href = '/' // Redirect to login page after logout
+    // return response.data
+  } catch (error) {
+    console.error('Error : logout', error)
+    throw error
+  }
+}
+
+
 // -------------------------------------------------------------------//
 
 // Criterias
@@ -184,7 +198,8 @@ export async function deleteScoreData (scoreId: number) {
 }
 export async function editScoreData (scoreId: number, updatedValue: number) {
   try {
-    const response = await axios.put(`api/score/${scoreId}`, updatedValue)
+    const response = await axios.post(`api/score/`, updatedValue)
+    console.log('Response from editScoreData API:', response)
     return response.data
   } catch (error) {
     console.error('Error : editScoreData', error)
@@ -215,3 +230,13 @@ export async function fetchTopsisScores (projectId: number) {
     throw error
   }
 }
+
+// Ranking
+export async function fetchRankingData (projectId: number) {
+  try {
+    const response = await axios.get(`api/topsis/${projectId}/results`)
+    return response.data
+  } catch (error) {
+    console.error('Error : fetchRankingData', error)
+    throw error 
+  }}
