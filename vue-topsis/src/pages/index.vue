@@ -49,7 +49,7 @@ async function handleLogin() {
     if (user.role === 'admin') {
       router.push('/admin')
     } else {
-      router.push('/dashboard')
+      toast.error('Make sure you have entered the right username or password')
     }
 
   } catch (error: any) {

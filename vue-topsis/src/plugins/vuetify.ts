@@ -6,6 +6,7 @@
 
 // Composables
 import { createVuetify } from 'vuetify'
+import { VFileUpload } from 'vuetify/labs/VFileUpload'
 import { VPie } from 'vuetify/labs/VPie'
 
 // Styles
@@ -18,6 +19,7 @@ export default createVuetify({
     defaultTheme: 'system',
   },
   components: {
+    VFileUpload,
     VPie,
   },
 })

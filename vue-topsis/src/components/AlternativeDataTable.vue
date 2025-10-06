@@ -20,6 +20,7 @@
     <template v-slot:item.name="{ item }">
       <VInlineTextField
         v-model="item.name"
+        save-icon-color="cyan"
         name="name"
         @update="(value) => emit('edit-alternative', Number(item.id), { name: value })"
         :cell="true"
@@ -31,6 +32,7 @@
     <template v-slot:item.id_alt="{ item }">
       <VInlineTextField
         v-model="item.id_alt"
+        save-icon-color="cyan"
         @update="(value) => emit('edit-alternative', Number(item.id), { id_alt: value })"
         name="id_alt"
         :cell="true"

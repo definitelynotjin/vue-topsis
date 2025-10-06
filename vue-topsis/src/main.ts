@@ -6,8 +6,6 @@
 
 import * as VInlineFields from '@wdns/vuetify-inline-fields'
 
-import { FileUpload } from 'primevue'
-import PrimeVue from 'primevue/config'
 // Composables
 import { createApp } from 'vue'
 // Plugins
@@ -29,5 +27,3 @@ for (const prop in VInlineFields) {
 registerPlugins(app)
 
 app.mount('#app')
-app.use(PrimeVue)
-app.component('FileUpload', FileUpload)

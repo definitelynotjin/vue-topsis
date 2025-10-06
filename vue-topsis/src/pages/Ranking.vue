@@ -23,10 +23,12 @@
     {
       title: 'No',
       key: 'no',
+      sortable: false,
+      width: '10%',
     },
 
     {
-      title: 'Nama',
+      title: 'Nama Alternatif',
       key: 'name',
     },
 

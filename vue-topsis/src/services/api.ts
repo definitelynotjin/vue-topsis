@@ -8,7 +8,8 @@ export async function fetchProjectData () {
     const response = await api.get('project/')
     // console.log('Response from fetchProjectData API:', response)
     return response.data
-  } catch {
+  } catch (error) {
+    console.error('Error : fetchProjectData', error)
     return []
   }
 }
@@ -154,6 +155,7 @@ export async function editAlternativeData (alternative_id: number, updatedAltern
     throw error
   }
 }
+
 export async function deleteAlternativeData (alternative_id: number) {
   try {
     const response = await axios.delete(`api/alternative/${alternative_id}`)
@@ -184,7 +186,7 @@ export async function fetchScoresByCriteria (projectId: number, criteriaId: numb
     return response.data
   } catch (error) {
     console.error('Error : fetchScoresByCriteria', error)
-    throw error
+    return []
   }
 }
 export async function deleteScoreData (scoreId: number) {
@@ -227,7 +229,7 @@ export async function fetchTopsisScores (projectId: number) {
     return response.data
   } catch (error) {
     console.error('error fetchTopsisScores', error)
-    throw error
+    return []
   }
 }
 
