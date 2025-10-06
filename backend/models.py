@@ -6,6 +6,7 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="CASCADE"), nullable=False)  # opsional: untuk mengaitkan proyek dengan pengguna tertentu
 
     criteria = db.relationship('Criteria', backref='project', lazy=True, cascade="all, delete-orphan")
     alternatives = db.relationship('Alternative', backref='project', lazy=True, cascade="all, delete-orphan")
@@ -83,5 +84,17 @@ class TopsisResult(db.Model):
     alternative_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Float, nullable=False)
     rank = db.Column(db.Integer, nullable=False)
+
+# Table User (opsional, untuk autentikasi)
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    role = db.Column(db.String(20), nullable=False, default='user')  # roles: admin, user
+
+    projects = db.relationship('Project', backref='user', cascade="all, delete-orphan", lazy=True)
+
+
 
 

@@ -9,22 +9,28 @@ from routes.score import score_bp
 from routes.topsis import topsis_bp
 from routes.export import export_bp
 from routes.imports import import_bp
+from routes.user import user_bp
+from routes.login import login_bp
+from db import bcrypt
+from flask_jwt_extended import JWTManager
 
 def create_app():
     app = Flask(__name__)
     _= CORS(app, resources={r"/*": {
-    "origins": ["http://localhost:3000", "http://127.0.0.1:3000"]
-}})
-
+    "origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}})
 
     # konfigurasi database MySQL
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flaskuser:flask123@localhost/topsis_db'
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/topsis_db'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flaskuser:flask123@localhost/topsis_db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/topsis_db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    app.config["JWT_SECRET_KEY"] = "ganti_dengan_key_rahasia"  
 
     # inisialisasi db & migrate
     db.init_app(app)
     migrate.init_app(app, db)
+    bcrypt.init_app(app)
+    JWTManager(app)
 
     # import models supaya Flask-Migrate bisa membaca
 
@@ -36,6 +42,8 @@ def create_app():
     app.register_blueprint(topsis_bp, url_prefix="/topsis")
     app.register_blueprint(export_bp, url_prefix="/export")
     app.register_blueprint(import_bp, url_prefix="/import")
+    app.register_blueprint(user_bp, url_prefix="/user")
+    app.register_blueprint(login_bp, url_prefix="/login")
 
     @app.route("/")
     def home():

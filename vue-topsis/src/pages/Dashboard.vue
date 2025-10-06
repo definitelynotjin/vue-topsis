@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import { onMounted, ref, computed } from 'vue'
   import { useProjectStore } from '@/stores/projectStore'
-  import { ChevronDown, Plus } from 'lucide-vue-next'
+  import { ChevronDown, Plus, Trash } from 'lucide-vue-next'
   import { fetchProjectData } from '../services/api.ts'
+
 
   const projectStore = useProjectStore()
   const searchFilter = ref('')
@@ -10,12 +11,28 @@
   const dropdowns = ref<Record<number, boolean>>({})
   const showDialog = ref(false)
   const activeProject = ref(null)
+  const pendingDeleteId = ref<number | null>(null)
+  const pendingDeleteName = ref<string | null>(null)
+  const showDeleteDialog = ref(false)
 
   function openDropdown(project: any) {
     activeProject.value = project
   }
   function closeDropdown() {
     activeProject.value = null
+  }
+    function requestDelete(item: { id: number; name: string }) {
+    pendingDeleteId.value = item.id
+    pendingDeleteName.value = item.name
+    showDeleteDialog.value = true
+  }
+  async function delProject(projectId: number) {
+    if (confirm('Are you sure you want to delete this project?')) {
+      await projectStore.deleteProject(projectId)
+      if (activeProject.value && activeProject.value.id === projectId) {
+        closeDropdown()
+      }
+    }
   }
 
   const handleSearch = (search: any) => {
@@ -30,6 +47,23 @@
       )
     })
   })
+
+  function getProjectName(projectId: number | null) {
+    if (!projectId) return 'idk'
+    return projectStore.projects.find((p) => p.id === projectId)?.name || 'idk tho'
+  }
+
+    async function confirmDelete() {
+      console.log('deleted project with id', pendingDeleteId.value)
+    if (pendingDeleteId.value !== null) {
+      await projectStore.deleteProject(pendingDeleteId.value)
+      if (activeProject.value && activeProject.value.id === pendingDeleteId.value) {
+        closeDropdown()
+      }
+    }
+    showDeleteDialog.value = false
+    pendingDeleteId.value = null
+  }
 
   onMounted(async () => {
     projectStore.projects = await fetchProjectData()
@@ -82,6 +116,20 @@
                   @close="closeDropdown"
                 />
               </v-card-actions>
+              <v-card-actions class="action-buttons">
+                <v-btn
+                  color="white"
+                  :icon="Trash"
+                  @click=" showDeleteDialog = true
+                  "
+                />
+              </v-card-actions>
+              <DeleteProjectDialog
+                v-model="showDeleteDialog"
+                :project-name="getProjectName(projectStore.selectedProjectId)"
+                :alternative-name="pendingDeleteName"
+                @confirm-delete="confirmDelete"
+              />
             </v-row>
             <DashboardDropdown
               v-if="activeProject?.id === project.id"

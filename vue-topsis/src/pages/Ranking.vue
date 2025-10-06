@@ -2,6 +2,8 @@
   import { ref, onMounted } from 'vue'
   import axios from 'axios'
   import { useProjectStore } from '@/stores/projectStore'
+  import { fetchRankingData } from '@/services/api'
+  // import CardTitleDropdown from '@/components/CardTitleScoreDropdown.vue'
   // import TopsisDataTable from '@/components/TopsisDataTable.vue'
 
   const projectStore = useProjectStore()
@@ -40,71 +42,54 @@
     },
   ]
 
+    watch(
+    () => projectStore.selectedProjectId,
+    async (newProjectId) => {
+      if (newProjectId) {
+        const res = await fetchRankingData(newProjectId)
+        scores.value = res.data
+        topsisResults.value = {
+          skipped: res.skipped,
+          total: res.total,
+        }
+      } else {
+        scores.value = []
+        topsisResults.value = {
+          skipped: 0,
+          total: 0,
+        }
+
+      }
+    },
+    { immediate: true },
+  )
+
   const searchFilter = ref('')
   const search = ref('')
   const handleSearch = (search: string) => {
     searchFilter.value = search
   }
-
-  const hitungTopsis = async () => {
-    if (!projectStore.selectedProjectId) return
-    try {
-      loading.value = true
-      const res = await axios.get(`http://127.0.0.1:5000/topsis/${projectStore.selectedProjectId}`)
-      // tambahkan nomor urut
-      scores.value = res.data.data
-      // console.log('res data', res.data.data)
-      topsisResults.value = {
-        skipped: res.data.skipped,
-        total: res.data.total,
-      }
-    } catch (err) {
-      console.error('Gagal hitung Topsis:', err)
-      alert('Gagal hitung Topsis!')
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const saveRankingReport = async () => {
-    if (!projectStore.selectedProjectId || scores.value.length === 0) return
-    try {
-      loading.value = true
-      await axios.post(`http://127.0.0.1:5000/topsis/${projectStore.selectedProjectId}/save`)
-      alert('Laporan ranking berhasil disimpan!')
-      console.log('Laporan ranking berhasil disimpan!')
-    } catch (err) {
-      console.error('Gagal simpan laporan ranking:', err)
-      alert('Gagal simpan laporan ranking!')
-    } finally {
-      loading.value = false
-    }
-  }
+  
+  
 </script>
 
 <template>
   <v-app class="!bg-cyan-900">
     <main>
       <v-container fluid class="bg-cyan-700 score-container">
-        <div class="d-flex bg-cyan-700 score-top-table-text">
-          <CardTitleDropdown />
-          <SearchBar @search="handleSearch" />
-          <v-btn
-            type="submit"
-            hover
-            variant="flat"
-            class="card-add-button !bg-cyan-600"
-            :disabled="!projectStore.selectedProjectId || loading"
-            @click="hitungTopsis"
-          >
-            <!-- {{ loading ? 'Menghitung...' : 'Hitung Topsis Score' }} -->
-          </v-btn>
+        <div class="d-flex bg-cyan-700 score-top-table-text py-2">
+          <CardTitleDropdown
+          />
+          <SearchBar @search="handleSearch" 
+          />
         </div>
+        
         <TopsisDataTable
           :items="scores"
           :skipped="topsisResults.skipped"
           :total="topsisResults.total"
           :headers="topsisHeaders"
+          
         />
         <template v-slot:bottom="slotProps">
           <!-- render pagination bawaan -->

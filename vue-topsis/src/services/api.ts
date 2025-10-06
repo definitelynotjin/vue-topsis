@@ -1,10 +1,12 @@
 import axios from 'axios'
+import api from './axiosInstance'
 
 // Projects
 
 export async function fetchProjectData () {
   try {
-    const response = await axios.get('api/project/')
+    const response = await api.get('project/')
+    // console.log('Response from fetchProjectData API:', response)
     return response.data
   } catch (error) {
     console.error('Error : fetchProjectData', error)
@@ -13,13 +15,52 @@ export async function fetchProjectData () {
 }
 export async function addProjectData (newProject: { name: string, description: string }) {
   try {
-    const response = await axios.post('api/project/', newProject)
+    const response = await api.post('project/', newProject)
+    // token = localStorage.getItem('access_token')
+    console.log('Response from addProjectData API:', response)
     return response.data
   } catch (error) {
     console.error('Error : addProjectData', error)
     throw error
   }
 }
+
+export async function deleteProjectData (projectId: number) {
+  try {
+    const response = await api.delete(`project/${projectId}`)
+    return response.data
+  } catch (error) {
+    console.error('Error : deleteProjectData', error)
+    throw error
+  }
+}
+
+// Login
+export async function login (credentials: { username: string, password: string }) {
+  try {
+    const response = await axios.post('api/login/auth', credentials)
+    // console.log('Response from login API:', response)
+    return response
+  } catch (error) {
+    console.error('Error : login', error)
+    throw error
+  }
+}
+
+
+// Logout
+export async function logout () {
+  try {
+    // const response = await api.post('api/logout') 
+    localStorage.removeItem("token")
+    window.location.href = '/' // Redirect to login page after logout
+    // return response.data
+  } catch (error) {
+    console.error('Error : logout', error)
+    throw error
+  }
+}
+
 
 // -------------------------------------------------------------------//
 
@@ -159,7 +200,8 @@ export async function deleteScoreData (scoreId: number) {
 }
 export async function editScoreData (scoreId: number, updatedValue: number) {
   try {
-    const response = await axios.put(`api/score/${scoreId}`, updatedValue)
+    const response = await axios.post(`api/score/`, updatedValue)
+    console.log('Response from editScoreData API:', response)
     return response.data
   } catch (error) {
     console.error('Error : editScoreData', error)
@@ -190,3 +232,13 @@ export async function fetchTopsisScores (projectId: number) {
     return []
   }
 }
+
+// Ranking
+export async function fetchRankingData (projectId: number) {
+  try {
+    const response = await axios.get(`api/topsis/${projectId}/results`)
+    return response.data
+  } catch (error) {
+    console.error('Error : fetchRankingData', error)
+    throw error 
+  }}
