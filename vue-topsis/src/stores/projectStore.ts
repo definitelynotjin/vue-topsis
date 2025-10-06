@@ -1,7 +1,7 @@
 import type { Project } from '../types/type.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { addProjectData, fetchProjectData } from '@/services/api.ts'
+import { addProjectData, fetchProjectData, deleteProjectData } from '@/services/api.ts'
 
 export const useProjectStore = defineStore('project', () => {
   const projects = ref<Project[]>([])
@@ -14,6 +14,7 @@ export const useProjectStore = defineStore('project', () => {
     if (newProject.name && newProject.description) {
       try {
         const res = await addProjectData(newProject)
+        await loadAllProjects()
         return res
       } catch {
         alert('cannot add project tngina')
@@ -23,8 +24,21 @@ export const useProjectStore = defineStore('project', () => {
     }
   }
 
+  async function deleteProject (projectId: number) {
+    try {
+      const res = await deleteProjectData(projectId)
+      console.log('statsus delete project store', res)
+      await loadAllProjects()
+      return res
+    } catch (error) {
+      console.error('Error : deleteProjectData', error)
+      throw error
+    }}
+    
   function setSelectedProjectId (id: number | null) {
     selectedProjectId.value = id
   }
-  return { setSelectedProjectId, loadAllProjects, projects, selectedProjectId, addProject }
+  return { setSelectedProjectId, loadAllProjects, projects, selectedProjectId, addProject, deleteProject }
+  
 })
+

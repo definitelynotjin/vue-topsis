@@ -12,6 +12,13 @@ def admin_required(fn):
         return fn(*args, **kwargs)
     return wrapper
 
+def jwt_required(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        verify_jwt_in_request()
+        return fn(*args, **kwargs)
+    return wrapper
+
 def user_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):

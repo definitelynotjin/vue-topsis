@@ -1,11 +1,14 @@
 from flask import Blueprint, request, jsonify
 from db import db
 from models import Criteria
+from flask_jwt_extended import get_jwt_identity
+from utils.decorator import user_required
 
 criteria_bp = Blueprint("criteria", __name__)
 
 # GET criteria by project_id
 @criteria_bp.route("/<int:project_id>", methods=["GET"])
+
 def get_criteria(project_id):
     criteria_list = Criteria.query.filter_by(project_id=project_id).all()
     result = []

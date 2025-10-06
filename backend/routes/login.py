@@ -24,7 +24,7 @@ def login_user():
         "access_token": access_token,
         "user": {
             "id": user.id,
-            "username": user.username,
-            "role": user.role
-            }
-        },200)
+            "role": user.role,
+            "username": user.username
+        }
+    }), 200

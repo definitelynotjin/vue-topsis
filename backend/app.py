@@ -20,8 +20,8 @@ def create_app():
     "origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}})
 
     # konfigurasi database MySQL
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flaskuser:flask123@localhost/topsis_db'
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/topsis_db'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flaskuser:flask123@localhost/topsis_db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/topsis_db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     app.config["JWT_SECRET_KEY"] = "ganti_dengan_key_rahasia"  

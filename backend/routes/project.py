@@ -50,7 +50,7 @@ def update_project(project_id):
     name = data.get("name")
     description = data.get("description", "")
 
-    project = Project.query.get(project_id).where_by(user_id=get_jwt_identity()).first()
+    project = Project.query.filter_by(id=project_id, user_id=get_jwt_identity).first()
     if not project:
         return jsonify({"error": "Project not found"}), 404
 
@@ -65,8 +65,10 @@ def update_project(project_id):
 
 # DELETE project
 @project_bp.route("/<int:project_id>", methods=["DELETE"])
+@user_required
 def delete_project(project_id):
-    project = Project.query.get(project_id).where_by(user_id=get_jwt_identity()).first()
+    user_id = get_jwt_identity()
+    project = Project.query.filter_by(id=project_id, user_id=user_id).first()
     if not project:
         return jsonify({"error": "Project not found"}), 404
 

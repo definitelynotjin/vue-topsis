@@ -1,10 +1,12 @@
 import axios from 'axios'
+import api from './axiosInstance'
 
 // Projects
 
 export async function fetchProjectData () {
   try {
-    const response = await axios.get('api/project/')
+    const response = await api.get('project/')
+    // console.log('Response from fetchProjectData API:', response)
     return response.data
   } catch {
     return []
@@ -12,13 +14,38 @@ export async function fetchProjectData () {
 }
 export async function addProjectData (newProject: { name: string, description: string }) {
   try {
-    const response = await axios.post('api/project/', newProject)
+    const response = await api.post('project/', newProject)
+    // token = localStorage.getItem('access_token')
+    console.log('Response from addProjectData API:', response)
     return response.data
   } catch (error) {
     console.error('Error : addProjectData', error)
     throw error
   }
 }
+
+export async function deleteProjectData (projectId: number) {
+  try {
+    const response = await api.delete(`project/${projectId}`)
+    return response.data
+  } catch (error) {
+    console.error('Error : deleteProjectData', error)
+    throw error
+  }
+}
+
+// Login
+export async function login (credentials: { username: string, password: string }) {
+  try {
+    const response = await axios.post('api/login/auth', credentials)
+    // console.log('Response from login API:', response)
+    return response
+  } catch (error) {
+    console.error('Error : login', error)
+    throw error
+  }
+}
+
 
 // -------------------------------------------------------------------//
 
