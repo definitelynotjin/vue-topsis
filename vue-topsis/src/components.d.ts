@@ -27,7 +27,7 @@ declare module 'vue' {
     DashboardDropdown: typeof import('./components/DashboardDropdown.vue')['default']
     DataTable: typeof import('./components/DataTable.vue')['default']
     DeleteAlternativeDialog: typeof import('./components/DeleteAlternativeDialog.vue')['default']
-    DeleteCriteriaDialog: typeof import('./componen./components/DeleteProjectDialog.vue
+    DeleteCriteriaDialog: typeof import('./components/DeleteCriteriaDialog.vue')['default']
     DeleteProjectDialog: typeof import('./components/DeleteProjectDialog.vue')['default']
     DeleteScoreDialog: typeof import('./components/DeleteScoreDialog.vue')['default']
     EditScoreDialog: typeof import('./components/EditScoreDialog.vue')['default']

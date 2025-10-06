@@ -13,6 +13,7 @@ from routes.user import user_bp
 from routes.login import login_bp
 from db import bcrypt
 from flask_jwt_extended import JWTManager
+import commands
 
 def create_app():
     app = Flask(__name__)
@@ -31,6 +32,9 @@ def create_app():
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     JWTManager(app)
+
+    # Import commands
+    app.cli.add_command(commands.create_admin)
 
     # import models supaya Flask-Migrate bisa membaca
 

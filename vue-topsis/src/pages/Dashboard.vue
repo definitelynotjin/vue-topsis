@@ -120,14 +120,14 @@
                 <v-btn
                   color="white"
                   :icon="Trash"
-                  @click=" showDeleteDialog = true
+                  @click=" requestDelete(project)
                   "
                 />
               </v-card-actions>
               <DeleteProjectDialog
                 v-model="showDeleteDialog"
-                :project-name="getProjectName(projectStore.selectedProjectId)"
-                :alternative-name="pendingDeleteName"
+                :project-id="pendingDeleteId"
+                :project-name="pendingDeleteName"
                 @confirm-delete="confirmDelete"
               />
             </v-row>
