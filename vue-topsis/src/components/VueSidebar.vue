@@ -8,6 +8,7 @@
     Activity,
     Trophy,
     CircleUserRound,
+    Sheet,
   } from 'lucide-vue-next'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
@@ -35,12 +36,17 @@
       icon: Activity,
     },
     {
+      title: 'Data Matriks ',
+      value: '/matriksdata',
+      icon: Sheet,
+    },
+    {
       title: 'TOPSIS ',
       value: '/topsisscore',
       icon: NotepadText,
     },
     {
-      title: 'Data Ranking ',
+      title: 'Log Data Ranking ',
       value: '/ranking',
       icon: Trophy,
     },

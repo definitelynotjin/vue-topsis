@@ -2,7 +2,6 @@
   import { ref, onMounted } from 'vue'
   import axios from 'axios'
   import { useProjectStore } from '@/stores/projectStore'
- import { useTopsisStore } from '@/stores/topsisStore'
 
   const projectStore = useProjectStore()
   const scores = ref<{ alternative: string; score: number }[]>([])
@@ -12,7 +11,6 @@
     total: 0,
   })
   const loading = ref(false)
-  const topsisStore = useTopsisStore()
 
   onMounted(() => {
     projectStore.loadAllProjects()
@@ -29,16 +27,7 @@
     {
       title: 'Nama Alternatif',
       key: 'name',
-    },
-
-    {
-      title: 'Score TOPSIS',
-      key: 'score',
-    },
-    {
-      title: 'Ranking',
-      key: 'rank',
-    },
+    }
   ]
 
   const searchFilter = ref('')
@@ -46,55 +35,62 @@
   const handleSearch = (search: string) => {
     searchFilter.value = search
   }
-
-  const hitungTopsis = async () => {
-    if (!projectStore.selectedProjectId) return
-    try {
-      loading.value = true
-      const res = await topsisStore.countTopsis(projectStore.selectedProjectId)
-      scores.value = res.data
-      topsisResults.value = {
-        skipped: res.skipped,
-        total: res.total,
-      }
-    } catch (err) {
-      console.error('Gagal hitung Topsis:', err)
-      alert('Gagal hitung Topsis!')
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const saveRankingReport = async () => {
-    if (!projectStore.selectedProjectId || scores.value.length === 0) return
-    try {
-      loading.value = true
-      const res = await topsisStore.saveRankingReport(projectStore.selectedProjectId, scores)
-    } finally {
-      loading.value = false
-    }
-  }
 </script>
 
 <template>
   <v-app class="!bg-cyan-900">
     <main>
       <v-container fluid class="bg-cyan-700 score-container">
-        <div class="d-flex bg-cyan-700 score-top-table-text">
-          <!-- Dropdown project -->
-          <CardTitleDropdown />
-          <SearchBar @search="handleSearch" />
+        <div class="flex flex-wrap justify-items-end items-end gap-5 bg-cyan-700 score-top-table-text">
+          <div class="flex w-full">
+            <!-- Dropdown project -->
+            <CardTitleDropdown />
+            <SearchBar @search="handleSearch" />
+          </div>
+          <div class="d-flex w-full">
+              <v-btn
+                type=""
+                hover
+                variant="flat"
+                class="card-add-button !bg-cyan-600"
+                :disabled="!projectStore.selectedProjectId || loading"
+                @click=""
+              >
+                Matriks Awal
+              </v-btn>
+              <v-btn
+                type=""
+                hover
+                variant="flat"
+                class="card-add-button !bg-cyan-600"
+                :disabled="!projectStore.selectedProjectId || loading"
+                @click=""
+              >
+                Matriks Normalisasi
+              </v-btn>
+              <v-btn
+                type=""
+                hover
+                variant="flat"
+                class="card-add-button !bg-cyan-600"
+                :disabled="!projectStore.selectedProjectId || loading"
+                @click=""
+              >
+                Matriks Berbobot
+              </v-btn>
+              <v-btn
+                type=""
+                hover
+                variant="flat"
+                class="card-add-button !bg-cyan-600"
+                :disabled="!projectStore.selectedProjectId || loading"
+                @click=""
+              >
+                Solusi Ideal
+              </v-btn>
+              
+          </div>
 
-          <v-btn
-            type="submit"
-            hover
-            variant="flat"
-            class="card-add-button !bg-cyan-600"
-            :disabled="!projectStore.selectedProjectId || loading"
-            @click="hitungTopsis"
-          >
-            {{ loading ? 'Menghitung...' : 'Hitung Topsis Score' }}
-          </v-btn>
 
         </div>
         <TopsisDataTable
@@ -123,7 +119,7 @@
             :disabled="!topsisResults.total"
             @click="saveRankingReport"
           >
-            Simpan Perhitungan
+            Save Report
           </v-btn>
         </div>
       </v-container>

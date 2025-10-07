@@ -2,6 +2,7 @@ from flask.cli import with_appcontext
 import click
 from app import db
 from models import User # sesuaikan path model kamu
+from db import bcrypt
 
 @click.command('create-admin')
 @with_appcontext
@@ -17,7 +18,8 @@ def create_admin():
         return
 
     user = User(username=username, role=role)
-    user.set_password(password)  # pastikan kamu punya method hash password
+    # user.set_password(password)  # pastikan kamu punya method hash password
+    user.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
     db.session.add(user)
     db.session.commit()
 

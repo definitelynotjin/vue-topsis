@@ -242,3 +242,12 @@ export async function fetchRankingData (projectId: number) {
     console.error('Error : fetchRankingData', error)
     throw error 
   }}
+
+export async function addRankingData (projectId: number) {
+  try {
+    const response = await axios.post(`api/topsis/${projectId}/save`)
+    return response.data
+  } catch (error) {
+    console.error('Error : fetchRankingData', error)
+    throw error 
+  }}
