@@ -7,7 +7,6 @@ const props = defineProps({
   
 })
 </script>
-
 <template>
 
   <v-data-table
