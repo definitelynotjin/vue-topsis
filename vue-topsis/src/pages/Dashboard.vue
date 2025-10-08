@@ -3,8 +3,8 @@
   import { useProjectStore } from '@/stores/projectStore'
   import { ChevronDown, Plus, Trash } from 'lucide-vue-next'
   import { fetchProjectData } from '../services/api.ts'
-
-
+  
+  
   const projectStore = useProjectStore()
   const searchFilter = ref('')
 

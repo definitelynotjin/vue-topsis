@@ -42,9 +42,9 @@
     </template>
 
     <template v-slot:item.actions="{ item }">
-      <div class="hover-delete">
+      <div class="">
         <v-btn variant="plain" icon @click="emit('delete-request', item)">
-          <X :size="20" />
+          <v-icon color="red">mdi-delete</v-icon>  
         </v-btn>
       </div>
     </template>

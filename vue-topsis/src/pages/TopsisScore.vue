@@ -2,6 +2,7 @@
   import { ref, onMounted } from 'vue'
   import axios from 'axios'
   import { useProjectStore } from '@/stores/projectStore'
+ import { useTopsisStore } from '@/stores/topsisStore'
 
   const projectStore = useProjectStore()
   const scores = ref<{ alternative: string; score: number }[]>([])
@@ -11,6 +12,7 @@
     total: 0,
   })
   const loading = ref(false)
+  const topsisStore = useTopsisStore()
 
   onMounted(() => {
     projectStore.loadAllProjects()
@@ -49,13 +51,11 @@
     if (!projectStore.selectedProjectId) return
     try {
       loading.value = true
-      const res = await axios.get(`http://127.0.0.1:5000/topsis/${projectStore.selectedProjectId}`)
-      // tambahkan nomor urut
-      scores.value = res.data.data
-      // console.log('res data', res.data.data)
+      const res = await topsisStore.countTopsis(projectStore.selectedProjectId)
+      scores.value = res.data
       topsisResults.value = {
-        skipped: res.data.skipped,
-        total: res.data.total,
+        skipped: res.skipped,
+        total: res.total,
       }
     } catch (err) {
       console.error('Gagal hitung Topsis:', err)
@@ -69,12 +69,7 @@
     if (!projectStore.selectedProjectId || scores.value.length === 0) return
     try {
       loading.value = true
-      await axios.post(`http://127.0.0.1:5000/topsis/${projectStore.selectedProjectId}/save`)
-      alert('Laporan ranking berhasil disimpan!')
-      console.log('Laporan ranking berhasil disimpan!')
-    } catch (err) {
-      console.error('Gagal simpan laporan ranking:', err)
-      alert('Gagal simpan laporan ranking!')
+      const res = await topsisStore.saveRankingReport(projectStore.selectedProjectId, scores)
     } finally {
       loading.value = false
     }
@@ -100,6 +95,7 @@
           >
             {{ loading ? 'Menghitung...' : 'Hitung Topsis Score' }}
           </v-btn>
+
         </div>
         <TopsisDataTable
           :items="scores"
@@ -127,7 +123,7 @@
             :disabled="!topsisResults.total"
             @click="saveRankingReport"
           >
-            Save Report
+            Simpan Perhitungan
           </v-btn>
         </div>
       </v-container>

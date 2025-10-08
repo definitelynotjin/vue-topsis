@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from db import db
 from models import Alternative, Score, Criteria, TopsisResult
-from services.topsis import calculate_topsis, calculate_weighted_matrix
+from services.topsis import calculate_weighted_matrix, topsis_full_process
 
 topsis_bp = Blueprint("topsis", __name__)
 
@@ -31,11 +31,10 @@ def get_topsis_data(project_id):
             "scores": scores_data
         })
 
-    ranking_result, skipped = calculate_topsis(alt_list, criteria_order)
-    ranking_result = sorted(ranking_result, key=lambda x: x["score"], reverse=True)
+    ranking_result = topsis_full_process(alt_list, criteria_order)
+    # ranking_result = sorted(ranking_result, key=lambda x: x["score"], reverse=True)
     # skipped = sorted(skipped, key=lambda x: x["name"], reverse=True)
-    
-    return ranking_result, skipped
+    return ranking_result
 
 def get_matriks_weighted(project_id):
     """Helper untuk ambil alternatif + kriteria lalu hitung matriks berbobot"""
@@ -71,7 +70,10 @@ def get_matriks_weighted(project_id):
 @topsis_bp.route("/<int:project_id>", methods=["GET"])
 def topsis_ranking(project_id):
     """Hitung TOPSIS tanpa simpan ke DB"""
-    ranking_result, skipped = get_topsis_data(project_id)
+    result= get_topsis_data(project_id)
+
+    ranking_result = result.get("ranking", [])
+    skipped = result.get("skipped", [])
 
     return jsonify({
         "status": "success",
@@ -85,7 +87,10 @@ def topsis_ranking(project_id):
 @topsis_bp.route("/<int:project_id>/save", methods=["POST"])
 def save_topsis_ranking(project_id):
     """Hitung TOPSIS lalu simpan ke DB"""
-    ranking_result, skipped = get_topsis_data(project_id)
+    result = get_topsis_data(project_id)
+
+    ranking_result = result.get("ranking", [])
+    skipped = result.get("skipped", [])
 
     # hapus hasil lama
     TopsisResult.query.filter_by(project_id=project_id).delete()
@@ -132,21 +137,62 @@ def get_saved_ranking(project_id):
     })
 
 # DATA Matriks Weighted
-@topsis_bp.route("/<int:project_id>/matrix", methods=["GET"])
+@topsis_bp.route("/<int:project_id>/matrix-weight", methods=["GET"])
 def get_decision_matrix(project_id):
     """Hitung matriks keputusan berbobot tanpa simpan ke DB"""
-    matrix_result, skipped = get_matriks_weighted(project_id)
+    result = get_topsis_data(project_id)
+
+    matrix_weigted = result.get("matrix_weighted", [])
+    skipped = result.get("skipped", [])
+
 
     return jsonify({
         "status": "success",
         "message": f"Weighted decision matrix calculation completed",
-        "total": len(matrix_result),
+        "total": len(matrix_weigted),
         "skipped": len(skipped),
-        "data": matrix_result
+        "data": matrix_weigted
     })
 
+#DATA Solusi Ideal
+@topsis_bp.route("/<int:project_id>/ideal-solution", methods=["GET"])
+def get_ideal_solution(project_id):
+    """Hitung solusi ideal tanpa simpan ke DB"""
+    result = get_topsis_data(project_id)
+
+    ideal_solution = result.get("ideal_solution", [])
+    skipped = result.get("skipped", [])
+
+
+    return jsonify({
+        "status": "success",
+        "message": f"Ideal solution calculation completed",
+        "total": len(ideal_solution),
+        "skipped": len(skipped),
+        "data": ideal_solution
+    })
+
+#DATA Matriks Normalized
+@topsis_bp.route("/<int:project_id>/matrix-normalized", methods=["GET"])
+def get_decision_matrix_normalized(project_id):
+    """Hitung matriks keputusan ternormalisasi tanpa simpan ke DB"""
+    result = get_topsis_data(project_id)
+
+    matrix_normalized = result.get("matrix_normalized", [])
+    skipped = result.get("skipped", [])
+
+
+    return jsonify({
+        "status": "success",
+        "message": f"Normalized decision matrix calculation completed",
+        "total": len(matrix_normalized),
+        "skipped": len(skipped),
+        "data": matrix_normalized
+    })
+
+
 # DATA Matriks Before Weight
-@topsis_bp.route("/<int:project_id>/matrix-before-weight", methods=["GET"])
+@topsis_bp.route("/<int:project_id>/matrix-raw", methods=["GET"])
 def get_decision_matrix_before_weight(project_id):
     """Hitung matriks keputusan sebelum berbobot tanpa simpan ke DB"""
     alternatives = Alternative.query.filter_by(project_id=project_id).all()
@@ -187,7 +233,7 @@ def get_decision_matrix_before_weight(project_id):
     # Buat matriks keputusan sebelum berbobot
     decision_matrix = []
     for alt in alt_list:
-        row = {"id": alt["id"], "name": alt["name"], "id_alt": alt["id_alt"]}
+        row = { "nama": alt["name"], "id": alt["id_alt"]}
         scores_dict = {s["criteria"]: s["value"] for s in alt["scores"]}
         missing_criteria = False
         for c in criteria_order:
