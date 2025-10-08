@@ -46,22 +46,23 @@ export const useCriteriaStore = defineStore('criteria', () => {
   }) {
     try {
       const res = await editCriteriaData(criteriaId, updatedCriteria)
-      await loadByProject(selectedProjectId)
+      await loadByProject(criteriaId)
       return res
-    } catch {
+    } catch (error) {
       toast.error('welp, cant edit')
+      console.error('cant edit crit man', error)
     }
   }
 
   async function deleteCriteria (id: number) {
     try {
       const res = await deleteCriteriaData(id)
-      if (selectedCriteriaId.value) {
-        await loadByProject(selectedProjectId!)
+      if (selectedCriteriaId.value !== null) {
+        await loadByProject(selectedProjectId.value!)
       }
       return res
     } catch (error) {
-      toast.error('cant delete crit man', error)
+      console.error('cant delete crit man', error)
       throw error
     }
   }

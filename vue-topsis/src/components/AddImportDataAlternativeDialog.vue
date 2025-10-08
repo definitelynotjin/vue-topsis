@@ -17,9 +17,11 @@
     emit('update:modelValue', false)
   }
 
-  function handleFileUpload(files: File[]) {
-    if (files && files.length < 0) {
+  function handleFileUpload(files: File | File[]) {
+    if (Array.isArray(files) && files.length > 0) {
       selectedFile.value = files[0]
+    } else if (files instanceof File) {
+      selectedFile.value = files
     } else {
       selectedFile.value = null
     }
@@ -44,18 +46,21 @@
 </script>
 
 <template>
-  <v-dialog v-model="props.modelValue" class="max-w-200 dialog-wallpaper justify-center">
+  <v-dialog
+    :model-value="props.modelValue"
+    @update:model-value="(val) => emit('update:modelValue', val)"
+    class="max-w-200 dialog-wallpaper justify-center"
+  >
     <v-card-text class="dialog-card !bg-cyan-700 flex justify-center">
-      <v-file-upload
-        class="file-upload"
-        browse-text="Browse Files"
-        divider-text="or"
-        title="Drag and drop the file here"
-        style="background-color: transparent"
-        clearable
+      <v-file-input
         @update:model-value="handleFileUpload"
+        class="file-upload"
+        accept=".xlsx"
+        clearable
+        title="Drag and drop"
+        style="background-color: transparent"
       >
-      </v-file-upload>
+      </v-file-input>
     </v-card-text>
     <v-card-actions>
       <v-spacer />
@@ -82,6 +87,5 @@
   .file-upload {
     justify-content: center;
     justify-items: stretch;
-    color: red;
   }
 </style>

@@ -1,73 +1,75 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { toast } from 'vue-sonner'
-import {login} from '@/services/api'
+  import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { toast } from 'vue-sonner'
+  import { login } from '@/services/api'
+  import { Blend } from 'lucide-vue-next'
 
-const router = useRouter()
-const username = ref('')
-const password = ref('')
-const show1 = ref(false)
-const valid = ref(false)
-const loading = ref(false) // ⏳ status login
+  const router = useRouter()
+  const username = ref('')
+  const password = ref('')
+  const show1 = ref(false)
+  const valid = ref(false)
+  const loading = ref(false) // ⏳ status login
 
-const nameRules = [
-  (v: string) => !!v || 'Username is required',
-  (v: string) => (v && v.length <= 20) || 'Username must be less than 20 characters',
-]
+  const nameRules = [
+    (v: string) => !!v || 'Username is required',
+    (v: string) => (v && v.length <= 20) || 'Username must be less than 20 characters',
+  ]
 
-const passwordRules = [
-  (v: string) => !!v || 'Password is required',
-  (v: string) => (v && v.length >= 6) || 'Password must be at least 6 characters',
-]
+  const passwordRules = [
+    (v: string) => !!v || 'Password is required',
+    (v: string) => (v && v.length >= 6) || 'Password must be at least 6 characters',
+  ]
 
-async function handleLogin() {
-  if (!username.value || !password.value) {
-    toast.error('Please fill all fields!')
-    return
+  async function handleLogin() {
+    if (!username.value || !password.value) {
+      toast.error('Please fill all fields!')
+      return
+    }
+
+    try {
+      loading.value = true
+      const response = await login({
+        username: username.value,
+        password: password.value,
+      })
+
+      // Ambil token & user data dari response Flask
+      const token = response.data.access_token
+      // console.log('Token:', response.data)
+      const user = response.data.user
+
+      // Simpan ke localStorage
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify(user))
+
+      toast.success('Login successful!')
+      router.push('/dashboard')
+
+      // Redirect sesuai role
+      // if (user.role === 'admin') {
+      //   router.push('/admin')
+      // } else {
+      //   toast.error('Make sure you have entered the right username or password')
+      // }
+    } catch (error: any) {
+      console.error(error)
+      toast.error(
+        error.response?.data?.error || 'Login failed. Please check your username and password.',
+      )
+    } finally {
+      loading.value = false
+    }
   }
-
-  try {
-    loading.value = true
-    const response = await login({
-      username: username.value,
-      password: password.value
-    })
-
-    // Ambil token & user data dari response Flask
-    const token = response.data.access_token
-    // console.log('Token:', response.data)
-    const user = response.data.user
-
-    // Simpan ke localStorage
-    localStorage.setItem('token', token)
-    localStorage.setItem('user', JSON.stringify(user))
-
-    toast.success('Login successful!')
-    router.push('/dashboard')
-
-    // Redirect sesuai role
-    // if (user.role === 'admin') {
-    //   router.push('/admin')
-    // } else {
-    //   toast.error('Make sure you have entered the right username or password')
-    // }
-
-  } catch (error: any) {
-    console.error(error)
-    toast.error(error.response?.data?.error || 'Login failed. Please check your username and password.')
-  } finally {
-    loading.value = false
-  }
-}
 </script>
 
 <template>
   <v-app class="!bg-gradient-to-r from-cyan-400 to-violet-600 hide-scrollbar">
     <v-row class="ma-10 pa-10">
-      <v-col class="bg-gray-900 rounded-tl-2xl rounded-bl-2xl d-flex">
-        <v-row align="center">
-          <v-img :height="150" :width="150" />
+      <v-col class="bg-gray-900 rounded-tl-2xl rounded-bl-2xl flex">
+        <v-row class="justify-items-center">
+          <Blend :size="150" class="login-icon flex-col" />
         </v-row>
       </v-col>
       <v-col class="bg-slate-100 rounded-tr-2xl rounded-br-2xl flex items-center justify-center">
@@ -121,15 +123,22 @@ async function handleLogin() {
 </template>
 
 <style scoped>
-.form-color {
-  color: green;
-}
-.submit-button {
-  color: white;
-  text-transform: initial;
-}
-.v-row.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+  .login-icon {
+    color: slategrey;
+    justify-content: center;
+    justify-items: center;
+    margin: auto;
+  }
+
+  form-color {
+    color: green;
+  }
+  .submit-button {
+    color: white;
+    text-transform: initial;
+  }
+  .v-row.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 </style>

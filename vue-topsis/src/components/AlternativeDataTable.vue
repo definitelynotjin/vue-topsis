@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { X } from 'lucide-vue-next'
   import { defineEmits } from 'vue'
 
   const emit = defineEmits<{
@@ -44,7 +43,7 @@
     <template v-slot:item.actions="{ item }">
       <div class="">
         <v-btn variant="plain" icon @click="emit('delete-request', item)">
-          <v-icon color="red">mdi-delete</v-icon>  
+          <v-icon color="red">mdi-delete</v-icon>
         </v-btn>
       </div>
     </template>

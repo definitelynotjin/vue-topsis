@@ -35,7 +35,7 @@ export const useAlternativeStore = defineStore('alternative', () => {
   }) {
     try {
       const res = await editAlternativeData(alternative_id, updatedAlternative)
-      await loadByProject(selectedProjectId)
+      await loadByProject(alternative_id)
       return res
     } catch {
       toast.error('Cannot edit alternative!')
@@ -52,9 +52,10 @@ export const useAlternativeStore = defineStore('alternative', () => {
     }
   }
   async function importAlternative (projectId: number, file: File) {
+    console.log('this shting is triggered by', { projectId, file })
     try {
       const res = await importAlternativeData(projectId, file)
-      await loadByProject(selectedProjectId)
+      await loadByProject(projectId)
       return res
     } catch (error) {
       toast.error('Cannot import alterantive!')

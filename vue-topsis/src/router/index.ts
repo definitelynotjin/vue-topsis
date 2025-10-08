@@ -4,22 +4,22 @@
  * Automatic routes for `./src/pages/*.vue`
  */
 
+import path from 'node:path'
 import { setupLayouts } from 'virtual:generated-layouts'
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
-// import { routes } from 'vue-router/auto-routes'
-import UserData from '@/pages/UserData.vue'
-import Dashboard from '@/pages/Dashboard.vue'
+import { components } from 'vuetify/lib/labs/entry-bundler.mjs'
 import Alternative from '@/pages/Alternative.vue'
 import Criteria from '@/pages/Criteria.vue'
+import Dashboard from '@/pages/Dashboard.vue'
+import index from '@/pages/index.vue'
+import MatriksData from '@/pages/MatriksData.vue'
 import Profile from '@/pages/Profile.vue'
 import Ranking from '@/pages/Ranking.vue'
-import MatriksData from '@/pages/MatriksData.vue'
-import index from '@/pages/index.vue'
 import ScoringData from '@/pages/ScoringData.vue'
 import TopsisScore from '@/pages/TopsisScore.vue'
-import path from 'path'
-import { components } from 'vuetify/lib/labs/entry-bundler.mjs'
+// import { routes } from 'vue-router/auto-routes'
+import UserData from '@/pages/UserData.vue'
 
 const routes = [
   {
@@ -28,55 +28,65 @@ const routes = [
     component: index,
   },
   {
+    name: 'Dashboard',
     path: '/dashboard',
     component: Dashboard,
     meta: { requiresAuth: true }, // semua user bisa akses
   },
   {
+    name: 'Data Alternatif',
     path: '/alternative',
     component: Alternative,
     meta: { requiresAuth: true }, // semua user bisa akses
   },
   {
+    name: 'Data User',
     path: '/userdata',
     component: UserData,
     meta: { requiresAuth: true, role: 'admin' }, // hanya admin
   },
   {
+
+    name: 'Data Kriteria',
     path: '/criteria',
     component: Criteria,
     meta: { requiresAuth: true },
   },
   {
+
+    name: 'Data Ranking',
     path: '/ranking',
     component: Ranking,
     meta: { requiresAuth: true },
-  }
-  ,
+  },
   {
+    name: 'Nilai TOPSIS',
     path: '/topsisscore',
     component: TopsisScore,
     meta: { requiresAuth: true },
-  }
-  ,
+  },
   {
+
+    name: 'Profile',
     path: '/profile',
     component: Profile,
     meta: { requiresAuth: true },
-  }
-  ,
+  },
   {
+
+    name: 'Data Matriks',
     path: '/matriksdata',
     component: MatriksData,
     meta: { requiresAuth: true },
-  }
-  ,
+  },
   {
+
+    name: 'Data Penilaian',
     path: '/scoringdata',
     component: ScoringData,
     meta: { requiresAuth: true },
-  }
-  
+  },
+
 ]
 
 // const enhancedRoutes = setupLayouts(routes) // bisa tambahkan layout

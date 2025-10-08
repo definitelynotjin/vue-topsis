@@ -1,29 +1,16 @@
 <script setup lang="ts">
   import { onMounted, ref, computed } from 'vue'
   import { useProjectStore } from '@/stores/projectStore'
-  import { ChevronDown, Plus, Trash } from 'lucide-vue-next'
+  import { Plus, Trash } from 'lucide-vue-next'
   import { fetchProjectData } from '../services/api.ts'
 
   const projectStore = useProjectStore()
   const searchFilter = ref('')
 
-  const dropdowns = ref<Record<number, boolean>>({})
   const showDialog = ref(false)
-  const activeProject = ref(null)
   const pendingDeleteId = ref<number | null>(null)
   const pendingDeleteName = ref<string | null>(null)
   const showDeleteDialog = ref(false)
-  const dropdownPosition = ref({ x: 0, y: 0 })
-
-  function openDropdown(project: any) {
-    activeProject.value = project
-    const rect = event?.currentTarget.getBoundingClientRect()
-    dropdownPosition.value = { x: rect.left, y: rect.bottom }
-  }
-
-  function closeDropdown() {
-    activeProject.value = null
-  }
 
   function requestDelete(item: { id: number; name: string }) {
     pendingDeleteId.value = item.id
@@ -54,9 +41,6 @@
 
   onMounted(async () => {
     projectStore.projects = await fetchProjectData()
-    projectStore.projects.forEach((project) => {
-      dropdowns.value[project.id!] = false
-    })
   })
 </script>
 
@@ -94,17 +78,6 @@
               </v-card-text>
               <v-card-actions class="action-buttons">
                 <DashboardGotoButton />
-                <!-- <v-btn -->
-                <!--   color="white" -->
-                <!--   :icon="ChevronDown" -->
-                <!--   @click=" -->
-                <!--     activeProject?.id === project.id ? closeDropdown() : openDropdown(project) -->
-                <!--   " -->
-                <!--   @close="closeDropdown" -->
-                <!-- /> -->
-                <!-- </v-card-actions> -->
-                <!---->
-                <!-- <v-card-actions class="action-buttons"> -->
                 <v-btn color="red" :icon="Trash" @click="requestDelete(project)" />
               </v-card-actions>
               <DeleteProjectDialog
@@ -115,21 +88,6 @@
               />
             </v-row>
           </v-card>
-
-          <v-expand-transition>
-            <div
-              class="dropdown-container"
-              v-if="activeProject"
-              :style="{
-                position: 'absolute',
-                top: dropdownPosition.y + 'px',
-                left: dropdownPosition.x + 'px',
-                right: dropdownPosition.x + '-px',
-              }"
-            >
-              <DashboardDropdown :project="activeProject" @close="closeDropdown" />
-            </div>
-          </v-expand-transition>
         </div>
         <AddProjectDialog v-model="showDialog" @saved="console.log('project saved')" />
       </v-container>

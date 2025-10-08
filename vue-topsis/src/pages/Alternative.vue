@@ -2,6 +2,7 @@
   import { watch, ref, computed } from 'vue'
   import { useProjectStore } from '@/stores/projectStore'
   import { useAlternativeStore } from '@/stores/alternativeStore'
+  import { toast } from 'vue-sonner'
 
   const projectStore = useProjectStore()
   const alternativeStore = useAlternativeStore()
@@ -41,6 +42,13 @@
   ) {
     await alternativeStore.editAlternative(alternative_id, updated)
     await alternativeStore.loadByProject(projectStore.selectedProjectId!)
+  }
+
+  async function handleImportSuccess() {
+    if (projectStore.selectedProjectId!) {
+      await alternativeStore.loadByProject(projectStore.selectedProjectId)
+    }
+    toast.success('wow, success')
   }
 
   async function confirmDelete() {
@@ -91,6 +99,17 @@
           >
             Tambah Alternatif
           </v-btn>
+
+          <v-btn
+            type="submit"
+            hover
+            variant="flat"
+            @click="showImportDialog = true"
+            class="card-export-button !bg-cyan-600"
+          >
+            Export Data
+          </v-btn>
+
           <v-btn
             type="submit"
             hover
@@ -111,7 +130,11 @@
           :alternative-name="pendingDeleteName"
           @confirm-delete="confirmDelete"
         />
-        <AddImportDataAlternativeDialog v-model="showImportDialog" />
+        <AddImportDataAlternativeDialog
+          v-model="showImportDialog"
+          :project_id="projectStore.selectedProjectId!"
+          @imported="handleImportSuccess"
+        />
         <AlternativeDataTable
           :items="filteredAlternative"
           :headers="altHeaders"
@@ -141,6 +164,13 @@
   }
 
   .card-add-button {
+    margin: 15px;
+    height: 50px;
+    padding: 10px;
+    text-transform: initial;
+  }
+
+  .card-export-button {
     margin: 15px;
     height: 50px;
     padding: 10px;

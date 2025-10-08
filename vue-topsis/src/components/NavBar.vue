@@ -14,9 +14,10 @@
 
   const dynamicTitle = computed(() => {
     if (!route.name) return 'whop'
+    console.log('this why', route.name)
     return String(route.name)
       .replace(/[-/]/g, ' ')
-      .replace(/\b\w /g, (l) => l.toUpperCase())
+      .replace(/\b\w/g, (l) => l.toUpperCase())
   })
 </script>
 

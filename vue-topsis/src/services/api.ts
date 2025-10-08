@@ -169,8 +169,9 @@ export async function importAlternativeData (projectId: number, file: File) {
   try {
     const formData = new FormData()
     formData.append('file', file)
+    console.log('FormData keys:', [...formData.keys()])
 
-    const response = await axios.post(`api/import/${projectId}`, formData, {
+    const response = await axios.post(`api/import/import/${projectId}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     return response.data
