@@ -221,6 +221,51 @@ export async function addScoreData (newScore: { value: number, alternative_id: n
 
 // -------------------------------------------------------------------//
 
+// Matriks Raw
+export async function fetchMatriksRaw (projectId: number) {
+  try {
+    const response = await axios.get(`api/topsis/${projectId}/matrix-raw`)
+    return response.data
+  } catch (error) {
+    console.error('Error : fetchMatriksRaw', error)
+    return []
+  }
+}
+
+// Matriks Normalisasi
+export async function fetchMatriksNormalisasi (projectId: number) {
+  try { 
+    const response = await axios.get(`api/topsis/${projectId}/matrix-normalized`)
+    return response.data
+  } catch (error) {
+    console.error('Error : fetchMatriksNormalisasi', error)
+    return []
+  }
+}
+
+// Matriks Weighted
+export async function fetchMatriksWeighted (projectId: number) {
+  try {
+    const response = await axios.get(`api/topsis/${projectId}/matrix-weight`)
+    return response.data
+  } catch (error) {
+    console.error('Error : fetchMatriksWeighted', error)
+    return []
+  }
+}
+
+// Ideal Solution
+export async function fetchIdealSolution (projectId: number) {
+  try {
+    const response = await axios.get(`api/topsis/${projectId}/ideal-solution`)
+    return response.data
+  } catch (error) {
+    console.error('Error : fetchIdealSolution', error)
+    return []
+  }
+}
+
+
 // Topsis Scores
 
 export async function fetchTopsisScores (projectId: number) {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useCriteriaStore } from '@/stores/criteriaStore'
-  import { useProjectStore } from '@/stores/projectStore'
   import { useScoreStore } from '@/stores/scoreStore'
+  import { useProjectStore } from '@/stores/projectStore'
 
   const criteriaStore = useCriteriaStore()
   const projectStore = useProjectStore()

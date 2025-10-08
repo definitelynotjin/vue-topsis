@@ -33,6 +33,7 @@ declare module 'vue' {
     EditScoreDialog: typeof import('./components/EditScoreDialog.vue')['default']
     EditScoreValueDialog: typeof import('./components/EditScoreValueDialog.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
+    MatrixDataTable: typeof import('./components/MatrixDataTable.vue')['default']
     NavBar: typeof import('./components/NavBar.vue')['default']
     PieChart: typeof import('./components/PieChart.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

@@ -1,5 +1,4 @@
 <script setup lang="ts"></script>
-
 <template>
   <v-app class="!bg-cyan-900">
     <main>
@@ -9,7 +8,6 @@
     </main>
   </v-app>
 </template>
-
 <style scoped lang="css">
   .userdata-container {
     padding: 25px;

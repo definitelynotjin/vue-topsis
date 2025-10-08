@@ -192,7 +192,7 @@ def get_decision_matrix_normalized(project_id):
 
 
 # DATA Matriks Before Weight
-@topsis_bp.route("/<int:project_id>/matrix-before-weight", methods=["GET"])
+@topsis_bp.route("/<int:project_id>/matrix-raw", methods=["GET"])
 def get_decision_matrix_before_weight(project_id):
     """Hitung matriks keputusan sebelum berbobot tanpa simpan ke DB"""
     alternatives = Alternative.query.filter_by(project_id=project_id).all()
@@ -233,7 +233,7 @@ def get_decision_matrix_before_weight(project_id):
     # Buat matriks keputusan sebelum berbobot
     decision_matrix = []
     for alt in alt_list:
-        row = {"id": alt["id"], "name": alt["name"], "id_alt": alt["id_alt"]}
+        row = { "nama": alt["name"], "id": alt["id_alt"]}
         scores_dict = {s["criteria"]: s["value"] for s in alt["scores"]}
         missing_criteria = False
         for c in criteria_order:

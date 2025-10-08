@@ -129,26 +129,34 @@ def topsis_full_process(alternatives, criteria_order):
     # Format hasil per tahap agar mudah dikirim ke frontend
     result = {
         "matrix_raw": [
-            {"name": alt["name"], **{c["criteria"]: v for c, v in zip(criteria_order, alt["row"])}}
+            {"nama": alt["name"], **{c["criteria"]: v for c, v in zip(criteria_order, alt["row"])}}
             for alt in clean_alternatives
         ],
         "matrix_normalized": [
-            {"name": alt["name"], **{c["criteria"]: float(norm_matrix[i][j]) for j, c in enumerate(criteria_order)}}
+            {"nama": alt["name"], **{c["criteria"]: float(norm_matrix[i][j]) for j, c in enumerate(criteria_order)}}
             for i, alt in enumerate(clean_alternatives)
         ],
         "matrix_weighted": [
-            {"name": alt["name"], **{c["criteria"]: float(weighted_matrix[i][j]) for j, c in enumerate(criteria_order)}}
+            {"nama": alt["name"], **{c["criteria"]: float(weighted_matrix[i][j]) for j, c in enumerate(criteria_order)}}
             for i, alt in enumerate(clean_alternatives)
         ],
+        # Ideal solution hanya berisi nilai ideal positif & negatif per kriteria
         "ideal_solution": [
             {
                 "criteria": c["criteria"],
                 "ideal_positive": float(details["ideal_positive"][i]),
-                "ideal_negative": float(details["ideal_negative"][i]),
+                "ideal_negative": float(details["ideal_negative"][i])
+            }
+            for i, c in enumerate(criteria_order)
+        ],
+        # Tambahkan jarak per alternatif di sini
+        "distance": [
+            {
+                "nama": alt["name"],
                 "distance_pos": float(details["distance_pos"][i]),
                 "distance_neg": float(details["distance_neg"][i])
             }
-            for i, c in enumerate(criteria_order)
+            for i, alt in enumerate(clean_alternatives)
         ],
         "ranking": ranking,
         "skipped": skipped,

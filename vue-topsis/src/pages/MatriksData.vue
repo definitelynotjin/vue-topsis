@@ -1,40 +1,88 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import axios from 'axios'
   import { useProjectStore } from '@/stores/projectStore'
+  import { useMatrixStore } from '@/stores/matrixStore'
 
   const projectStore = useProjectStore()
-  const scores = ref<{ alternative: string; score: number }[]>([])
-  const topsisResults = ref({
-    scores: [],
-    skipped: 0,
-    total: 0,
-  })
+  const matrixStore = useMatrixStore()
+  const matrix = ref<{ alternative: string; score: number }[]>([])
+  const activeMatrixType = ref('')
+
+
   const loading = ref(false)
 
   onMounted(() => {
     projectStore.loadAllProjects()
   })
 
-  const topsisHeaders = [
-    {
-      title: 'No',
-      key: 'no',
-      sortable: false,
-      width: '10%',
-    },
-
-    {
-      title: 'Nama Alternatif',
-      key: 'name',
-    }
-  ]
-
   const searchFilter = ref('')
   const search = ref('')
   const handleSearch = (search: string) => {
     searchFilter.value = search
   }
+
+  const handleMatriksRaw = async () => {
+    if (!projectStore.selectedProjectId) return
+
+    try {
+      loading.value = true
+      const res = await matrixStore.getMatrixRaw(projectStore.selectedProjectId)
+      matrix.value = res.data
+      activeMatrixType.value = 'raw'
+      // console.log('items:', JSON.stringify(res, null, 2))
+    } catch (err) {
+      console.error('Gagal fetch matriks awal:', err)
+      alert('Gagal fetch matriks awal!')
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const handleMatriksNormalisasi = async () => {
+    if (!projectStore.selectedProjectId) return
+    try {
+      loading.value = true
+      const res = await matrixStore.getMatrixNormalisasi(projectStore.selectedProjectId)
+      matrix.value = res.data
+      activeMatrixType.value = 'norm'
+    } catch (err) {
+      console.error('Gagal fetch matriks normalisasi:', err)
+      alert('Gagal fetch matriks normalisasi!')
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const handleMatriksBerbobot = async () => {
+    if (!projectStore.selectedProjectId) return
+    try {
+      loading.value = true
+      const res = await matrixStore.getMatrixWeighted(projectStore.selectedProjectId)
+      matrix.value = res.data
+      activeMatrixType.value = 'weight'
+    } catch (err) {
+      console.error('Gagal fetch matriks berbobot:', err)
+      alert('Gagal fetch matriks berbobot!')
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const handleIdealSolution = async () => {
+    if (!projectStore.selectedProjectId) return
+    try {
+      loading.value = true
+      const res = await matrixStore.getIdealSolution(projectStore.selectedProjectId)
+      matrix.value = res.data
+      activeMatrixType.value = 'ideal'
+    } catch (err) {
+      console.error('Gagal fetch solusi ideal:', err)
+      alert('Gagal fetch solusi ideal!')
+    } finally {
+      loading.value = false
+    }
+  }
+
 </script>
 
 <template>
@@ -42,19 +90,28 @@
     <main>
       <v-container fluid class="bg-cyan-700 score-container">
         <div class="flex flex-wrap justify-items-end items-end gap-5 bg-cyan-700 score-top-table-text">
-          <div class="flex w-full">
+          <div class="flex w-full justify-start gap-2 pl-2">
             <!-- Dropdown project -->
             <CardTitleDropdown />
             <SearchBar @search="handleSearch" />
-          </div>
-          <div class="d-flex w-full">
               <v-btn
                 type=""
                 hover
                 variant="flat"
-                class="card-add-button !bg-cyan-600"
+                class="bg-cyan-600 card-add-button"
                 :disabled="!projectStore.selectedProjectId || loading"
-                @click=""
+              >
+                Export
+              </v-btn>
+          </div>
+          <div class="d-flex w-full justify-end gap-2 pr-2">
+              <v-btn
+                type=""
+                hover
+                variant="flat"
+                :class="activeMatrixType === 'raw' ? 'activate-tab card-add-button' : '!bg-cyan-600 card-add-button'"
+                :disabled="!projectStore.selectedProjectId || loading"
+                @click="handleMatriksRaw"
               >
                 Matriks Awal
               </v-btn>
@@ -62,9 +119,9 @@
                 type=""
                 hover
                 variant="flat"
-                class="card-add-button !bg-cyan-600"
+                :class="activeMatrixType === 'norm' ? 'activate-tab card-add-button' : '!bg-cyan-600 card-add-button'"
                 :disabled="!projectStore.selectedProjectId || loading"
-                @click=""
+                @click="handleMatriksNormalisasi"
               >
                 Matriks Normalisasi
               </v-btn>
@@ -72,9 +129,9 @@
                 type=""
                 hover
                 variant="flat"
-                class="card-add-button !bg-cyan-600"
+                :class="activeMatrixType === 'weight' ? 'activate-tab card-add-button' : '!bg-cyan-600 card-add-button'"
                 :disabled="!projectStore.selectedProjectId || loading"
-                @click=""
+                @click="handleMatriksBerbobot"
               >
                 Matriks Berbobot
               </v-btn>
@@ -82,46 +139,18 @@
                 type=""
                 hover
                 variant="flat"
-                class="card-add-button !bg-cyan-600"
+                :class="activeMatrixType === 'ideal' ? 'activate-tab card-add-button' : '!bg-cyan-600 card-add-button'"
                 :disabled="!projectStore.selectedProjectId || loading"
-                @click=""
+                @click="handleIdealSolution"
               >
                 Solusi Ideal
               </v-btn>
               
           </div>
-
-
         </div>
-        <TopsisDataTable
-          :items="scores"
-          :skipped="topsisResults.skipped"
-          :total="topsisResults.total"
-          :headers="topsisHeaders"
+        <MatrixDataTable
+          :items="matrix"
         />
-        <template v-slot:bottom="slotProps">
-          <!-- render pagination bawaan -->
-          <v-data-table-footer v-bind="slotProps" />
-
-          <!-- tambahin info custom -->
-          <div class="pa-4">
-            <p>Data dihitung: {{ props.total }}</p>
-            <p>Data tidak dihitung: {{ props.skipped }}</p>
-          </div>
-        </template>
-        <div class="d-flex justify-end">
-          <v-btn
-            v-if="topsisResults.total"
-            type="submit"
-            hover
-            variant="flat"
-            class="card-add-button !bg-green-600"
-            :disabled="!topsisResults.total"
-            @click="saveRankingReport"
-          >
-            Save Report
-          </v-btn>
-        </div>
       </v-container>
     </main>
   </v-app>
@@ -143,15 +172,17 @@
   .score-top-table-text {
     font-weight: bold;
     margin-bottom: 10px;
-    padding: 10px;
+    margin-top: 10px;
+    /* padding: 10px; */
     border-radius: 10px;
     justify-content: space-between;
   }
 
   .card-add-button {
-    margin: 15px;
+    /* margin: 15px; */
     height: 50px;
-    padding: 10px;
+    /* padding: 10px; */
+    border-radius: 10px 10px 0 0;
     text-transform: initial;
   }
 
@@ -159,5 +190,11 @@
     margin: 14px;
     /* max-width: 250px; */
     height: 30px;
+  }
+
+  .activate-tab {
+    border-radius: 10px 10px 0 0;
+    background-color: steelblue;
+
   }
 </style>

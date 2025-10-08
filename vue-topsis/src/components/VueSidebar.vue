@@ -13,6 +13,11 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
 
+  // ambil user dari localStorage
+const user = JSON.parse(localStorage.getItem('user') || '{}')
+const role = user.role || 'guest' // default ke 'guest' jika tidak ada user atau role
+console.log('User:', user) // Debug: cek role user
+
   const dashboard = {
     title: 'Dashboard',
     value: '/dashboard',
@@ -86,18 +91,22 @@
       <v-list-item>
         <Blend class="top-icon-sidebar" :size="50" />
       </v-list-item>
+
       <v-divider class="sidebar-divider ma-1" :thickness="2" />
+
+      <!-- Dashboard -->
       <v-list-item
         class="pl-7 py-5"
         @click="selectMenu(dashboard.value)"
-        :prepend-icon="LayoutDashboard"
+        :prepend-icon="dashboard.icon"
       >
         {{ dashboard.title }}
       </v-list-item>
+
+      <!-- Menu umum -->
       <v-list>
         <v-divider class="sidebar-divider ma-1" :thickness="2" />
         <v-list-item
-          color="primary"
           v-for="item in menuItems"
           :key="item.value"
           class="pl-7 sidebar-icon"
@@ -105,9 +114,12 @@
           :title="item.title"
           @click="selectMenu(item.value)"
         />
+      </v-list>
+
+      <!-- Menu khusus admin -->
+      <v-list v-if="role === 'admin'">
         <v-divider class="sidebar-divider ma-1" :thickness="2" />
         <v-list-item
-          color="primary"
           v-for="item in userMenuItems"
           :key="item.value"
           class="pl-7 sidebar-icon"
