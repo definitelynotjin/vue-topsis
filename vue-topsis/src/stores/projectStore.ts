@@ -1,7 +1,7 @@
 import type { Project } from '../types/type.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { addProjectData, fetchProjectData, deleteProjectData } from '@/services/api.ts'
+import { addProjectData, deleteProjectData, fetchProjectData } from '@/services/api.ts'
 
 export const useProjectStore = defineStore('project', () => {
   const projects = ref<Project[]>([])
@@ -10,6 +10,7 @@ export const useProjectStore = defineStore('project', () => {
   async function loadAllProjects () {
     projects.value = await fetchProjectData()
   }
+
   async function addProject (newProject: { name: string, description: string }) {
     if (newProject.name && newProject.description) {
       try {
@@ -33,12 +34,11 @@ export const useProjectStore = defineStore('project', () => {
     } catch (error) {
       console.error('Error : deleteProjectData', error)
       throw error
-    }}
-    
+    }
+  }
+
   function setSelectedProjectId (id: number | null) {
     selectedProjectId.value = id
   }
   return { setSelectedProjectId, loadAllProjects, projects, selectedProjectId, addProject, deleteProject }
-  
 })
-

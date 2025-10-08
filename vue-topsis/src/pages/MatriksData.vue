@@ -8,7 +8,6 @@
   const matrix = ref<{ alternative: string; score: number }[]>([])
   const activeMatrixType = ref('')
 
-
   const loading = ref(false)
 
   onMounted(() => {
@@ -82,75 +81,88 @@
       loading.value = false
     }
   }
-
 </script>
 
 <template>
   <v-app class="!bg-cyan-900">
     <main>
       <v-container fluid class="bg-cyan-700 score-container">
-        <div class="flex flex-wrap justify-items-end items-end gap-5 bg-cyan-700 score-top-table-text">
-          <div class="flex w-full justify-start gap-2 pl-2">
+        <div class="flex flex-wrap justify-items-end items-end bg-cyan-700 score-top-table-text">
+          <div class="flex w-full justify-start">
             <!-- Dropdown project -->
             <CardTitleDropdown />
             <SearchBar @search="handleSearch" />
-              <v-btn
-                type=""
-                hover
-                variant="flat"
-                class="bg-cyan-600 card-add-button"
-                :disabled="!projectStore.selectedProjectId || loading"
-              >
-                Export
-              </v-btn>
+            <v-btn
+              type="submit"
+              hover
+              variant="flat"
+              class="card-export-button !bg-cyan-600"
+              :disabled="!projectStore.selectedProjectId || loading"
+              @click="hitungTopsis"
+            >
+              {{ loading ? 'Menghitung...' : 'Export Data' }}
+            </v-btn>
           </div>
-          <div class="d-flex w-full justify-end gap-2 pr-2">
-              <v-btn
-                type=""
-                hover
-                variant="flat"
-                :class="activeMatrixType === 'raw' ? 'activate-tab card-add-button' : '!bg-cyan-600 card-add-button'"
-                :disabled="!projectStore.selectedProjectId || loading"
-                @click="handleMatriksRaw"
-              >
-                Matriks Awal
-              </v-btn>
-              <v-btn
-                type=""
-                hover
-                variant="flat"
-                :class="activeMatrixType === 'norm' ? 'activate-tab card-add-button' : '!bg-cyan-600 card-add-button'"
-                :disabled="!projectStore.selectedProjectId || loading"
-                @click="handleMatriksNormalisasi"
-              >
-                Matriks Normalisasi
-              </v-btn>
-              <v-btn
-                type=""
-                hover
-                variant="flat"
-                :class="activeMatrixType === 'weight' ? 'activate-tab card-add-button' : '!bg-cyan-600 card-add-button'"
-                :disabled="!projectStore.selectedProjectId || loading"
-                @click="handleMatriksBerbobot"
-              >
-                Matriks Berbobot
-              </v-btn>
-              <v-btn
-                type=""
-                hover
-                variant="flat"
-                :class="activeMatrixType === 'ideal' ? 'activate-tab card-add-button' : '!bg-cyan-600 card-add-button'"
-                :disabled="!projectStore.selectedProjectId || loading"
-                @click="handleIdealSolution"
-              >
-                Solusi Ideal
-              </v-btn>
-              
+          <div class="d-flex w-full justify-end">
+            <v-btn
+              type=""
+              hover
+              variant="flat"
+              :class="
+                activeMatrixType === 'raw'
+                  ? 'activate-tab card-add-button'
+                  : '!bg-cyan-600 card-add-button'
+              "
+              :disabled="!projectStore.selectedProjectId || loading"
+              @click="handleMatriksRaw"
+            >
+              Matriks Awal
+            </v-btn>
+            <v-btn
+              type=""
+              hover
+              variant="flat"
+              :class="
+                activeMatrixType === 'norm'
+                  ? 'activate-tab card-add-button'
+                  : '!bg-cyan-600 card-add-button'
+              "
+              :disabled="!projectStore.selectedProjectId || loading"
+              @click="handleMatriksNormalisasi"
+            >
+              Matriks Normalisasi
+            </v-btn>
+            <v-btn
+              type=""
+              hover
+              variant="flat"
+              :class="
+                activeMatrixType === 'weight'
+                  ? 'activate-tab card-add-button'
+                  : '!bg-cyan-600 card-add-button'
+              "
+              :disabled="!projectStore.selectedProjectId || loading"
+              @click="handleMatriksBerbobot"
+            >
+              Matriks Berbobot
+            </v-btn>
+            <v-btn
+              type=""
+              hover
+              variant="flat"
+              :class="
+                activeMatrixType === 'ideal'
+                  ? 'activate-tab card-add-button'
+                  : '!bg-cyan-600 card-add-button'
+              "
+              :disabled="!projectStore.selectedProjectId || loading"
+              @click="handleIdealSolution"
+            >
+              Solusi Ideal
+            </v-btn>
           </div>
         </div>
-        <MatrixDataTable
-          :items="matrix"
-        />
+        <MatrixDataTable :items="matrix" />
       </v-container>
     </main>
   </v-app>
@@ -172,29 +184,37 @@
   .score-top-table-text {
     font-weight: bold;
     margin-bottom: 10px;
-    margin-top: 10px;
-    /* padding: 10px; */
+    /* margin-top: 10px; */
+    padding: 10px;
     border-radius: 10px;
+    text-transform: initial;
     justify-content: space-between;
   }
 
   .card-add-button {
-    /* margin: 15px; */
+    margin-left: 10px;
+    margin-right: 15px;
+    margin-top: 20px;
     height: 50px;
-    /* padding: 10px; */
+    padding: 10px;
     border-radius: 10px 10px 0 0;
+    text-transform: initial;
+  }
+
+  .card-export-button {
+    margin: 15px;
+    height: 50px;
+    padding: 10px;
     text-transform: initial;
   }
 
   .card-title {
     margin: 14px;
-    /* max-width: 250px; */
     height: 30px;
   }
 
   .activate-tab {
     border-radius: 10px 10px 0 0;
     background-color: steelblue;
-
   }
 </style>

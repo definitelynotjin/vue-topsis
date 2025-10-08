@@ -1,8 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import axios from 'axios'
   import { useProjectStore } from '@/stores/projectStore'
- import { useTopsisStore } from '@/stores/topsisStore'
+  import { useTopsisStore } from '@/stores/topsisStore'
 
   const projectStore = useProjectStore()
   const scores = ref<{ alternative: string; score: number }[]>([])
@@ -95,7 +94,6 @@
           >
             {{ loading ? 'Menghitung...' : 'Hitung Topsis Score' }}
           </v-btn>
-
         </div>
         <TopsisDataTable
           :items="scores"

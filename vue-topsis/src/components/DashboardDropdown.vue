@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { defineProps, defineEmits } from 'vue'
+  import { defineProps, defineEmits, onMounted } from 'vue'
   import { useProjectStore } from '@/stores/projectStore'
   import { useScoreStore } from '@/stores/scoreStore'
   import { useAlternativeStore } from '@/stores/alternativeStore'
@@ -11,21 +11,40 @@
   const scoreStore = useScoreStore()
 
   const emit = defineEmits()
-  const props = defineProps<{}>()
+  const props = defineProps<{ project: any }>()
+
+  onMounted(async () => {
+    criteriaStore.loadByProject(projectStore.selectedProjectId)
+    alternativeStore.loadByProject(projectStore.selectedProjectId)
+    scoreStore.loadByCriteria(projectStore.selectedProjectId, criteriaStore.selectedCriteriaId)
+  })
 </script>
 
 <template>
-  <v-container class="dropdown-container">
-    <v-card v-model="criteria" class="base-card">Go to criteria </v-card>
-    <v-card v-model="alternative" class="base-card">Go to alternative </v-card>
-    <v-card v-model="score" class="base-card">Go to score </v-card>
+  <v-container class="flex flex-1 dropdown-container w-screen">
+    <v-row>
+      <v-btn
+        v-model="projectStore.selectedProjectId"
+        :items="criteriaStore.criteria"
+        class="base-card"
+        >Go to criteria
+      </v-btn>
+      <v-btn
+        v-model="projectStore.selectedProjectId"
+        :items="alternativeStore.alternative"
+        class="base-card"
+        >Go to alternative
+      </v-btn>
+      <v-btn v-model="projectStore.selectedProjectId" :items="scoreStore.score" class="base-card"
+        >Go to score
+      </v-btn>
+    </v-row>
   </v-container>
 </template>
 
 <style scoped lang="css">
   .dropdown-container {
-    background-color: darkblue;
-    margin-top: initial;
+    background-color: red;
   }
   .base-card {
     text-align: left;

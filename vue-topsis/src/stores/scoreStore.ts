@@ -34,11 +34,10 @@ export const useScoreStore = defineStore('score', () => {
   }
 
   async function editScoreValue (scoreId: number, updatedValue: {
-    value: number
-    alternative_id: number
-    criteria_id: number
+    value?: number
   }) {
     try {
+      console.log('Editing score:', { scoreId, updatedValue })
       const res = await editScoreData(scoreId, updatedValue)
       await loadByCriteria(projectStore.selectedProjectId!, criteriaStore.selectedCriteriaId!)
       return res

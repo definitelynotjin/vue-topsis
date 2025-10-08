@@ -2,7 +2,7 @@ import type { Alternative } from '../types/type.ts'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
-import { addAlternativeData, deleteAlternativeData, editAlternativeData, fetchAlternativeData } from '@/services/api.ts'
+import { addAlternativeData, deleteAlternativeData, editAlternativeData, fetchAlternativeData, importAlternativeData } from '@/services/api.ts'
 
 export const useAlternativeStore = defineStore('alternative', () => {
   const alternative = ref<Alternative []>([])
@@ -51,5 +51,16 @@ export const useAlternativeStore = defineStore('alternative', () => {
       throw error
     }
   }
-  return { loadByProject, alternative, addAlternative, deleteAlternative, editAlternative }
+  async function importAlternative (projectId: number, file: File) {
+    try {
+      const res = await importAlternativeData(projectId, file)
+      await loadByProject(selectedProjectId)
+      return res
+    } catch (error) {
+      toast.error('Cannot import alterantive!')
+      throw error
+    }
+  }
+
+  return { loadByProject, alternative, addAlternative, deleteAlternative, editAlternative, importAlternative }
 })

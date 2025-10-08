@@ -4,11 +4,7 @@
 
   const emit = defineEmits<{
     (e: 'delete-request', item: any): void
-    (
-      e: 'edit-value',
-      scoreId: number,
-      updated: { value?: number; alternative_id?: number; criteria_id?: number },
-    ): void
+    (e: 'edit-value', scoreId: number, updated: { value?: number }): void
   }>()
 </script>
 
@@ -26,9 +22,7 @@
         @update="
           (value) =>
             emit('edit-value', Number(item.score_id), {
-              value: value,
-              alternative_id: item.alt_id,
-              criteria_id: item.criteria_id,
+              value: Number(value),
             })
         "
         :table-field="true"

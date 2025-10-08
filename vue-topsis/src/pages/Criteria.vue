@@ -39,7 +39,7 @@
   async function confirmDelete() {
     if (pendingDeleteId.value !== null) {
       await criteriaStore.deleteCriteria(pendingDeleteId.value)
-      await criteriaStore.loadByProject(projectStore.selectedProjectId!)
+      await criteriaStore.loadByProject(projectStore.selectedProjectId?.id)
     }
     showDeleteDialog.value = false
     pendingDeleteId.value = null

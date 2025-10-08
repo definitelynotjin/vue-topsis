@@ -4,10 +4,10 @@
 
   const props = defineProps<{
     modelValue: boolean
-    alternativeName: string | null
     projectId: number | null
     projectName: string | null
   }>()
+
   const emit = defineEmits(['update:modelValue', 'confirm-delete'])
 
   function close() {

@@ -13,6 +13,7 @@ export async function fetchProjectData () {
     return []
   }
 }
+
 export async function addProjectData (newProject: { name: string, description: string }) {
   try {
     const response = await api.post('project/', newProject)
@@ -47,12 +48,11 @@ export async function login (credentials: { username: string, password: string }
   }
 }
 
-
 // Logout
 export async function logout () {
   try {
-    // const response = await api.post('api/logout') 
-    localStorage.removeItem("token")
+    // const response = await api.post('api/logout')
+    localStorage.removeItem('token')
     window.location.href = '/' // Redirect to login page after logout
     // return response.data
   } catch (error) {
@@ -60,7 +60,6 @@ export async function logout () {
     throw error
   }
 }
-
 
 // -------------------------------------------------------------------//
 
@@ -166,6 +165,21 @@ export async function deleteAlternativeData (alternative_id: number) {
   }
 }
 
+export async function importAlternativeData (projectId: number, file: File) {
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const response = await axios.post(`api/import/${projectId}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error : importAlternativeData', error)
+    throw error
+  }
+}
+
 // -------------------------------------------------------------------//
 
 // Scores
@@ -198,9 +212,11 @@ export async function deleteScoreData (scoreId: number) {
     throw error
   }
 }
-export async function editScoreData (scoreId: number, updatedValue: number) {
+export async function editScoreData (scoreId: number, updatedValue: {
+  value: number
+}) {
   try {
-    const response = await axios.post(`api/score/`, updatedValue)
+    const response = await axios.put(`api/score/${scoreId}`, updatedValue)
     console.log('Response from editScoreData API:', response)
     return response.data
   } catch (error) {
@@ -234,7 +250,7 @@ export async function fetchMatriksRaw (projectId: number) {
 
 // Matriks Normalisasi
 export async function fetchMatriksNormalisasi (projectId: number) {
-  try { 
+  try {
     const response = await axios.get(`api/topsis/${projectId}/matrix-normalized`)
     return response.data
   } catch (error) {
@@ -265,7 +281,6 @@ export async function fetchIdealSolution (projectId: number) {
   }
 }
 
-
 // Topsis Scores
 
 export async function fetchTopsisScores (projectId: number) {
@@ -285,8 +300,9 @@ export async function fetchRankingData (projectId: number) {
     return response.data
   } catch (error) {
     console.error('Error : fetchRankingData', error)
-    throw error 
-  }}
+    throw error
+  }
+}
 
 export async function addRankingData (projectId: number) {
   try {
@@ -294,5 +310,6 @@ export async function addRankingData (projectId: number) {
     return response.data
   } catch (error) {
     console.error('Error : fetchRankingData', error)
-    throw error 
-  }}
+    throw error
+  }
+}

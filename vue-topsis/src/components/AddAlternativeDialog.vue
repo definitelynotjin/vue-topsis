@@ -5,7 +5,6 @@
   import { toast } from 'vue-sonner'
 
   const alternativeStore = useAlternativeStore()
-
   const alternativeName = ref('')
   const alternativeId = ref(null)
 
@@ -13,7 +12,9 @@
     modelValue: boolean
     project_id: number
   }>()
+
   const emit = defineEmits(['update:modelValue', 'saved'])
+
   function close() {
     emit('update:modelValue', false)
   }
@@ -59,7 +60,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn class="action-buttons" @click="save" :prepend-icon="Save">Save</v-btn>
+      <v-btn class="action-buttons !bg-cyan-700" @click="save" :prepend-icon="Save">Save</v-btn>
       <v-btn class="action-buttons" @click="close">Cancel</v-btn>
     </v-card-actions>
   </v-dialog>

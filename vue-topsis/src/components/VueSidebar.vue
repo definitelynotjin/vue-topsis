@@ -149,7 +149,7 @@ console.log('User:', user) // Debug: cek role user
     overflow: visible;
   }
   .top-icon-sidebar {
-    height: 63px;
+    height: 59px;
     display: flex;
     justify-content: center;
     margin: 0 auto;

@@ -1,9 +1,14 @@
 <script setup lang="ts">
+  import { onMounted } from 'vue'
   import { useProjectStore } from '../stores/projectStore'
   import { useCriteriaStore } from '../stores/criteriaStore'
 
   const projectStore = useProjectStore()
   const criteriaStore = useCriteriaStore()
+
+  onMounted(async () => {
+    projectStore.loadAllProjects()
+  })
 </script>
 
 <template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref } from 'vue'
+  import { storeToRefs } from 'pinia'
   import { useCriteriaStore } from '@/stores/criteriaStore'
   import { useScoreStore } from '@/stores/scoreStore'
   import { useProjectStore } from '@/stores/projectStore'
@@ -7,6 +8,10 @@
   const criteriaStore = useCriteriaStore()
   const projectStore = useProjectStore()
   const scoreStore = useScoreStore()
+
+  const { selectedProjectId } = storeToRefs(projectStore)
+  const { selectedCriteriaId, criteria } = storeToRefs(criteriaStore)
+  const { score } = storeToRefs(scoreStore)
 
   const searchFilter = ref('')
   const pendingDeleteId = ref<number | null>(null)
@@ -17,11 +22,17 @@
   const handleSearch = (search: any) => {
     searchFilter.value = search
   }
+
   const scoreHeaders = [
-    { title: 'No', key: 'no', sortable: false },
+    { title: 'No', key: 'no', sortable: false, width: '10%' },
+    {
+      title: 'ID ',
+      key: 'alt_id',
+    },
+
     {
       title: 'ID Alternatif',
-      key: 'alt_id',
+      key: 'id_alt',
     },
 
     {
@@ -43,24 +54,25 @@
       return (
         item.id?.toString().includes(term) ||
         item.alt_id?.toString().includes(term) ||
+        item.id_alt?.toString().includes(term) ||
         item.value?.toString().includes(term)
       )
     })
   })
 
-  async function handleEditScoreValue(
-    scoreId: number,
-    updated: {
-      value?: number
-      alternative_id: number
-      criteria_id: number
-    },
-  ) {
-    await scoreStore.editScoreValue(scoreId, updated)
-    await scoreStore.loadByCriteria(
-      projectStore.selectedProjectId!,
-      criteriaStore.selectedCriteriaId!,
-    )
+  async function handleEditScoreValue(scoreId: number | null, updated: { value: number }) {
+    console.log('🔍 Editing score value:', { scoreId, updated })
+    try {
+      if (!scoreId) {
+        await scoreStore.addScoreValue(updated)
+      } else {
+        await scoreStore.editScoreValue(scoreId, updated)
+      }
+      await scoreStore.loadByCriteria(selectedProjectId.value!, selectedCriteriaId.value!)
+    } catch (error) {
+      console.error('damn it error', error)
+      throw error
+    }
   }
 
   function requestDelete(item: { score_id: number; name: string }) {
@@ -81,24 +93,32 @@
   }
 
   watch(
-    () => projectStore.selectedProjectId,
+    () => selectedProjectId.value,
     async (newProjectId) => {
-      if (newProjectId) {
-        await criteriaStore.loadByProject(newProjectId)
-      } else {
-        criteriaStore.criteria = []
+      try {
+        if (newProjectId) {
+          await criteriaStore.loadByProject(newProjectId)
+        } else {
+          criteria.value = []
+        }
+      } catch (error) {
+        console.error('whoa, error', error)
       }
     },
     { immediate: true },
   )
 
   watch(
-    [() => projectStore.selectedProjectId, () => criteriaStore.selectedCriteriaId],
+    [() => selectedProjectId.value, () => selectedCriteriaId.value],
     async ([newProjectId, newCriteriaId]) => {
-      if (newProjectId && newCriteriaId) {
-        await scoreStore.loadByCriteria(newProjectId, newCriteriaId)
-      } else {
-        scoreStore.score = []
+      try {
+        if (newProjectId && newCriteriaId) {
+          await scoreStore.loadByCriteria(newProjectId, newCriteriaId)
+        } else {
+          score.value = []
+        }
+      } catch (error) {
+        console.error('whao , another error', error)
       }
     },
     { immediate: true },
@@ -116,11 +136,11 @@
             @click="showAddDialog = true"
             v-bind="props"
             hover
+            readonly
             variant="flat"
             type="submit"
             class="card-edit-button !bg-cyan-600"
           >
-            Edit Value
           </v-btn>
         </div>
         <DeleteScoreDialog

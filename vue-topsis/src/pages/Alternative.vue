@@ -17,11 +17,7 @@
   const filteredAlternative = computed(() => {
     const term = (searchfilter.value ?? '').toLowerCase()
     return alternativeStore.alternative.filter((item) => {
-      return (
-        item.id?.toString().includes(term) ||
-        item.id_alt?.toString().includes(term) ||
-        item.name.toLowerCase().includes(term)
-      )
+      return item.id_alt?.toString().includes(term) || item.name.toLowerCase().includes(term)
     })
   })
 
@@ -35,6 +31,7 @@
     pendingDeleteName.value = item.name
     showDeleteDialog.value = true
   }
+
   async function handleAlternativeEdit(
     alternative_id: number,
     updated: {

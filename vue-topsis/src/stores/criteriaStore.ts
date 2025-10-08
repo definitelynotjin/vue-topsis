@@ -3,11 +3,14 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { addCriteriaData, deleteCriteriaData, editCriteriaData, fetchCriteriaData } from '@/services/api.ts'
+import { useProjectStore } from '@/stores/projectStore.ts'
 
 export const useCriteriaStore = defineStore('criteria', () => {
   const criteria = ref<Criteria []>([])
+  const projectStore = useProjectStore()
+
+  const selectedProjectId = computed(() => projectStore.selectedProjectId)
   const selectedCriteriaId = ref<number | null>(null)
-  const selectedProjectId = ref<number | null>(null)
 
   async function loadByProject (projectId: number) {
     criteria.value = await fetchCriteriaData (projectId)
@@ -43,7 +46,7 @@ export const useCriteriaStore = defineStore('criteria', () => {
   }) {
     try {
       const res = await editCriteriaData(criteriaId, updatedCriteria)
-      await loadByProject(selectedProjectId!)
+      await loadByProject(selectedProjectId)
       return res
     } catch {
       toast.error('welp, cant edit')
@@ -54,7 +57,7 @@ export const useCriteriaStore = defineStore('criteria', () => {
     try {
       const res = await deleteCriteriaData(id)
       if (selectedCriteriaId.value) {
-        await loadByProject(selectedProjectId.value)
+        await loadByProject(selectedProjectId!)
       }
       return res
     } catch (error) {

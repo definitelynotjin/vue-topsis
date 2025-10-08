@@ -42,7 +42,7 @@
     },
   ]
 
-    watch(
+  watch(
     () => projectStore.selectedProjectId,
     async (newProjectId) => {
       if (newProjectId) {
@@ -58,7 +58,6 @@
           skipped: 0,
           total: 0,
         }
-
       }
     },
     { immediate: true },
@@ -69,8 +68,6 @@
   const handleSearch = (search: string) => {
     searchFilter.value = search
   }
-  
-  
 </script>
 
 <template>
@@ -78,18 +75,24 @@
     <main>
       <v-container fluid class="bg-cyan-700 score-container">
         <div class="d-flex bg-cyan-700 score-top-table-text py-2">
-          <CardTitleDropdown
-          />
-          <SearchBar @search="handleSearch" 
-          />
+          <CardTitleDropdown />
+          <SearchBar @search="handleSearch" />
+          <v-btn
+            v-bind="props"
+            hover
+            readonly
+            variant="flat"
+            type="submit"
+            class="card-edit-button !bg-cyan-600"
+          >
+          </v-btn>
         </div>
-        
+
         <TopsisDataTable
           :items="scores"
           :skipped="topsisResults.skipped"
           :total="topsisResults.total"
           :headers="topsisHeaders"
-          
         />
         <template v-slot:bottom="slotProps">
           <!-- render pagination bawaan -->
@@ -151,5 +154,12 @@
     margin: 14px;
     /* max-width: 250px; */
     height: 30px;
+  }
+
+  .card-edit-button {
+    margin: 15px;
+    height: 50px;
+    padding: 10px;
+    text-transform: initial;
   }
 </style>

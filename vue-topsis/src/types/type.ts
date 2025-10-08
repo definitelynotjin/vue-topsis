@@ -19,6 +19,7 @@ export interface Alternative {
   type: string
   weight: number
 }
+
 export interface Score {
   alt_id: number
   project_id: number

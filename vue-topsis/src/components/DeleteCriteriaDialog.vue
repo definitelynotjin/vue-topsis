@@ -37,9 +37,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn class="action-buttons !hover:bg-red-200" @click="confirm" :prepend-icon="Trash"
-        >Delete</v-btn
-      >
+      <v-btn class="action-buttons-delete" @click="confirm" :prepend-icon="Trash">Delete</v-btn>
       <v-btn class="action-buttons" @click="close">Cancel</v-btn>
     </v-card-actions>
   </v-dialog>
@@ -53,5 +51,12 @@
   .action-buttons {
     font-size: 15px;
     text-transform: initial;
+  }
+
+  .action-buttons-delete {
+    font-size: 15px;
+    text-transform: initial;
+    background-color: red;
+    color: white;
   }
 </style>
