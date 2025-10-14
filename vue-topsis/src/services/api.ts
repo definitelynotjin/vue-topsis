@@ -1,6 +1,8 @@
 import axios from 'axios'
 import api from './axiosInstance'
 
+const token = localStorage.getItem('token')
+
 // Projects
 
 export async function fetchProjectData () {
@@ -57,6 +59,59 @@ export async function logout () {
     // return response.data
   } catch (error) {
     console.error('Error : logout', error)
+    throw error
+  }
+}
+
+export async function fetchUsersData () {
+  try {
+    const response = await api.get(`/user/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error : getAllUsersData', error)
+    throw error
+  }
+}
+
+export async function registerUserData (newUser: {
+  username: string
+  password?: string
+  id?: number
+  role: string
+}) {
+  try {
+    const response = await api.post(`/user/register`, newUser)
+    return response.data
+  } catch (error) {
+    console.error('Error : registerUserData', error)
+    throw error
+  }
+}
+
+export async function editUserData (userId: number, updatedValue: {
+  username?: string
+  password?: string
+  role?: string
+}) {
+  try {
+    const response = await api.put(`/user/${userId}`, updatedValue)
+    return response.data
+  } catch (error) {
+    console.error('Error : editUserData', error)
+    throw error
+  }
+}
+
+export async function deleteUserData (userId: number) {
+  try {
+    const response = await api.delete(`/user/${userId}`)
+    return response.data
+  } catch (error) {
+    console.error('Error : deleteUserData', error)
     throw error
   }
 }
@@ -178,6 +233,15 @@ export async function importAlternativeData (projectId: number, file: File) {
   } catch (error) {
     console.error('Error : importAlternativeData', error)
     throw error
+  }
+}
+
+export async function exportAlternativeData (projectId: number) {
+  try {
+    const response = await axios.get(`api/export/${projectId}`)
+    return response.data
+  } catch (error) {
+    console.error('Error : exportAlternativeData', error)
   }
 }
 

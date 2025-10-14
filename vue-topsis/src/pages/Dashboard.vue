@@ -11,6 +11,7 @@
   const pendingDeleteId = ref<number | null>(null)
   const pendingDeleteName = ref<string | null>(null)
   const showDeleteDialog = ref(false)
+  const selectedProject = ref<any>(null)
 
   function requestDelete(item: { id: number; name: string }) {
     pendingDeleteId.value = item.id
@@ -77,7 +78,7 @@
                 {{ project.description }}
               </v-card-text>
               <v-card-actions class="action-buttons">
-                <DashboardGotoButton />
+                <DashboardGotoButton @click="selectedProject = project" />
                 <v-btn color="red" :icon="Trash" @click="requestDelete(project)" />
               </v-card-actions>
               <DeleteProjectDialog

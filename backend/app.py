@@ -18,7 +18,11 @@ import commands
 def create_app():
     app = Flask(__name__)
     _= CORS(app, resources={r"/*": {
-    "origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}})
+    "origins": ["http://localhost:3000", "http://127.0.0.1:3000"],
+    "supports_credentials": True,
+    "allow_headers": ["Content-Type", "Authorization"],
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    }})
 
     # konfigurasi database MySQL
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flaskuser:flask123@localhost/topsis_db'

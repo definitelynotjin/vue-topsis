@@ -44,6 +44,14 @@
     await alternativeStore.loadByProject(projectStore.selectedProjectId!)
   }
 
+  async function handleExportSuccess() {
+    try {
+      await alternativeStore.exportAlternative(projectStore.selectedProjectId)
+    } catch (error) {
+      console.log('damn eror', error)
+    }
+  }
+
   async function handleImportSuccess() {
     if (projectStore.selectedProjectId!) {
       await alternativeStore.loadByProject(projectStore.selectedProjectId)
@@ -104,7 +112,7 @@
             type="submit"
             hover
             variant="flat"
-            @click="showImportDialog = true"
+            @click=""
             class="card-export-button !bg-cyan-600"
           >
             Export Data

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { defineEmits } from 'vue'
+  import { capitalizeFirst } from '../utils/capitalizeFirst.ts'
 
   const typeItems = [
     {
@@ -51,6 +52,7 @@
         :cell="true"
         :table-field="true"
       >
+        {{ capitalizeFirst(item.type) }}
       </VInlineSelect>
     </template>
 

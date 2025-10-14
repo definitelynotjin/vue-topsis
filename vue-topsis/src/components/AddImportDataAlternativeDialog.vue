@@ -55,6 +55,7 @@
       <v-file-input
         @update:model-value="handleFileUpload"
         class="file-upload"
+        variant="outlined"
         accept=".xlsx"
         clearable
         title="Drag and drop"
@@ -85,7 +86,7 @@
     background-color: gray;
   }
   .file-upload {
-    justify-content: center;
-    justify-items: stretch;
+    padding-top: 10px;
+    margin: 10px;
   }
 </style>

@@ -1,5 +1,16 @@
 <script setup lang="ts">
   import { Calculator, UserPen, Activity } from 'lucide-vue-next'
+  import { useCriteriaStore } from '@/stores/criteriaStore'
+  import { useAlternativeStore } from '@/stores/alternativeStore'
+  import { useScoreStore } from '@/stores/scoreStore'
+
+  const criteriaStore = useCriteriaStore()
+  const alternativeStore = useAlternativeStore()
+  const scoreStore = useScoreStore()
+
+  const selectedCrit = ref<any>(null)
+  const selectedAlt = ref<any>(null)
+  const selectedScore = ref<any>(null)
 </script>
 
 <template>

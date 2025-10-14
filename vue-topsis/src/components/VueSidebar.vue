@@ -14,9 +14,9 @@
   import { useRouter } from 'vue-router'
 
   // ambil user dari localStorage
-const user = JSON.parse(localStorage.getItem('user') || '{}')
-const role = user.role || 'guest' // default ke 'guest' jika tidak ada user atau role
-console.log('User:', user) // Debug: cek role user
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const role = user.role || 'guest' // default ke 'guest' jika tidak ada user atau role
+  console.log('User:', user) // Debug: cek role user
 
   const dashboard = {
     title: 'Dashboard',
@@ -56,6 +56,7 @@ console.log('User:', user) // Debug: cek role user
       icon: Trophy,
     },
   ]
+
   const userMenuItems = [
     {
       title: 'Data User',
@@ -81,6 +82,7 @@ console.log('User:', user) // Debug: cek role user
 <template>
   <v-navigation-drawer
     class="!bg-cyan-700 sidebar"
+    app
     :elevation="5"
     expand-on-hover
     permanent
@@ -137,6 +139,7 @@ console.log('User:', user) // Debug: cek role user
     background-color: red;
     color: white;
   }
+
   .v-list-item.sidebar-icon--active {
     color: red;
   }
@@ -144,10 +147,12 @@ console.log('User:', user) // Debug: cek role user
   .v-navigation-drawer.sidebar {
     color: white;
   }
+
   .criteria {
     text-overflow: unset;
     overflow: visible;
   }
+
   .top-icon-sidebar {
     height: 59px;
     display: flex;
@@ -160,6 +165,7 @@ console.log('User:', user) // Debug: cek role user
   .v-navigation-drawer--expanded .sidebar-divider {
     width: 80%;
   }
+
   .sidebar-divider {
     margin: 0 auto;
   }

@@ -27,3 +27,9 @@ export interface Score {
   id?: number
   value: number
 }
+
+export interface User {
+  id?: number
+  username: string
+  role: string
+}

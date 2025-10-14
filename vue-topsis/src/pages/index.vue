@@ -10,7 +10,7 @@
   const password = ref('')
   const show1 = ref(false)
   const valid = ref(false)
-  const loading = ref(false) // ⏳ status login
+  const loading = ref(false)
 
   const nameRules = [
     (v: string) => !!v || 'Username is required',
@@ -124,19 +124,17 @@
 
 <style scoped>
   .login-icon {
-    color: slategrey;
+    color: ghostwhite;
     justify-content: center;
     justify-items: center;
     margin: auto;
   }
 
-  form-color {
-    color: green;
-  }
   .submit-button {
     color: white;
     text-transform: initial;
   }
+
   .v-row.hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
