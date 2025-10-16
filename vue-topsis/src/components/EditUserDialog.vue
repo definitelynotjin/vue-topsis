@@ -23,9 +23,9 @@
 
     try {
       await userStore.editUser(props.userId, {
-        username: props.userName,
-        password: props.userPass,
-        role: props.userRole,
+        username: userName.value,
+        password: userPass.value,
+        role: userRole.value,
       })
       toast.success('User has been edited successfully')
       emit('saved')

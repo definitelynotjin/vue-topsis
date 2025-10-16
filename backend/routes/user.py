@@ -50,6 +50,21 @@ def get_all_users():
         })
     return jsonify(result)
 
+#Get specific user information ( for profile view )
+@user_bp.route("/<int:user_id>", methods=["GET"])
+def get_current_user(user_id):
+    specific_user = User.query.filter_by(id=user_id).first()
+
+    if not specific_user:
+        return jsonify({"Error: User Not Found"}), 404
+
+    result = {
+        "username" : specific_user.username,
+        "role": specific_user.role
+    }
+    return jsonify(result)
+
+
 #update user (admin only)
 @user_bp.route("/<int:user_id>", methods=["PUT"])
 @admin_required

@@ -1,6 +1,6 @@
 import type { User } from '@/types/type'
 import { defineStore } from 'pinia'
-import { deleteUserData, editUserData, fetchUsersData, registerUserData } from '@/services/api'
+import { deleteUserData, editUserData, fetchUserData, fetchUsersData, registerUserData } from '@/services/api'
 
 export const useUserStore = defineStore('user', () => {
   const users = ref<User[]>([])
@@ -12,6 +12,15 @@ export const useUserStore = defineStore('user', () => {
 
   async function loadAllUsers () {
     users.value = await fetchUsersData()
+  }
+  async function getAUser (userId: number) {
+    try {
+      const response = await fetchUserData(userId)
+      return response.data
+    } catch (error) {
+      console.error('cnaot get tis user info eh', error)
+      throw error
+    }
   }
 
   async function registerUser (newUser: {
@@ -55,5 +64,5 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return { loadAllUsers, users, registerUser, deleteUser, editUser, setSelectedUserId }
+  return { loadAllUsers, users, registerUser, deleteUser, editUser, setSelectedUserId, getAUser }
 })

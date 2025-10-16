@@ -77,6 +77,16 @@ export async function fetchUsersData () {
   }
 }
 
+export async function fetchUserData (userId: number) {
+  try {
+    const response = await api.get(`/user/${userId}`)
+    return response.data
+  } catch (error) {
+    console.error('Error : fetchUserData', error)
+    throw error
+  }
+}
+
 export async function registerUserData (newUser: {
   username: string
   password?: string
