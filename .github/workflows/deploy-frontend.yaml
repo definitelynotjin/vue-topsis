@@ -1,0 +1,43 @@
+name: Build & Deploy Frontend
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine image tag
+        id: vars
+        run: |
+          echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        run: |
+          cd vue-topsis
+          docker build --build-arg VITE_API_BASE_URL="${{ vars.VITE_API_BASE_URL }}" -t topsisfrontend:${{ steps.vars.outputs.COMMIT_SHA }} .
+
+      - name: Stop and remove old container (if exists)
+        run: |
+          if docker ps -q --filter "name=topsisfrontend" >/dev/null; then
+            docker container stop topsisfrontend
+            docker container rm topsisfrontend
+          fi || true
+
+      - name: Run new container
+        run: |
+          docker run -d \
+            --restart unless-stopped \
+            --name topsisfrontend \
+            topsisfrontend:${{ steps.vars.outputs.COMMIT_SHA }}
+
+      - name: Clean up old images (optional)
+        run: |
+          docker image prune -f
