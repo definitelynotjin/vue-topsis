@@ -80,7 +80,6 @@
                   :icon="Pen"
                   @click="
                     () => {
-                      selectedUser: user
                       showEditDialog = true
                     }
                   "
