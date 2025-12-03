@@ -1,0 +1,56 @@
+name: Build & Deploy Backend
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine image tag
+        id: vars
+        run: |
+          echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        run: |
+          cd backend
+          docker build -t topsisbackend:${{ steps.vars.outputs.COMMIT_SHA }} .
+
+      - name: Create .env file for backend
+        run: |
+          mkdir -p /opt/topsisbackend
+          cat <<EOF > /opt/topsisbackend/.env
+            CORS_ORIGINS=${{ vars.CORS_ORIGINS }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASS=${{ secrets.DB_PASS }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+          EOF
+
+      - name: Stop and remove old container (if exists)
+        run: |
+          if docker ps -q --filter "name=topsisbackend" >/dev/null; then
+            docker container stop topsisbackend
+            docker container rm topsisbackend
+          fi || true
+
+      - name: Run new container
+        run: |
+          docker run -d \
+            --restart unless-stopped \
+            --name topsisbackend \
+            --env-file /opt/topsisbackend/.env \
+            topsisbackend:${{ steps.vars.outputs.COMMIT_SHA }}
+
+      - name: Clean up old images (optional)
+        run: |
+          docker image prune -f
