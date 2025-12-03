@@ -14,7 +14,7 @@ FROM caddy:2.10.2
 WORKDIR /srv
 COPY --from=builder /app/dist/ ./
 COPY <<EOF /etc/caddy/Caddyfile
-:80 {
+:3000 {
     encode gzip zstd
 
     handle {

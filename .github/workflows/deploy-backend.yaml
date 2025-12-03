@@ -50,6 +50,7 @@ jobs:
             --restart unless-stopped \
             --name topsisbackend \
             --env-file /opt/topsisbackend/.env \
+            -p 5000:5000 \
             topsisbackend:${{ steps.vars.outputs.COMMIT_SHA }}
 
       - name: Clean up old images (optional)

@@ -37,6 +37,7 @@ jobs:
           docker run -d \
             --restart unless-stopped \
             --name topsisfrontend \
+            -p 3000:3000 \
             topsisfrontend:${{ steps.vars.outputs.COMMIT_SHA }}
 
       - name: Clean up old images (optional)
