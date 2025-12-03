@@ -1,0 +1,43 @@
+name: DB Migration
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-migrations:
+    runs-on: self-hosted
+    environment: Default
+
+    steps:
+      - name: Checkout code
+      # etc.
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Export environment variables
+        run: |
+          echo "CORS_ORIGINS=${{ vars.CORS_ORIGINS }}" >> $GITHUB_ENV
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASS=${{ secrets.DB_PASS }}" >> $GITHUB_ENV
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
+
+      - name: Run DB migrations
+        working-directory: backend
+        run: |
+          flask db init || echo "Migration folder already exists, skipping init"
+          flask db migrate -m "manual migration"
+          flask db upgrade
