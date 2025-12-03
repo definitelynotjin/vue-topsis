@@ -40,7 +40,7 @@
       selectedFile.value = null
     } catch (error) {
       console.error('damn somethin wrong', error)
-      toast.error('something wrong big bro in the import')
+      toast.error('File format must be .xlsx!')
     }
   }
 </script>
@@ -57,8 +57,8 @@
         class="file-upload"
         variant="outlined"
         accept=".xlsx"
+        label="Pilih file untuk di import"
         clearable
-        title="Drag and drop"
         style="background-color: transparent"
       >
       </v-file-input>
@@ -82,9 +82,11 @@
     font-size: 15px;
     text-transform: initial;
   }
+
   .file-upload-card {
     background-color: gray;
   }
+
   .file-upload {
     padding-top: 10px;
     margin: 10px;

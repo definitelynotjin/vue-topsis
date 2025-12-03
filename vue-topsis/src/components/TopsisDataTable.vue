@@ -1,20 +1,13 @@
 <script setup>
-const props = defineProps({
-  items: { type: Array, required: true },
-  headers: { type: Array, required: true },
-  skipped: { type: Number, default: 0},
-  total: { type: Number, default: 0 }
-  
-})
+  const props = defineProps({
+    items: { type: Array, required: true },
+    headers: { type: Array, required: true },
+    skipped: { type: Number, default: 0 },
+    total: { type: Number, default: 0 },
+  })
 </script>
 <template>
-
-  <v-data-table
-    class="data-table"
-    hover
-    :items= "props.items"
-    :headers="props.headers"
-  >
+  <v-data-table class="data-table" hover :items="props.items" :headers="props.headers">
     <template v-slot:item.no="{ index }">
       {{ index + 1 }}
     </template>
@@ -30,9 +23,7 @@ const props = defineProps({
     </template>
 
     <!-- rank -->
-    <template v-slot:item.rank="{ item }">
-      🏆 {{ item.rank }}
-    </template>
+    <template v-slot:item.rank="{ item }"> 🏆 {{ item.rank }} </template>
   </v-data-table>
 </template>
 

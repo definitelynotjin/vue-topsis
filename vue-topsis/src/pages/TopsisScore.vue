@@ -81,6 +81,8 @@
 <template>
   <v-app class="!bg-cyan-900">
     <main>
+      <v-progress-linear color="deep-purple" height="4" indeterminate v-if="loading">
+      </v-progress-linear>
       <v-container fluid class="bg-cyan-700 score-container">
         <div class="d-flex bg-cyan-700 score-top-table-text">
           <CardTitleDropdown />

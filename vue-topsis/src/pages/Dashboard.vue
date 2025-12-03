@@ -99,6 +99,7 @@
   .wallpaper {
     background-color: antiquewhite;
   }
+
   .card-container {
     align-items: center;
     padding: 25px;
@@ -107,6 +108,7 @@
     border-radius: 10px;
     overflow-y: auto;
   }
+
   .project-card {
     border-radius: 10px;
     height: 10vh;

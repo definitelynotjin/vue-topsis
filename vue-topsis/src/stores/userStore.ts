@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', () => {
   async function loadAllUsers () {
     users.value = await fetchUsersData()
   }
+
   async function getAUser (userId: number) {
     try {
       const response = await fetchUserData(userId)

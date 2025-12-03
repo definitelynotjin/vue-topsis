@@ -3,6 +3,10 @@
   import { useUserStore } from '../stores/userStore'
 
   const userStore = useUserStore()
+
+  async function showUser(userId: number) {
+    await userStore.getAUser(userId)
+  }
 </script>
 
 <template>
