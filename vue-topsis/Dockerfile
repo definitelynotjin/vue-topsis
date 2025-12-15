@@ -15,10 +15,9 @@ WORKDIR /srv
 COPY --from=builder /app/dist/ ./
 COPY <<EOF /etc/caddy/Caddyfile
 :3000 {
-    handle {
-        root * /srv
-        try_files {path} /index.html
-        file_server
-    }
+    root * /srv
+    encode
+    try_files {path} /index.html
+    file_server
 }
 EOF
