@@ -15,8 +15,6 @@ WORKDIR /srv
 COPY --from=builder /app/dist/ ./
 COPY <<EOF /etc/caddy/Caddyfile
 :3000 {
-    encode gzip zstd
-
     handle {
         root * /srv
         try_files {path} /index.html
