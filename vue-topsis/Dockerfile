@@ -43,5 +43,13 @@ server {
         add_header Pragma "no-cache" always;
         add_header Expires "0" always;
     }
+    
+    location /api/ {
+        proxy_pass http://192.168.122.200;  # Forward to the internal server
+        proxy_set_header Host $host;         # Preserve the original host header
+        proxy_set_header X-Real-IP $remote_addr;  # Pass on the real IP address
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  # Pass forwarded IPs
+        proxy_set_header X-Forwarded-Proto $scheme;  # Pass the scheme (http/https)
+    }
 }
 EOF
