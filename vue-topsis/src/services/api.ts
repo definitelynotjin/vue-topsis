@@ -41,7 +41,7 @@ export async function deleteProjectData(projectId: number) {
 // Login
 export async function login(credentials: { username: string; password: string }) {
   try {
-    const response = await axios.post('api/login/auth', credentials)
+    const response = await api.post('api/login/auth', credentials)
     // console.log('Response from login API:', response)
     return response
   } catch (error) {
