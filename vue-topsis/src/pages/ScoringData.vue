@@ -60,13 +60,20 @@
     })
   })
 
-  async function handleEditScoreValue(scoreId: number | null, updated: { value: number }) {
+  async function handleEditScoreValue(
+    scoreId: number | null,
+    updated: { value: number; alternative_id?: number },
+  ) {
     console.log('🔍 Editing score value:', { scoreId, updated })
     try {
       if (!scoreId) {
-        await scoreStore.addScoreValue(updated)
+        await scoreStore.addScoreValue({
+          value: updated.value,
+          alternative_id: updated.alternative_id,
+          criteria_id: selectedCriteriaId.value!,
+        })
       } else {
-        await scoreStore.editScoreValue(scoreId, updated)
+        await scoreStore.editScoreValue(scoreId, { value: updated.value })
       }
       await scoreStore.loadByCriteria(selectedProjectId.value!, selectedCriteriaId.value!)
     } catch (error) {

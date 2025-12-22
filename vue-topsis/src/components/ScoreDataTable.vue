@@ -21,9 +21,9 @@
         :cell="true"
         @update="
           (value) =>
-            emit('edit-value', Number(item.score_id), {
+            emit('edit-value', item.score_id, {
               value: Number(value),
-            })
+            }
         "
         :table-field="true"
       >
@@ -33,7 +33,7 @@
     <template v-slot:item.actions="{ item }">
       <div class="">
         <v-btn variant="plain" icon @click="emit('delete-request', item)">
-          <v-icon color="red">mdi-delete</v-icon>           
+          <v-icon color="red">mdi-delete</v-icon>
         </v-btn>
       </div>
     </template>
