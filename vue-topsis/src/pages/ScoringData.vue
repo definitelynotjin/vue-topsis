@@ -54,7 +54,7 @@
       return (
         item.id?.toString().includes(term) ||
         item.alt_id?.toString().includes(term) ||
-        item.id_alt?.toString().includes(term) ||
+        // item.id_alt?.toString().includes(term) ||
         item.value?.toString().includes(term)
       )
     })
