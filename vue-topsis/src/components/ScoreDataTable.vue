@@ -1,21 +1,25 @@
 <script setup lang="ts">
-  import { X } from 'lucide-vue-next'
-  import { defineEmits } from 'vue'
+  import { defineEmits, defineProps } from 'vue'
+
+  const props = defineProps<{
+    items: any[]
+    headers: any[]
+  }>()
 
   const emit = defineEmits<{
     (e: 'delete-request', item: any): void
-    (e: 'edit-value', scoreId: number, updated: { value?: number }): void
+    (e: 'edit-value', scoreId: number | null, updated: { value?: number }): void
   }>()
 
   const onUpdateValue = (value: any, item: any) => {
-    emit('edit-value', item.score_id, {
+    emit('edit-value', item.score_id ?? null, {
       value: Number(value),
     })
   }
 </script>
 
 <template>
-  <v-data-table hover class="score-data-table">
+  <v-data-table :items="props.items" :headers="props.headers" hover class="score-data-table">
     <template v-slot:item.no="{ index }">
       {{ index + 1 }}
     </template>
