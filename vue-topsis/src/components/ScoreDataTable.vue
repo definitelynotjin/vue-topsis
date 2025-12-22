@@ -26,12 +26,7 @@
         save-icon-color="cyan"
         name="value"
         :cell="true"
-        @update="
-          (value) =>
-            emit('edit-value', item.score_id, {
-              value: Number(value)
-            }
-        "
+        @update="onUpdateValue($event, item)"
         :table-field="true"
       >
       </VInlineTextField>
