@@ -41,7 +41,7 @@ export async function deleteProjectData(projectId: number) {
 // Login
 export async function login(credentials: { username: string; password: string }) {
   try {
-    const response = await api.post('api/login/auth', credentials)
+    const response = await api.post('login/auth', credentials)
     // console.log('Response from login API:', response)
     return response
   } catch (error) {
@@ -79,7 +79,7 @@ export async function fetchUsersData() {
 
 export async function fetchUserData(userId: number) {
   try {
-    const response = await api.get(`/user/${userId}`)
+    const response = await api.get(`user/${userId}`)
     return response.data
   } catch (error) {
     console.error('Error : fetchUserData', error)
@@ -94,7 +94,7 @@ export async function registerUserData(newUser: {
   role: string
 }) {
   try {
-    const response = await api.post(`/user/register`, newUser)
+    const response = await api.post(`user/register`, newUser)
     return response.data
   } catch (error) {
     console.error('Error : registerUserData', error)
@@ -111,7 +111,7 @@ export async function editUserData(
   },
 ) {
   try {
-    const response = await api.put(`/user/${userId}`, updatedValue)
+    const response = await api.put(`user/${userId}`, updatedValue)
     return response.data
   } catch (error) {
     console.error('Error : editUserData', error)
@@ -121,7 +121,7 @@ export async function editUserData(
 
 export async function deleteUserData(userId: number) {
   try {
-    const response = await api.delete(`/user/${userId}`)
+    const response = await api.delete(`user/${userId}`)
     return response.data
   } catch (error) {
     console.error('Error : deleteUserData', error)
