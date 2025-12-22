@@ -150,7 +150,7 @@ export async function addCriteriaData(newCriteria: {
   type: string
 }) {
   try {
-    const response = await axios.post(`criteria`, newCriteria)
+    const response = await api.post(`criteria`, newCriteria)
     return response.data
   } catch (error) {
     console.error('Error : addCriteriaData', error)
