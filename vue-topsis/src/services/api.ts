@@ -135,7 +135,7 @@ export async function deleteUserData(userId: number) {
 
 export async function fetchCriteriaData(id: number) {
   try {
-    const response = await axios.get(`/criteria/${id}`)
+    const response = await axios.get(`criteria/${id}`)
     return response.data
   } catch (error) {
     console.error('Error : fetchCriteriaData', error)
@@ -150,7 +150,7 @@ export async function addCriteriaData(newCriteria: {
   type: string
 }) {
   try {
-    const response = await axios.post(`/criteria`, newCriteria)
+    const response = await axios.post(`criteria`, newCriteria)
     return response.data
   } catch (error) {
     console.error('Error : addCriteriaData', error)
@@ -167,7 +167,7 @@ export async function editCriteriaData(
   },
 ) {
   try {
-    const response = await axios.put(`/criteria/${criteriaId}`, updatedCriteria)
+    const response = await axios.put(`criteria/${criteriaId}`, updatedCriteria)
     return response.data
   } catch (error) {
     console.error('Error : editCriteriaData', error)
@@ -177,7 +177,7 @@ export async function editCriteriaData(
 
 export async function deleteCriteriaData(criteriaId: number) {
   try {
-    const response = await axios.delete(`/criteria/${criteriaId}`)
+    const response = await axios.delete(`criteria/${criteriaId}`)
     return response.data
   } catch (error) {
     console.error('Error : deleteCriteriaData', error)
@@ -191,7 +191,7 @@ export async function deleteCriteriaData(criteriaId: number) {
 
 export async function fetchAlternativeData(id: number) {
   try {
-    const response = await axios.get(`/alternative/${id}`)
+    const response = await axios.get(`alternative/${id}`)
     return response.data
   } catch (error) {
     console.error('Error : fetchAlternativeData', error)
@@ -205,7 +205,7 @@ export async function addAlternativeData(newAlternative: {
   alternative_id: number
 }) {
   try {
-    const response = await axios.post(`/alternative`, newAlternative)
+    const response = await axios.post(`alternative`, newAlternative)
     return response.data
   } catch (error) {
     console.error('Error : addAlternativeData', error)
@@ -221,7 +221,7 @@ export async function editAlternativeData(
   },
 ) {
   try {
-    const response = await axios.put(`/alternative/${alternative_id}`, updatedAlternative)
+    const response = await axios.put(`alternative/${alternative_id}`, updatedAlternative)
     return response.data
   } catch (error) {
     console.error('Error : editAlternativeData', error)
@@ -231,7 +231,7 @@ export async function editAlternativeData(
 
 export async function deleteAlternativeData(alternative_id: number) {
   try {
-    const response = await axios.delete(`/alternative/${alternative_id}`)
+    const response = await axios.delete(`alternative/${alternative_id}`)
     return response.data
   } catch (error) {
     console.error('Error : deleteAlternativeData', error)
@@ -245,7 +245,7 @@ export async function importAlternativeData(projectId: number, file: File) {
     formData.append('file', file)
     console.log('FormData keys:', [...formData.keys()])
 
-    const response = await axios.post(`/import/import/${projectId}`, formData, {
+    const response = await axios.post(`import/import/${projectId}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     return response.data
@@ -257,7 +257,7 @@ export async function importAlternativeData(projectId: number, file: File) {
 
 export async function exportAlternativeData(projectId: number) {
   try {
-    const response = await axios.get(`/export/${projectId}`)
+    const response = await axios.get(`export/${projectId}`)
     return response.data
   } catch (error) {
     console.error('Error : exportAlternativeData', error)
@@ -270,7 +270,7 @@ export async function exportAlternativeData(projectId: number) {
 
 export async function fetchScoreData(alternative_id: number) {
   try {
-    const response = await axios.get(`/score/${alternative_id}`)
+    const response = await axios.get(`score/${alternative_id}`)
     return response.data
   } catch (error) {
     console.error('Error : fetchScoreData', error)
@@ -280,7 +280,7 @@ export async function fetchScoreData(alternative_id: number) {
 
 export async function fetchScoresByCriteria(projectId: number, criteriaId: number) {
   try {
-    const response = await axios.get(`/score/project/${projectId}/criteria/${criteriaId}`)
+    const response = await axios.get(`score/project/${projectId}/criteria/${criteriaId}`)
     return response.data
   } catch (error) {
     console.error('Error : fetchScoresByCriteria', error)
@@ -289,7 +289,7 @@ export async function fetchScoresByCriteria(projectId: number, criteriaId: numbe
 }
 export async function deleteScoreData(scoreId: number) {
   try {
-    const response = await axios.delete(`/score/${scoreId}`)
+    const response = await axios.delete(`score/${scoreId}`)
     return response.data
   } catch (error) {
     console.error('Error : deleteScoreData', error)
@@ -303,7 +303,7 @@ export async function editScoreData(
   },
 ) {
   try {
-    const response = await axios.put(`/score/${scoreId}`, updatedValue)
+    const response = await axios.put(`score/${scoreId}`, updatedValue)
     console.log('Response from editScoreData API:', response)
     return response.data
   } catch (error) {
@@ -318,7 +318,7 @@ export async function addScoreData(newScore: {
   criteria_id: number
 }) {
   try {
-    const response = await axios.post(`/score/`, newScore)
+    const response = await axios.post(`score/`, newScore)
     return response.data
   } catch (error) {
     console.error('Error : addScoreData', error)
@@ -331,7 +331,7 @@ export async function addScoreData(newScore: {
 // Matriks Raw
 export async function fetchMatriksRaw(projectId: number) {
   try {
-    const response = await axios.get(`/topsis/${projectId}/matrix-raw`)
+    const response = await axios.get(`topsis/${projectId}/matrix-raw`)
     return response.data
   } catch (error) {
     console.error('Error : fetchMatriksRaw', error)
@@ -342,7 +342,7 @@ export async function fetchMatriksRaw(projectId: number) {
 // Matriks Normalisasi
 export async function fetchMatriksNormalisasi(projectId: number) {
   try {
-    const response = await axios.get(`/topsis/${projectId}/matrix-normalized`)
+    const response = await axios.get(`topsis/${projectId}/matrix-normalized`)
     return response.data
   } catch (error) {
     console.error('Error : fetchMatriksNormalisasi', error)
@@ -353,7 +353,7 @@ export async function fetchMatriksNormalisasi(projectId: number) {
 // Matriks Weighted
 export async function fetchMatriksWeighted(projectId: number) {
   try {
-    const response = await axios.get(`/topsis/${projectId}/matrix-weight`)
+    const response = await axios.get(`topsis/${projectId}/matrix-weight`)
     return response.data
   } catch (error) {
     console.error('Error : fetchMatriksWeighted', error)
@@ -364,7 +364,7 @@ export async function fetchMatriksWeighted(projectId: number) {
 // Ideal Solution
 export async function fetchIdealSolution(projectId: number) {
   try {
-    const response = await axios.get(`/topsis/${projectId}/ideal-solution`)
+    const response = await axios.get(`topsis/${projectId}/ideal-solution`)
     return response.data
   } catch (error) {
     console.error('Error : fetchIdealSolution', error)
