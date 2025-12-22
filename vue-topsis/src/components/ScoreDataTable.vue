@@ -14,6 +14,7 @@
       {{ index + 1 }}
     </template>
     <template v-slot:item.value="{ item }">
+      e
       <VInlineTextField
         v-model="item.value"
         save-icon-color="cyan"
@@ -22,7 +23,7 @@
         @update="
           (value) =>
             emit('edit-value', item.score_id, {
-              value: Number(value),
+              value: Number(value)
             }
         "
         :table-field="true"
