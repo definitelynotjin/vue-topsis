@@ -6,6 +6,12 @@
     (e: 'delete-request', item: any): void
     (e: 'edit-value', scoreId: number, updated: { value?: number }): void
   }>()
+
+  const onUpdateValue = (value: any, item: any) => {
+    emit('edit-value', item.score_id, {
+      value: Number(value),
+    })
+  }
 </script>
 
 <template>
