@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import axios from 'axios'
   import { useProjectStore } from '@/stores/projectStore'
   import { fetchRankingData } from '@/services/api'
-  // import CardTitleDropdown from '@/components/CardTitleScoreDropdown.vue'
-  // import TopsisDataTable from '@/components/TopsisDataTable.vue'
 
   const projectStore = useProjectStore()
   const scores = ref<{ alternative: string; score: number }[]>([])
@@ -29,7 +26,12 @@
 
     {
       title: 'Nama Alternatif',
-      key: 'name',
+      key: 'alternative_name',
+    },
+
+    {
+      title: 'ID Alternatif',
+      key: 'alternative_id',
     },
 
     {
