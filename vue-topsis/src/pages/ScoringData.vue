@@ -25,15 +25,15 @@
 
   const scoreHeaders = [
     { title: 'No', key: 'no', sortable: false, width: '10%' },
-    {
-      title: 'ID ',
-      key: 'alt_id',
-    },
+    // {
+    //   title: 'ID ',
+    //   key: 'alt_id',
+    // },
 
-    {
-      title: 'ID Alternatif',
-      key: 'id_alt',
-    },
+    // {
+    //   title: 'ID Alternatif',
+    //   key: 'id_alt',
+    // },
 
     {
       title: 'Nama Alternatif',
