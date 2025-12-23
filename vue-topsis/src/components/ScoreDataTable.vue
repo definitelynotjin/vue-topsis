@@ -14,6 +14,7 @@
   const onUpdateValue = (value: any, item: any) => {
     emit('edit-value', item.score_id ?? null, {
       value: Number(value),
+      alternative_id: item.alt_id,
     })
   }
 </script>
